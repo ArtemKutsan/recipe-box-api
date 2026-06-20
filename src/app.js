@@ -1,13 +1,9 @@
 import express from 'express';
+import healthRouter from './routes/health.js';
 
 const app = express();
 
-// JSON-body parsing нужен для будущих API-роутов.
 app.use(express.json());
-
-// Локальная проверка сервиса.
-app.get('/health', (_req, res) => {
-  res.json({ status: 'ok', service: 'recipe-box-api' });
-});
+app.use(healthRouter);
 
 export default app;
