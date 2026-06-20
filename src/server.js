@@ -1,13 +1,9 @@
 import 'dotenv/config';
-import express from 'express';
+import app from './app.js';
 
-const app = express();
 const port = process.env.PORT || 4000;
 
-app.get('/health', (_req, res) => {
-  res.json({ status: 'ok', service: 'recipe-box-api' });
-});
-
+// Поднимаем HTTP-сервер на порту из окружения или на дефолтном порту.
 app.listen(port, () => {
   console.log(`recipe-box-api listening on ${port}`);
 });
