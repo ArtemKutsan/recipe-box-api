@@ -1,7 +1,7 @@
 import express from 'express';
-import apiRouter from './routes/index.js';
-import notFound from './middlewares/notFound.js';
-import errorHandler from './middlewares/errorHandler.js';
+import apiRouter from '#routes/index.js';
+import notFound from '#middlewares/notFound.js';
+import errorHandler from '#middlewares/errorHandler.js';
 
 const app = express();
 
