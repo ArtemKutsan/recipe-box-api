@@ -15,9 +15,9 @@ export async function register(req, res, next) {
   try {
     // Сначала проверяем входные данные, потом вызываем сервисный слой.
     validateRegister(req.body);
-    await registerUser(req.body);
+    const result = await registerUser(req.body);
 
-    return sendNotImplemented(res);
+    return res.status(201).json(result);
   } catch (error) {
     next(error);
   }
