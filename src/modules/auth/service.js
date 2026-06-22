@@ -4,7 +4,7 @@ import env from '#config/env.js';
 import { User } from '#modules/users/model.js';
 
 // Сервисный слой работает с моделью пользователя и готовит ответ для API.
-function toUserDto(user) {
+export function toUserDto(user) {
   return {
     id: user._id.toString(),
     name: user.name,
@@ -25,33 +25,6 @@ function createToken(userId) {
   }
 
   return jwt.sign({ sub: userId }, env.jwtSecret, { expiresIn: '7d' });
-}
-
-// Достаём bearer-токен из заголовка Authorization.
-function getTokenFromRequest(request) {
-  const authHeader = request.headers.authorization || '';
-  const [type, token] = authHeader.split(' ');
-
-  if (type !== 'Bearer' || !token) {
-    const error = new Error('Authorization token is required.');
-    error.status = 401;
-    error.code = 'UNAUTHORIZED';
-    throw error;
-  }
-
-  return token;
-}
-
-// Проверяем токен и получаем payload с id пользователя.
-function verifyToken(token) {
-  if (!env.jwtSecret) {
-    const error = new Error('JWT_SECRET is required.');
-    error.status = 500;
-    error.code = 'JWT_SECRET_REQUIRED';
-    throw error;
-  }
-
-  return jwt.verify(token, env.jwtSecret);
 }
 
 export async function registerUser(payload) {
@@ -104,23 +77,5 @@ export async function loginUser(payload) {
   return {
     user: toUserDto(user),
     token: createToken(user._id.toString()),
-  };
-}
-
-export async function getCurrentUser(request) {
-  // Из токена берём id пользователя и загружаем его из MongoDB.
-  const token = getTokenFromRequest(request);
-  const payload = verifyToken(token);
-  const user = await User.findById(payload.sub);
-
-  if (!user) {
-    const error = new Error('User not found.');
-    error.status = 404;
-    error.code = 'USER_NOT_FOUND';
-    throw error;
-  }
-
-  return {
-    user: toUserDto(user),
   };
 }

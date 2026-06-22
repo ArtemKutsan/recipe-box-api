@@ -1,4 +1,4 @@
-import { getCurrentUser, loginUser, registerUser } from './service.js';
+import { loginUser, registerUser } from './service.js';
 import { validateLogin, validateRegister } from './validation.js';
 
 export async function register(req, res, next) {
@@ -27,10 +27,8 @@ export async function login(req, res, next) {
 
 export async function me(req, res, next) {
   try {
-    // Здесь берём токен из заголовка и ищем текущего пользователя.
-    const result = await getCurrentUser(req);
-
-    return res.status(200).json(result);
+    // Текущий пользователь уже лежит в req.user после проверки middleware.
+    return res.status(200).json({ user: req.user });
   } catch (error) {
     next(error);
   }
