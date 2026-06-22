@@ -8,6 +8,8 @@ try {
 
   if (!dbState.enabled) {
     console.log('Database is not connected, server is running without DB.');
+  } else {
+    console.log('Database connected successfully.');
   }
 } catch (error) {
   console.error('Database connection failed:');
