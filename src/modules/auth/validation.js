@@ -3,6 +3,7 @@ export function validateRegister(payload) {
   const body = payload || {};
   const errors = [];
 
+  // Для регистрации пока проверяем только наличие обязательных полей.
   if (!body.name || typeof body.name !== 'string') {
     errors.push('name is required');
   }
@@ -26,6 +27,26 @@ export function validateRegister(payload) {
   return [];
 }
 
-export function validateLogin(_payload) {
+export function validateLogin(payload) {
+  const body = payload || {};
+  const errors = [];
+
+  // Для логина нужны только email и password.
+  if (!body.email || typeof body.email !== 'string') {
+    errors.push('email is required');
+  }
+
+  if (!body.password || typeof body.password !== 'string') {
+    errors.push('password is required');
+  }
+
+  if (errors.length > 0) {
+    const error = new Error('Validation failed');
+    error.status = 400;
+    error.code = 'VALIDATION_ERROR';
+    error.details = errors;
+    throw error;
+  }
+
   return [];
 }

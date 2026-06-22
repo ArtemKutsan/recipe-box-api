@@ -1,19 +1,9 @@
 import { getCurrentUser, loginUser, registerUser } from './service.js';
 import { validateLogin, validateRegister } from './validation.js';
 
-// Временный ответ, пока auth-логика не подключена к БД и JWT.
-function sendNotImplemented(res) {
-  return res.status(501).json({
-    error: {
-      code: 'NOT_IMPLEMENTED',
-      message: 'Auth is not implemented yet.',
-    },
-  });
-}
-
 export async function register(req, res, next) {
   try {
-    // Сначала проверяем входные данные, потом вызываем сервисный слой.
+    // Сначала валидируем тело запроса, потом отдаём данные в сервис.
     validateRegister(req.body);
     const result = await registerUser(req.body);
 
@@ -25,11 +15,11 @@ export async function register(req, res, next) {
 
 export async function login(req, res, next) {
   try {
-    // Логин будет использовать ту же схему: валидация, затем сервис.
+    // Логин идёт по той же схеме: проверка тела запроса и потом сервис.
     validateLogin(req.body);
-    await loginUser(req.body);
+    const result = await loginUser(req.body);
 
-    return sendNotImplemented(res);
+    return res.status(200).json(result);
   } catch (error) {
     next(error);
   }
@@ -37,10 +27,10 @@ export async function login(req, res, next) {
 
 export async function me(req, res, next) {
   try {
-    // Этот хендлер позже будет читать пользователя из токена.
-    await getCurrentUser(req);
+    // Здесь берём токен из заголовка и ищем текущего пользователя.
+    const result = await getCurrentUser(req);
 
-    return sendNotImplemented(res);
+    return res.status(200).json(result);
   } catch (error) {
     next(error);
   }
