@@ -10,6 +10,7 @@
     "#db/*": "./src/db/*",
     "#modules/*": "./src/modules/*",
     "#routes/*": "./src/routes/*",
+    "#shared/*": "./src/shared/*",
     "#utils/*": "./src/utils/*"
   },
   "main": "src/server.js",
