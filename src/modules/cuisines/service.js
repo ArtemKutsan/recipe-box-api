@@ -3,7 +3,6 @@ import { Cuisine } from './model.js';
 // DTO справочника отдаёт только данные, нужные фильтрам рецептов.
 function toCuisineDto(cuisine) {
   return {
-    id: cuisine._id.toString(),
     title: cuisine.title,
     slug: cuisine.slug,
     recipesCount: cuisine.recipesCount,
