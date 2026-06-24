@@ -7,8 +7,7 @@ import { getNextSequence } from '#shared/counters/service.js';
 // Сервисный слой работает с моделью пользователя и готовит ответ для API.
 export function toUserDto(user) {
   return {
-    id: user._id.toString(),
-    publicId: user.publicId,
+    id: user.publicId,
     name: user.name,
     email: user.email,
     avatarUrl: user.avatarUrl,

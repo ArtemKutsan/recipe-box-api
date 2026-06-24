@@ -3,8 +3,7 @@ import { User } from './model.js';
 // Сервис users готовит публичный профиль пользователя.
 function toPublicProfileDto(user) {
   return {
-    id: user._id.toString(),
-    publicId: user.publicId,
+    id: user.publicId,
     name: user.name,
     avatarUrl: user.avatarUrl,
     bio: user.bio,
