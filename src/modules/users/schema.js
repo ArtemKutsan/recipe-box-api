@@ -3,6 +3,12 @@ import { Schema } from 'mongoose';
 // Схема пользователя хранит только данные, нужные для авторизации и профиля.
 export const userSchema = new Schema(
   {
+    publicId: {
+      type: Number,
+      required: true,
+      unique: true,
+      index: true,
+    },
     name: {
       type: String,
       required: true,

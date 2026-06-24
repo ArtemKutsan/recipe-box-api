@@ -2,11 +2,13 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import env from '#config/env.js';
 import { User } from '#modules/users/model.js';
+import { getNextSequence } from '#shared/counters/service.js';
 
 // Сервисный слой работает с моделью пользователя и готовит ответ для API.
 export function toUserDto(user) {
   return {
     id: user._id.toString(),
+    publicId: user.publicId,
     name: user.name,
     email: user.email,
     avatarUrl: user.avatarUrl,
@@ -39,9 +41,11 @@ export async function registerUser(payload) {
     throw error;
   }
 
-  // Хэшируем пароль и сохраняем его хеш в базе.
+  // Получаем публичный номер и хэшируем пароль перед сохранением.
+  const publicId = await getNextSequence('users');
   const passwordHash = await bcrypt.hash(payload.password, 10);
   const user = await User.create({
+    publicId,
     name: payload.name.trim(),
     email,
     passwordHash,
