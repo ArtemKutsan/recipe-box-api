@@ -1,14 +1,5 @@
 import { User } from './model.js';
-
-// Сервис users готовит публичный профиль пользователя.
-function toPublicProfileDto(user) {
-  return {
-    id: user.publicId,
-    name: user.name,
-    avatarUrl: user.avatarUrl,
-    bio: user.bio,
-  };
-}
+import { toPublicUserResponse } from './shared/response.js';
 
 export async function getPublicUserProfile(publicId) {
   const userPublicId = Number(publicId);
@@ -31,6 +22,6 @@ export async function getPublicUserProfile(publicId) {
   }
 
   return {
-    user: toPublicProfileDto(user),
+    user: toPublicUserResponse(user),
   };
 }

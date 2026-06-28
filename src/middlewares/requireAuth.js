@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import env from '#config/env.js';
 import { User } from '#modules/users/model.js';
-import { toUserDto } from '#modules/auth/service.js';
+import { toUserResponse } from '#modules/auth/shared/response.js';
 
 // Проверяем JWT до входа в защищённый контроллер.
 export default async function requireAuth(req, _res, next) {
@@ -34,7 +34,7 @@ export default async function requireAuth(req, _res, next) {
     }
 
     // Кладём в запрос публичного пользователя для ответа и сырой документ для сервисов.
-    req.user = toUserDto(user);
+    req.user = toUserResponse(user);
     req.authUser = user;
 
     next();

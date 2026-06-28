@@ -3,18 +3,7 @@ import jwt from 'jsonwebtoken';
 import env from '#config/env.js';
 import { User } from '#modules/users/model.js';
 import { getNextSequence } from '#shared/counters/service.js';
-
-// Сервисный слой работает с моделью пользователя и готовит ответ для API.
-export function toUserDto(user) {
-  return {
-    id: user.publicId,
-    name: user.name,
-    email: user.email,
-    avatarUrl: user.avatarUrl,
-    bio: user.bio,
-    createdAt: user.createdAt,
-  };
-}
+import { toUserResponse } from './shared/response.js';
 
 // Подписываем JWT тем секретом, который хранится в окружении сервера.
 function createToken(userId) {
@@ -51,7 +40,7 @@ export async function registerUser(payload) {
   });
 
   return {
-    user: toUserDto(user),
+    user: toUserResponse(user),
     token: createToken(user._id.toString()),
   };
 }
@@ -78,7 +67,7 @@ export async function loginUser(payload) {
   }
 
   return {
-    user: toUserDto(user),
+    user: toUserResponse(user),
     token: createToken(user._id.toString()),
   };
 }
