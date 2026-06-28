@@ -33,8 +33,9 @@ export default async function requireAuth(req, _res, next) {
       throw error;
     }
 
-    // Кладём текущего пользователя в запрос, чтобы контроллер не повторял проверку.
+    // Кладём в запрос публичного пользователя для ответа и сырой документ для сервисов.
     req.user = toUserDto(user);
+    req.authUser = user;
 
     next();
   } catch (error) {
