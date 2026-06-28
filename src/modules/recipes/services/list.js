@@ -1,5 +1,5 @@
 import { Recipe } from '../model.js';
-import { toRecipeListDto } from '../shared/response.js';
+import { toRecipeListResponse } from '../shared/response.js';
 import {
   DEFAULT_PAGE,
   DEFAULT_PAGE_SIZE,
@@ -32,7 +32,7 @@ export async function getRecipes(query = {}) {
   const totalPages = total === 0 ? 0 : Math.ceil(total / pageSize);
 
   return {
-    items: recipes.map(toRecipeListDto),
+    items: recipes.map(toRecipeListResponse),
     page,
     pageSize,
     total,

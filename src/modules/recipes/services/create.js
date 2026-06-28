@@ -8,7 +8,7 @@ import {
   normalizeSlug,
   normalizeStringArray,
 } from '../shared/utils.js';
-import { toRecipeDetailDto } from '../shared/response.js';
+import { toRecipeDetailResponseFromCreate } from '../shared/response.js';
 
 const ALLOWED_DIFFICULTIES = new Set(RECIPE_DIFFICULTIES);
 
@@ -96,7 +96,7 @@ export async function createRecipe(payload, author) {
     });
 
     return {
-      recipe: toRecipeDetailDto(createdRecipe, mealTypeTitles, cuisine, author),
+      recipe: toRecipeDetailResponseFromCreate(createdRecipe, mealTypeTitles, cuisine, author),
     };
   } finally {
     await session.endSession();

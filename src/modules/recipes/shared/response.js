@@ -1,7 +1,7 @@
-import { toRecipeAuthorDto } from './utils.js';
+import { toRecipeAuthorResponse } from './utils.js';
 
 // Собираем короткий ответ для списка рецептов.
-export function toRecipeListDto(recipe) {
+export function toRecipeListResponse(recipe) {
   return {
     id: recipe._id.toString(),
     title: recipe.title,
@@ -14,12 +14,12 @@ export function toRecipeListDto(recipe) {
     prepTimeMinutes: recipe.prepTimeMinutes,
     cookTimeMinutes: recipe.cookTimeMinutes,
     thumbnailUrl: recipe.thumbnailUrl,
-    author: toRecipeAuthorDto(recipe.authorId),
+    author: toRecipeAuthorResponse(recipe.authorId),
   };
 }
 
 // Собираем детальный ответ для рецепта.
-export function toRecipeDetailDto(recipe, mealTypeTitles, cuisine, author) {
+function buildRecipeDetailResponse(recipe, mealTypeTitles, cuisine, author) {
   return {
     id: recipe._id.toString(),
     title: recipe.title,
@@ -35,7 +35,7 @@ export function toRecipeDetailDto(recipe, mealTypeTitles, cuisine, author) {
     instructions: recipe.instructions,
     thumbnailUrl: recipe.thumbnailUrl,
     images: recipe.images,
-    author: toRecipeAuthorDto(author),
+    author: toRecipeAuthorResponse(author),
     createdAt: recipe.createdAt,
     updatedAt: recipe.updatedAt,
   };
@@ -47,10 +47,15 @@ export function toRecipeDetailResponse(recipe) {
     ? recipe.mealTypeIds.map((item) => item.title).filter(Boolean)
     : [];
 
-  return toRecipeDetailDto(
+  return buildRecipeDetailResponse(
     recipe,
     mealTypeTitles,
     recipe.cuisineId ?? { title: null },
     recipe.authorId,
   );
+}
+
+// Делаем detail ответ из данных create-сценария.
+export function toRecipeDetailResponseFromCreate(recipe, mealTypeTitles, cuisine, author) {
+  return buildRecipeDetailResponse(recipe, mealTypeTitles, cuisine, author);
 }

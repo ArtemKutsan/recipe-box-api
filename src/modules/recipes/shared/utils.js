@@ -9,7 +9,7 @@ export function normalizeStringArray(value = []) {
 }
 
 // Возвращаем только публичные данные автора рецепта.
-export function toRecipeAuthorDto(author) {
+export function toRecipeAuthorResponse(author) {
   if (!author) {
     return null;
   }
