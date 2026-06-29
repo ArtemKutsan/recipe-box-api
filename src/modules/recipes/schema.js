@@ -7,6 +7,14 @@ const RECIPE_DIFFICULTIES = ['easy', 'medium', 'hard'];
 // Схема рецепта хранит основной контент и связи со справочниками.
 export const recipeSchema = new Schema(
   {
+    // Короткий публичный номер рецепта для API и URL.
+    publicId: {
+      type: Number,
+      required: true,
+      unique: true,
+      sparse: true,
+      index: true,
+    },
     // Автор хранится как внутренняя Mongo-связь с пользователем.
     authorId: {
       type: ObjectId,

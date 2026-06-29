@@ -3,7 +3,7 @@ import { toRecipeAuthorResponse } from './utils.js';
 // Собираем короткий ответ для списка рецептов.
 export function toRecipeListResponse(recipe) {
   return {
-    id: recipe._id.toString(),
+    id: recipe.publicId,
     title: recipe.title,
     mealType: Array.isArray(recipe.mealTypeIds)
       ? recipe.mealTypeIds.map((item) => item.title).filter(Boolean)
@@ -21,7 +21,7 @@ export function toRecipeListResponse(recipe) {
 // Собираем детальный ответ для рецепта.
 function buildRecipeDetailResponse(recipe, mealTypeTitles, cuisine, author) {
   return {
-    id: recipe._id.toString(),
+    id: recipe.publicId,
     title: recipe.title,
     description: recipe.description,
     mealType: mealTypeTitles,

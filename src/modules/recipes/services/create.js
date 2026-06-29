@@ -3,6 +3,7 @@ import { Recipe } from '../model.js';
 import { RECIPE_DIFFICULTIES, RECIPE_DIFFICULTY_ERROR } from '../constants.js';
 import { MealType } from '#modules/meal-types/model.js';
 import { Cuisine } from '#modules/cuisines/model.js';
+import { getNextSequence } from '#shared/counters/service.js';
 import { normalizeStringArray } from '../shared/utils.js';
 import { resolveRecipeDictionaries } from '../shared/dictionaries.js';
 import { toRecipeDetailResponseFromCreate } from '../shared/response.js';
@@ -34,10 +35,14 @@ export async function createRecipe(payload, author) {
 
     // Все операции ниже должны пройти вместе, иначе Mongo откатит их.
     await session.withTransaction(async () => {
+      // Выдаём короткий публичный номер рецепта в той же транзакции.
+      const publicId = await getNextSequence('recipes', { session });
+
       // Создаем сам рецепт в рамках текущей транзакции.
       const [recipe] = await Recipe.create(
         [
           {
+            publicId,
             authorId: author._id,
             title: payload.title.trim(),
             description: typeof payload.description === 'string' ? payload.description.trim() : '',

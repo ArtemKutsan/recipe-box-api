@@ -20,6 +20,17 @@ export function toRecipeAuthorResponse(author) {
   };
 }
 
+// Превращаем id из URL в публичный номер рецепта.
+export function parseRecipePublicId(value) {
+  const publicId = Number(value);
+
+  if (!Number.isInteger(publicId) || publicId < 1) {
+    buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
+  }
+
+  return publicId;
+}
+
 // Формируем ошибку с HTTP-статусом и внутренним кодом в одном месте.
 export function buildNotFoundError(message, code) {
   const error = new Error(message);

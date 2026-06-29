@@ -1,4 +1,4 @@
-import { createRecipe, deleteRecipe, getRecipeById, getRecipes, updateRecipe } from './service.js';
+import { createRecipe, deleteRecipe, getRecipeByPublicId, getRecipes, updateRecipe } from './service.js';
 import { validateCreateRecipe, validateUpdateRecipe } from './validation.js';
 
 export async function list(req, res, next) {
@@ -15,7 +15,7 @@ export async function list(req, res, next) {
 export async function getById(req, res, next) {
   try {
     // Детали рецепта берем по id из URL и возвращаем готовый DTO.
-    const result = await getRecipeById(req.params.id);
+    const result = await getRecipeByPublicId(req.params.id);
 
     return res.status(200).json(result);
   } catch (error) {

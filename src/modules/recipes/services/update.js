@@ -3,7 +3,7 @@ import { Recipe } from '../model.js';
 import { RECIPE_DIFFICULTIES, RECIPE_DIFFICULTY_ERROR } from '../constants.js';
 import { MealType } from '#modules/meal-types/model.js';
 import { Cuisine } from '#modules/cuisines/model.js';
-import { buildNotFoundError, normalizeStringArray } from '../shared/utils.js';
+import { buildNotFoundError, normalizeStringArray, parseRecipePublicId } from '../shared/utils.js';
 import { resolveRecipeCuisine, resolveRecipeMealTypes } from '../shared/dictionaries.js';
 import { toRecipeDetailResponse } from '../shared/response.js';
 
@@ -97,11 +97,9 @@ function buildRecipeUpdate(payload, dictionaryData = {}) {
 
 // Обновляем только рецепт текущего пользователя и синхронизируем счетчики справочников.
 export async function updateRecipe(recipeId, payload, author) {
-  if (!mongoose.isValidObjectId(recipeId)) {
-    buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
-  }
+  const publicId = parseRecipePublicId(recipeId);
 
-  const recipe = await Recipe.findOne({ _id: recipeId, authorId: author._id });
+  const recipe = await Recipe.findOne({ publicId, authorId: author._id });
 
   if (!recipe) {
     buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');

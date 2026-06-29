@@ -2,15 +2,13 @@ import mongoose from 'mongoose';
 import { Recipe } from '../model.js';
 import { MealType } from '#modules/meal-types/model.js';
 import { Cuisine } from '#modules/cuisines/model.js';
-import { buildNotFoundError } from '../shared/utils.js';
+import { buildNotFoundError, parseRecipePublicId } from '../shared/utils.js';
 
 // Удаляем только рецепт текущего пользователя и уменьшаем счетчики справочников.
 export async function deleteRecipe(recipeId, author) {
-  if (!mongoose.isValidObjectId(recipeId)) {
-    buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
-  }
+  const publicId = parseRecipePublicId(recipeId);
 
-  const recipe = await Recipe.findOne({ _id: recipeId, authorId: author._id });
+  const recipe = await Recipe.findOne({ publicId, authorId: author._id });
 
   if (!recipe) {
     buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
