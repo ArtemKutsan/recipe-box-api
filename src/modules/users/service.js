@@ -1,4 +1,5 @@
 import { User } from './model.js';
+import { getRecipesByAuthor } from '#modules/recipes/service.js';
 import { toPublicUserResponse } from './shared/response.js';
 
 export async function getPublicUserProfile(publicId) {
@@ -24,4 +25,9 @@ export async function getPublicUserProfile(publicId) {
   return {
     user: toPublicUserResponse(user),
   };
+}
+
+export async function getCurrentUserRecipes(query = {}, user) {
+  // Рецепты отдаёт recipes module, users module только задаёт текущего автора.
+  return getRecipesByAuthor(user._id, query);
 }
