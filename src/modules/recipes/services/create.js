@@ -3,19 +3,14 @@ import { Recipe } from '../model.js';
 import { RECIPE_DIFFICULTIES, RECIPE_DIFFICULTY_ERROR } from '../constants.js';
 import { MealType } from '#modules/meal-types/model.js';
 import { Cuisine } from '#modules/cuisines/model.js';
-import {
-  buildNotFoundError,
-  normalizeSlug,
-  normalizeStringArray,
-} from '../shared/utils.js';
+import { normalizeStringArray } from '../shared/utils.js';
+import { resolveRecipeDictionaries } from '../shared/dictionaries.js';
 import { toRecipeDetailResponseFromCreate } from '../shared/response.js';
 
 const ALLOWED_DIFFICULTIES = new Set(RECIPE_DIFFICULTIES);
 
 // Создаем рецепт и обновляем связанные справочники в одной транзакции.
 export async function createRecipe(payload, author) {
-  const mealTypeSlugs = [...new Set(payload.mealType.map(normalizeSlug))];
-  const cuisineSlug = normalizeSlug(payload.cuisine);
   const tags = normalizeStringArray(payload.tags);
   const ingredients = normalizeStringArray(payload.ingredients);
   const instructions = normalizeStringArray(payload.instructions);
@@ -30,24 +25,7 @@ export async function createRecipe(payload, author) {
     throw error;
   }
 
-  const mealTypes = await MealType.find({
-    slug: { $in: mealTypeSlugs },
-    isActive: true,
-  });
-
-  if (mealTypes.length !== mealTypeSlugs.length) {
-    buildNotFoundError('One or more meal types were not found.', 'MEAL_TYPE_NOT_FOUND');
-  }
-
-  const cuisine = await Cuisine.findOne({ slug: cuisineSlug, isActive: true });
-
-  if (!cuisine) {
-    buildNotFoundError('Cuisine not found.', 'CUISINE_NOT_FOUND');
-  }
-
-  const mealTypeBySlug = new Map(mealTypes.map((item) => [item.slug, item]));
-  const mealTypeIds = mealTypeSlugs.map((slug) => mealTypeBySlug.get(slug)._id);
-  const mealTypeTitles = mealTypeSlugs.map((slug) => mealTypeBySlug.get(slug).title);
+  const { mealTypeIds, mealTypeTitles, cuisine } = await resolveRecipeDictionaries(payload);
 
   const session = await mongoose.startSession();
 

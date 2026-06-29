@@ -1,5 +1,5 @@
-import { createRecipe, getRecipeById, getRecipes } from './service.js';
-import { validateCreateRecipe } from './validation.js';
+import { createRecipe, getRecipeById, getRecipes, updateRecipe } from './service.js';
+import { validateCreateRecipe, validateUpdateRecipe } from './validation.js';
 
 export async function list(req, res, next) {
   try {
@@ -30,6 +30,18 @@ export async function create(req, res, next) {
     const result = await createRecipe(req.body, req.authUser);
 
     return res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function update(req, res, next) {
+  try {
+    // Обновлять рецепт может только владелец с валидным JWT.
+    validateUpdateRecipe(req.body);
+    const result = await updateRecipe(req.params.id, req.body, req.authUser);
+
+    return res.status(200).json(result);
   } catch (error) {
     next(error);
   }
