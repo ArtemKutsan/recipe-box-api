@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import requireAuth from '#middlewares/requireAuth.js';
-import { create, getById, list, update } from './controller.js';
+import { create, getById, list, remove, update } from './controller.js';
 
 const router = Router();
 
@@ -12,5 +12,7 @@ router.get('/:id', getById);
 router.post('/', requireAuth, create);
 // Обновление рецепта доступно только владельцу после проверки JWT.
 router.patch('/:id', requireAuth, update);
+// Удаление рецепта доступно только владельцу после проверки JWT.
+router.delete('/:id', requireAuth, remove);
 
 export default router;
