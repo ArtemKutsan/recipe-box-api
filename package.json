@@ -17,7 +17,8 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "seed:recipe-dictionaries": "node src/db/seedRecipeDictionaries.js"
+    "seed:recipe-dictionaries": "node src/db/seedRecipeDictionaries.js",
+    "backfill:recipe-public-ids": "node src/db/backfillRecipePublicIds.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
