@@ -2,7 +2,7 @@ import { User } from './model.js';
 import { getRecipesByAuthor } from '#modules/recipes/service.js';
 import { toPublicUserResponse } from './shared/response.js';
 
-export async function getPublicUserProfile(publicId) {
+async function findUserByPublicId(publicId) {
   const userPublicId = Number(publicId);
 
   // Если publicId не число, профиль не ищем.
@@ -22,9 +22,22 @@ export async function getPublicUserProfile(publicId) {
     throw error;
   }
 
+  return user;
+}
+
+export async function getPublicUserProfile(publicId) {
+  const user = await findUserByPublicId(publicId);
+
   return {
     user: toPublicUserResponse(user),
   };
+}
+
+export async function getPublicUserRecipes(publicId, query = {}) {
+  const user = await findUserByPublicId(publicId);
+
+  // Публичный список рецептов автора использует тот же recipes service.
+  return getRecipesByAuthor(user._id, query);
 }
 
 export async function getCurrentUserRecipes(query = {}, user) {
