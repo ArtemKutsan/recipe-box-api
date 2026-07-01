@@ -28,6 +28,7 @@ function buildRecipeDetailResponse(recipe, mealTypeTitles, cuisine, author) {
     mealType: mealTypeTitles,
     tags: recipe.tags,
     cuisine: cuisine.title,
+    rating: recipe.rating ?? null,
     caloriesPerServing: recipe.caloriesPerServing ?? null,
     prepTimeMinutes: recipe.prepTimeMinutes,
     cookTimeMinutes: recipe.cookTimeMinutes,
