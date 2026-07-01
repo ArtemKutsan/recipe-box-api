@@ -33,6 +33,11 @@ export const userSchema = new Schema(
       type: String,
       default: null,
     },
+    role: {
+      type: String,
+      enum: ['user', 'moderator', 'admin'],
+      default: 'user',
+    },
   },
   {
     timestamps: true,

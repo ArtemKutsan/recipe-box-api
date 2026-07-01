@@ -46,6 +46,11 @@ export const recipeSchema = new Schema(
       default: null,
       index: true,
     },
+    caloriesPerServing: {
+      type: Number,
+      default: null,
+      min: 0,
+    },
     tags: {
       type: [String],
       default: [],
@@ -78,6 +83,12 @@ export const recipeSchema = new Schema(
       // enum ограничивает поле только значениями из списка сложностей.
       enum: RECIPE_DIFFICULTIES,
       default: 'medium',
+    },
+    rating: {
+      type: Number,
+      default: null,
+      min: 0,
+      max: 5,
     },
     images: {
       type: [String],
