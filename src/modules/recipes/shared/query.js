@@ -36,7 +36,18 @@ export function buildSort(query) {
   return { [sortBy]: sortOrder };
 }
 
-// Превращаем query-параметры в Mongo-фильтр.
+async function resolveMealTypeId(mealTypeValue) {
+  const mealTypeSlug = normalizeSlug(mealTypeValue);
+  const mealType = await MealType.findOne({ slug: mealTypeSlug, isActive: true }).select('_id');
+
+  if (!mealType) {
+    buildNotFoundError('Meal type not found.', 'MEAL_TYPE_NOT_FOUND');
+  }
+
+  return mealType._id;
+}
+
+// Превращаем query-параметры в Mongo-фильтр для списка рецептов.
 export async function buildRecipeListFilter(query) {
   const filter = {};
   const searchValue = typeof query.q === 'string' ? query.q.trim() : '';
@@ -53,14 +64,7 @@ export async function buildRecipeListFilter(query) {
   }
 
   if (mealTypeValue) {
-    const mealTypeSlug = normalizeSlug(mealTypeValue);
-    const mealType = await MealType.findOne({ slug: mealTypeSlug, isActive: true }).select('_id');
-
-    if (!mealType) {
-      buildNotFoundError('Meal type not found.', 'MEAL_TYPE_NOT_FOUND');
-    }
-
-    filter.mealTypeIds = mealType._id;
+    filter.mealTypeIds = await resolveMealTypeId(mealTypeValue);
   }
 
   if (cuisineValue) {
