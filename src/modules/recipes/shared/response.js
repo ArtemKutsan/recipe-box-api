@@ -14,8 +14,18 @@ export function toRecipeListResponse(recipe) {
     caloriesPerServing: recipe.caloriesPerServing ?? null,
     prepTimeMinutes: recipe.prepTimeMinutes,
     cookTimeMinutes: recipe.cookTimeMinutes,
+    servings: recipe.servings,
     thumbnailUrl: recipe.thumbnailUrl,
     author: toRecipeAuthorResponse(recipe.authorId),
+  };
+}
+
+// Собираем короткий ответ для кухни в списке рецептов.
+export function toCuisineResponse(cuisine) {
+  return {
+    title: cuisine.title,
+    slug: cuisine.slug,
+    recipesCount: cuisine.recipesCount,
   };
 }
 
