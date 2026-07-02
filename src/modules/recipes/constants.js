@@ -10,4 +10,4 @@ export const RECIPE_LIST_DEFAULT_PAGE_SIZE = 20;
 export const RECIPE_LIST_MAX_PAGE_SIZE = 100;
 
 // Список полей, по которым backend разрешает сортировать список рецептов.
-export const RECIPE_LIST_SORT_FIELDS = ['createdAt', 'title', 'prepTimeMinutes', 'cookTimeMinutes'];
+export const RECIPE_LIST_SORT_FIELDS = ['createdAt', 'title', 'rating', 'prepTimeMinutes', 'cookTimeMinutes'];
