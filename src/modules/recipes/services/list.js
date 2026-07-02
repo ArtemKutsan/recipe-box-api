@@ -1,3 +1,4 @@
+import { Cuisine } from '#modules/cuisines/model.js';
 import { Recipe } from '../model.js';
 import { toRecipeListResponse } from '../shared/response.js';
 import {
@@ -21,13 +22,50 @@ export async function getRecipesByAuthor(authorId, query = {}) {
   return getRecipesByFilter({ authorId }, query);
 }
 
+async function getCuisineList(filter) {
+  const cuisineFilter = { ...filter };
+  delete cuisineFilter.cuisineId;
+
+  const cuisines = await Recipe.aggregate([
+    { $match: { ...cuisineFilter, cuisineId: { $ne: null } } },
+    {
+      $group: {
+        _id: '$cuisineId',
+        recipesCount: { $sum: 1 },
+      },
+    },
+    {
+      $lookup: {
+        from: Cuisine.collection.name,
+        localField: '_id',
+        foreignField: '_id',
+        as: 'cuisine',
+      },
+    },
+    { $unwind: '$cuisine' },
+    { $match: { 'cuisine.isActive': true } },
+    {
+      $project: {
+        _id: 0,
+        title: '$cuisine.title',
+        slug: '$cuisine.slug',
+        order: '$cuisine.order',
+        recipesCount: 1,
+      },
+    },
+    { $sort: { order: 1, title: 1 } },
+  ]);
+
+  return cuisines;
+}
+
 async function getRecipesByFilter(filter, query = {}) {
   const page = parsePositiveInteger(query.page, DEFAULT_PAGE);
   const pageSize = parsePositiveInteger(query.pageSize, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE);
   const sort = buildSort(query);
   const skip = (page - 1) * pageSize;
 
-  const [total, recipes] = await Promise.all([
+  const [total, recipes, cuisines] = await Promise.all([
     Recipe.countDocuments(filter),
     Recipe.find(filter)
       .populate('authorId', 'publicId name')
@@ -37,6 +75,7 @@ async function getRecipesByFilter(filter, query = {}) {
       .skip(skip)
       .limit(pageSize)
       .lean(),
+    getCuisineList(filter),
   ]);
 
   const totalPages = total === 0 ? 0 : Math.ceil(total / pageSize);
@@ -47,5 +86,6 @@ async function getRecipesByFilter(filter, query = {}) {
     pageSize,
     total,
     totalPages,
+    cuisines,
   };
 }
