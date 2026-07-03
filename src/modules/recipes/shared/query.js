@@ -10,6 +10,10 @@ import { buildNotFoundError, normalizeSlug } from './utils.js';
 
 const ALLOWED_SORT_FIELDS = new Set(RECIPE_LIST_SORT_FIELDS);
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 // Приводим число из query к безопасному положительному значению.
 export function parsePositiveInteger(value, fallback, max = Number.MAX_SAFE_INTEGER) {
   const parsed = Number.parseInt(String(value ?? ''), 10);
@@ -56,7 +60,13 @@ export async function buildRecipeListFilter(query) {
   const cuisineValue = typeof query.cuisine === 'string' ? query.cuisine.trim() : '';
 
   if (searchValue) {
-    filter.$text = { $search: searchValue };
+    const searchPattern = escapeRegExp(searchValue);
+
+    filter.$or = [
+      { title: { $regex: searchPattern, $options: 'i' } },
+      { description: { $regex: searchPattern, $options: 'i' } },
+      { tags: { $regex: searchPattern, $options: 'i' } },
+    ];
   }
 
   if (tagValue) {
