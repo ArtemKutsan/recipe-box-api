@@ -89,6 +89,8 @@ src/
 Backend использует переменные окружения:
 
 - `PORT`
+- `DB_ENABLED`
+- `DB_PROVIDER`
 - `MONGODB_URI`
 - `JWT_SECRET`
 - `CLIENT_ORIGIN`
