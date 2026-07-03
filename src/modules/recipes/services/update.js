@@ -161,7 +161,7 @@ export async function updateRecipe(recipeId, payload, author) {
   }
 
   const updatedRecipe = await Recipe.findById(recipe._id)
-    .populate('authorId', 'publicId name')
+    .populate('authorId', 'publicId name avatarUrl')
     .populate('mealTypeIds', 'title')
     .populate('cuisineId', 'title')
     .lean();

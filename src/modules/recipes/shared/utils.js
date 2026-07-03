@@ -17,6 +17,7 @@ export function toRecipeAuthorResponse(author) {
   return {
     id: author.publicId ?? author.id ?? author._id?.toString(),
     name: author.name,
+    avatarUrl: author.avatarUrl ?? null,
   };
 }
 

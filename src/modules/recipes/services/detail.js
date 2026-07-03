@@ -7,7 +7,7 @@ export async function getRecipeByPublicId(recipeId) {
   const publicId = parseRecipePublicId(recipeId);
 
   const recipe = await Recipe.findOne({ publicId })
-    .populate('authorId', 'publicId name')
+    .populate('authorId', 'publicId name avatarUrl')
     .populate('mealTypeIds', 'title')
     .populate('cuisineId', 'title')
     .lean();
