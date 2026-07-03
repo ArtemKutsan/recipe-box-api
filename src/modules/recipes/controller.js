@@ -14,7 +14,7 @@ export async function list(req, res, next) {
 
 export async function getById(req, res, next) {
   try {
-    // Детали рецепта берем по id из URL и возвращаем готовый DTO.
+    // Детали рецепта берем по id из URL и возвращаем готовый response.
     const result = await getRecipeByPublicId(req.params.id);
 
     return res.status(200).json(result);
