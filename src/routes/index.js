@@ -5,6 +5,7 @@ import usersRouter from '#modules/users/router.js';
 import mealTypesRouter from '#modules/meal-types/router.js';
 import cuisinesRouter from '#modules/cuisines/router.js';
 import recipesRouter from '#modules/recipes/router.js';
+import mealPlansRouter from '#modules/meal-plans/router.js';
 
 const router = Router();
 
@@ -17,6 +18,8 @@ router.use('/meal-types', mealTypesRouter);
 router.use('/cuisines', cuisinesRouter);
 // Создание рецепта уже идёт через защищённый модуль recipes.
 router.use('/recipes', recipesRouter);
+// Meal planner работает от текущего пользователя и тоже защищён JWT.
+router.use('/meal-plans', mealPlansRouter);
 router.use(healthRouter);
 
 export default router;

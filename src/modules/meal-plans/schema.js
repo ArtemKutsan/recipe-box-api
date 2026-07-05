@@ -1,24 +1,25 @@
 import { Schema } from 'mongoose';
-import { MEAL_PLAN_DAYS, MEAL_PLAN_PERIODS } from './constants.js';
+import { MEAL_PLAN_DAYS, MEAL_PLAN_PERIODS, createEmptyMealPlanSlots } from './constants.js';
 
 const { ObjectId } = Schema.Types;
 
-const createMealPeriodSchemaDefinition = () =>
+const createMealPeriodSchemaDefinition = () => ({
+  // В слотах храним публичный id рецепта из API, а не Mongo _id.
+  type: Number,
+  default: null,
+  min: 1,
+});
+
+const createDaySchemaDefinition = () =>
   Object.fromEntries(
-    MEAL_PLAN_PERIODS.map((mealPeriod) => [
-      mealPeriod,
-      {
-        // В слотах храним публичный id рецепта из API, а не Mongo _id.
-        type: Number,
-        default: null,
-        min: 1,
-      },
-    ])
+    MEAL_PLAN_PERIODS.map((mealPeriod) => [mealPeriod, createMealPeriodSchemaDefinition()])
   );
 
 const slotsSchemaDefinition = Object.fromEntries(
-  MEAL_PLAN_DAYS.map((day) => [day, createMealPeriodSchemaDefinition()])
+  MEAL_PLAN_DAYS.map((day) => [day, createDaySchemaDefinition()])
 );
+
+const slotsSchema = new Schema(slotsSchemaDefinition, { _id: false });
 
 export const mealPlanSchema = new Schema(
   {
@@ -31,8 +32,8 @@ export const mealPlanSchema = new Schema(
       index: true,
     },
     slots: {
-      type: slotsSchemaDefinition,
-      default: {},
+      type: slotsSchema,
+      default: createEmptyMealPlanSlots,
     },
   },
   {
