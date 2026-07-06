@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { Recipe } from '../model.js';
-import { RECIPE_DIFFICULTIES, RECIPE_DIFFICULTY_ERROR } from '../constants.js';
+import { RECIPE_DIFFICULTIES, RECIPE_DIFFICULTY_ERROR, RECIPE_VISIBILITIES, RECIPE_VISIBILITY_ERROR } from '../constants.js';
 import { MealType } from '#modules/meal-types/model.js';
 import { Cuisine } from '#modules/cuisines/model.js';
 import { getNextSequence } from '#shared/counters/service.js';
@@ -9,6 +9,7 @@ import { resolveRecipeDictionaries } from '../shared/dictionaries.js';
 import { toRecipeDetailResponseFromCreate } from '../shared/response.js';
 
 const ALLOWED_DIFFICULTIES = new Set(RECIPE_DIFFICULTIES);
+const ALLOWED_VISIBILITIES = new Set(RECIPE_VISIBILITIES);
 
 // Создаем рецепт и обновляем связанные справочники в одной транзакции.
 export async function createRecipe(payload, author) {
@@ -17,12 +18,21 @@ export async function createRecipe(payload, author) {
   const instructions = normalizeStringArray(payload.instructions);
   const images = normalizeStringArray(payload.images);
   const difficulty = payload.difficulty ? String(payload.difficulty).trim().toLowerCase() : 'medium';
+  const visibility = payload.visibility ? String(payload.visibility).trim().toLowerCase() : 'public';
 
   if (!ALLOWED_DIFFICULTIES.has(difficulty)) {
     const error = new Error(RECIPE_DIFFICULTY_ERROR);
     error.status = 400;
     error.code = 'VALIDATION_ERROR';
     error.details = [RECIPE_DIFFICULTY_ERROR];
+    throw error;
+  }
+
+  if (!ALLOWED_VISIBILITIES.has(visibility)) {
+    const error = new Error(RECIPE_VISIBILITY_ERROR);
+    error.status = 400;
+    error.code = 'VALIDATION_ERROR';
+    error.details = [RECIPE_VISIBILITY_ERROR];
     throw error;
   }
 
@@ -55,6 +65,7 @@ export async function createRecipe(payload, author) {
             cookTimeMinutes: Number(payload.cookTimeMinutes),
             servings: Number(payload.servings),
             difficulty,
+            visibility,
             images,
             thumbnailUrl:
               typeof payload.thumbnailUrl === 'string' && payload.thumbnailUrl.trim()

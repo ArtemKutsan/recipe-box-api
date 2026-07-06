@@ -41,6 +41,6 @@ export async function getPublicUserRecipes(publicId, query = {}) {
 }
 
 export async function getCurrentUserRecipes(query = {}, user) {
-  // Рецепты отдаёт recipes module, users module только задаёт текущего автора.
-  return getRecipesByAuthor(user._id, query);
+  // Рецепты текущего пользователя включают и public, и private записи.
+  return getRecipesByAuthor(user._id, query, { includePrivate: true });
 }

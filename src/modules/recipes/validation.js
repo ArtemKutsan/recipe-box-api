@@ -1,4 +1,9 @@
-import { RECIPE_DIFFICULTIES, RECIPE_DIFFICULTY_ERROR } from './constants.js';
+import {
+  RECIPE_DIFFICULTIES,
+  RECIPE_DIFFICULTY_ERROR,
+  RECIPE_VISIBILITIES,
+  RECIPE_VISIBILITY_ERROR,
+} from './constants.js';
 
 const RECIPE_UPDATE_FIELDS = [
   'title',
@@ -14,6 +19,7 @@ const RECIPE_UPDATE_FIELDS = [
   'difficulty',
   'images',
   'thumbnailUrl',
+  'visibility',
 ];
 
 // Общий helper для ошибок валидации рецепта.
@@ -94,6 +100,14 @@ function validateRecipeFields(body, errors, { partial = false } = {}) {
 
     if (!RECIPE_DIFFICULTIES.includes(normalizedDifficulty)) {
       errors.push(RECIPE_DIFFICULTY_ERROR);
+    }
+  }
+
+  if (body.visibility !== undefined) {
+    const normalizedVisibility = String(body.visibility).trim().toLowerCase();
+
+    if (!RECIPE_VISIBILITIES.includes(normalizedVisibility)) {
+      errors.push(RECIPE_VISIBILITY_ERROR);
     }
   }
 }

@@ -15,7 +15,7 @@ export async function list(req, res, next) {
 export async function getById(req, res, next) {
   try {
     // Детали рецепта берем по id из URL и возвращаем готовый response.
-    const result = await getRecipeByPublicId(req.params.id);
+    const result = await getRecipeByPublicId(req.params.id, req.authUser);
 
     return res.status(200).json(result);
   } catch (error) {

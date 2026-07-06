@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { Recipe } from '../model.js';
-import { RECIPE_DIFFICULTIES, RECIPE_DIFFICULTY_ERROR } from '../constants.js';
+import { RECIPE_DIFFICULTIES, RECIPE_DIFFICULTY_ERROR, RECIPE_VISIBILITIES, RECIPE_VISIBILITY_ERROR } from '../constants.js';
 import { MealType } from '#modules/meal-types/model.js';
 import { Cuisine } from '#modules/cuisines/model.js';
 import { buildNotFoundError, normalizeStringArray, parseRecipePublicId } from '../shared/utils.js';
@@ -8,6 +8,7 @@ import { resolveRecipeCuisine, resolveRecipeMealTypes } from '../shared/dictiona
 import { toRecipeDetailResponse } from '../shared/response.js';
 
 const ALLOWED_DIFFICULTIES = new Set(RECIPE_DIFFICULTIES);
+const ALLOWED_VISIBILITIES = new Set(RECIPE_VISIBILITIES);
 
 function toIdString(value) {
   return value?.toString();
@@ -84,6 +85,20 @@ function buildRecipeUpdate(payload, dictionaryData = {}) {
   }
 
   setIfDefined(update, 'images', payload.images === undefined ? undefined : normalizeStringArray(payload.images));
+
+  if (payload.visibility !== undefined) {
+    const visibility = String(payload.visibility).trim().toLowerCase();
+
+    if (!ALLOWED_VISIBILITIES.has(visibility)) {
+      const error = new Error(RECIPE_VISIBILITY_ERROR);
+      error.status = 400;
+      error.code = 'VALIDATION_ERROR';
+      error.details = [RECIPE_VISIBILITY_ERROR];
+      throw error;
+    }
+
+    update.visibility = visibility;
+  }
 
   if (payload.thumbnailUrl !== undefined) {
     update.thumbnailUrl =

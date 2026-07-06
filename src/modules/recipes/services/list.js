@@ -10,16 +10,28 @@ import {
   parsePositiveInteger,
 } from '../shared/query.js';
 
+// Старые рецепты без `visibility` пока считаем публичными.
+function buildPublicVisibilityFilter() {
+  return {
+    $or: [{ visibility: 'public' }, { visibility: { $exists: false } }],
+  };
+}
+
 // Возвращаем список рецептов с пагинацией и фильтрами.
 export async function getRecipes(query = {}) {
   const filter = await buildRecipeListFilter(query);
 
-  return getRecipesByFilter(filter, query);
+  return getRecipesByFilter({ $and: [filter, buildPublicVisibilityFilter()] }, query);
 }
 
 // Возвращаем список рецептов конкретного автора.
-export async function getRecipesByAuthor(authorId, query = {}) {
-  return getRecipesByFilter({ authorId }, query);
+export async function getRecipesByAuthor(authorId, query = {}, { includePrivate = false } = {}) {
+  return getRecipesByFilter({
+    $and: [
+      { authorId },
+      ...(includePrivate ? [] : [buildPublicVisibilityFilter()]),
+    ],
+  }, query);
 }
 
 async function getCuisineList(filter) {

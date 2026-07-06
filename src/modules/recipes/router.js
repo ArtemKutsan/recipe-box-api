@@ -1,13 +1,14 @@
 import { Router } from 'express';
 import requireAuth from '#middlewares/requireAuth.js';
+import optionalAuth from '#middlewares/optionalAuth.js';
 import { create, getById, list, remove, update } from './controller.js';
 
 const router = Router();
 
 // Список рецептов доступен без авторизации.
 router.get('/', list);
-// Детальная страница рецепта тоже доступна без авторизации.
-router.get('/:id', getById);
+// Детальная страница рецепта может принять JWT, чтобы автор увидел private-рецепт.
+router.get('/:id', optionalAuth, getById);
 // Создание рецепта доступно только после проверки JWT.
 router.post('/', requireAuth, create);
 // Обновление рецепта доступно только владельцу после проверки JWT.

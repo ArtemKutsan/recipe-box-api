@@ -1,4 +1,5 @@
 import { Schema } from 'mongoose';
+import { RECIPE_VISIBILITIES } from './constants.js';
 
 const { ObjectId } = Schema.Types;
 
@@ -44,6 +45,13 @@ export const recipeSchema = new Schema(
       type: ObjectId,
       ref: 'Cuisine',
       default: null,
+      index: true,
+    },
+    // Видимость определяет, кто может видеть рецепт в списках и detail.
+    visibility: {
+      type: String,
+      enum: RECIPE_VISIBILITIES,
+      default: 'public',
       index: true,
     },
     caloriesPerServing: {
