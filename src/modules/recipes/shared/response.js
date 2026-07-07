@@ -16,6 +16,7 @@ export function toRecipeListResponse(recipe) {
     prepTimeMinutes: recipe.prepTimeMinutes,
     cookTimeMinutes: recipe.cookTimeMinutes,
     servings: recipe.servings,
+    difficulty: recipe.difficulty ?? null,
     thumbnailUrl: recipe.thumbnailUrl,
     author: toRecipeAuthorResponse(recipe.authorId),
   };
