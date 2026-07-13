@@ -26,12 +26,18 @@ export async function getRecipes(query = {}) {
 
 // Возвращаем список рецептов конкретного автора.
 export async function getRecipesByAuthor(authorId, query = {}, { includePrivate = false } = {}) {
-  return getRecipesByFilter({
-    $and: [
-      { authorId },
-      ...(includePrivate ? [] : [buildPublicVisibilityFilter()]),
-    ],
-  }, query);
+  const filter = await buildRecipeListFilter(query);
+
+  return getRecipesByFilter(
+    {
+      $and: [
+        { authorId },
+        filter,
+        ...(includePrivate ? [] : [buildPublicVisibilityFilter()]),
+      ],
+    },
+    query,
+  );
 }
 
 async function getCuisineList(filter) {
