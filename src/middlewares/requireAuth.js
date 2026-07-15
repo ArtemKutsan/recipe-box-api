@@ -3,6 +3,26 @@ import env from '#config/env.js';
 import { User } from '#modules/users/model.js';
 import { toUserResponse } from '#modules/auth/shared/response.js';
 
+function buildUnauthorizedError(message) {
+  const error = new Error(message);
+  error.status = 401;
+  error.code = 'UNAUTHORIZED';
+  return error;
+}
+
+function normalizeJwtError(error) {
+  // Ошибки проверки JWT должны возвращать 401, а не проваливаться в общий 500.
+  if (error?.name === 'TokenExpiredError') {
+    return buildUnauthorizedError('Authorization token has expired.');
+  }
+
+  if (error?.name === 'JsonWebTokenError' || error?.name === 'NotBeforeError') {
+    return buildUnauthorizedError('Authorization token is invalid.');
+  }
+
+  return error;
+}
+
 // Проверяем JWT до входа в защищённый контроллер.
 export default async function requireAuth(req, _res, next) {
   try {
@@ -39,6 +59,6 @@ export default async function requireAuth(req, _res, next) {
 
     next();
   } catch (error) {
-    next(error);
+    next(normalizeJwtError(error));
   }
 }
