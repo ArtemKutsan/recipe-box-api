@@ -1,3 +1,12 @@
+/**
+ * Здесь обрабатываются параметры из адресной строки запроса списка рецептов.
+ * Например, из `?page=2&mealType=dinner` файл понимает номер страницы и выбранный тип питания.
+ * Он готовит условия для поиска в базе, сортировку и ограничения для пагинации.
+ * Сам список рецептов этот файл не получает и ответ браузеру не отправляет.
+ * Принимает: объект `req.query`, например `{ q: 'pasta', page: '2', mealType: 'dinner' }`.
+ * Возвращает: Mongo-фильтр, сортировку или безопасные числа для пагинации.
+ * Пример: `buildRecipeListFilter({ mealType: 'dinner' })` готовит условие по Mongo id dinner.
+ */
 import { SORT_FIELDS } from '../constants.js';
 import { resolveRecipeCuisine, resolveRecipeMealType } from './dictionaries.js';
 

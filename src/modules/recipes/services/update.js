@@ -1,3 +1,12 @@
+/**
+ * Здесь меняется рецепт, но только если он принадлежит пользователю, который отправил запрос.
+ * Файл обновляет только поля, которые действительно пришли с фронтенда через PATCH.
+ * Если изменились типы питания или кухня, он также обновляет количество рецептов
+ * в соответствующих справочниках.
+ * Принимает: номер рецепта, только изменяемые поля и объект пользователя из JWT.
+ * Возвращает: `{ recipe: {...} }` с обновлённым рецептом для фронтенда.
+ * Пример: `updateRecipe('42', { title: 'New pasta' }, author)`.
+ */
 import mongoose from 'mongoose';
 import { Recipe } from '../model.js';
 import { RECIPE_DIFFICULTIES, RECIPE_DIFFICULTY_ERROR, RECIPE_VISIBILITIES, RECIPE_VISIBILITY_ERROR } from '../constants.js';

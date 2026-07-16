@@ -1,3 +1,12 @@
+/**
+ * Здесь загружаются списки рецептов: общий каталог или рецепты одного пользователя.
+ * Файл учитывает поиск, фильтры, сортировку и номер страницы.
+ * Он не показывает приватные рецепты всем подряд, а вместе со списком возвращает кухни,
+ * которые подходят к текущим выбранным фильтрам.
+ * Принимает: query-параметры, например `{ page: '2', mealType: 'dinner' }`.
+ * Возвращает: `{ items, page, pageSize, total, totalPages, cuisines }`.
+ * Пример: `getRecipes({ q: 'pasta', page: '1' })`.
+ */
 import { Cuisine } from '#modules/cuisines/model.js';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants.js';
 import { Recipe } from '../model.js';

@@ -1,3 +1,12 @@
+/**
+ * Здесь создаётся новый рецепт от имени пользователя, который отправил запрос.
+ * Файл приводит данные формы к нужному виду, находит выбранные типы питания и кухню,
+ * выдаёт рецепту короткий публичный id и сохраняет всё в базе данных.
+ * Одновременно обновляется количество рецептов у выбранных типов питания и кухни.
+ * Принимает: данные нового рецепта и объект автора из JWT.
+ * Возвращает: `{ recipe: {...} }` с созданным рецептом для фронтенда.
+ * Пример: `createRecipe({ title: 'Pasta', mealType: ['dinner'], cuisine: 'italian' }, author)`.
+ */
 import mongoose from 'mongoose';
 import { Recipe } from '../model.js';
 import { RECIPE_DIFFICULTIES, RECIPE_DIFFICULTY_ERROR, RECIPE_VISIBILITIES, RECIPE_VISIBILITY_ERROR } from '../constants.js';
