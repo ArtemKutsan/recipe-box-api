@@ -2,6 +2,18 @@ import { MealType } from '#modules/meal-types/model.js';
 import { Cuisine } from '#modules/cuisines/model.js';
 import { buildNotFoundError, normalizeSlug } from './utils.js';
 
+// Находим один тип блюда по slug и возвращаем документ справочника.
+export async function resolveRecipeMealType(mealTypeValue) {
+  const mealTypeSlug = normalizeSlug(mealTypeValue);
+  const mealType = await MealType.findOne({ slug: mealTypeSlug, isActive: true });
+
+  if (!mealType) {
+    buildNotFoundError('Meal type not found.', 'MEAL_TYPE_NOT_FOUND');
+  }
+
+  return mealType;
+}
+
 // Находим типы блюда по slug и возвращаем id для Mongo-связей.
 export async function resolveRecipeMealTypes(mealType) {
   const mealTypeSlugs = [...new Set(mealType.map(normalizeSlug))];

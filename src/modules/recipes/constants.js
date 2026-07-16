@@ -11,9 +11,9 @@ export const RECIPE_DIFFICULTY_ERROR = 'difficulty must be one of easy, medium, 
 export const RECIPE_VISIBILITY_ERROR = 'visibility must be one of public, private';
 
 // Базовые значения пагинации списка рецептов.
-export const RECIPE_LIST_DEFAULT_PAGE = 1;
-export const RECIPE_LIST_DEFAULT_PAGE_SIZE = 20;
-export const RECIPE_LIST_MAX_PAGE_SIZE = 100;
+export const DEFAULT_PAGE = 1;
+export const DEFAULT_PAGE_SIZE = 20;
+export const MAX_PAGE_SIZE = 100;
 
 // Список полей, по которым backend разрешает сортировать список рецептов.
-export const RECIPE_LIST_SORT_FIELDS = ['createdAt', 'title', 'rating', 'prepTimeMinutes', 'cookTimeMinutes'];
+export const SORT_FIELDS = ['createdAt', 'title', 'rating', 'prepTimeMinutes', 'cookTimeMinutes'];

@@ -1,10 +1,8 @@
 import { Cuisine } from '#modules/cuisines/model.js';
+import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants.js';
 import { Recipe } from '../model.js';
 import { toRecipeListResponse } from '../shared/response.js';
 import {
-  DEFAULT_PAGE,
-  DEFAULT_PAGE_SIZE,
-  MAX_PAGE_SIZE,
   buildRecipeListFilter,
   buildSort,
   parsePositiveInteger,

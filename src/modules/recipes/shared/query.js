@@ -1,14 +1,7 @@
-import { MealType } from '#modules/meal-types/model.js';
-import { Cuisine } from '#modules/cuisines/model.js';
-import {
-  RECIPE_LIST_DEFAULT_PAGE,
-  RECIPE_LIST_DEFAULT_PAGE_SIZE,
-  RECIPE_LIST_MAX_PAGE_SIZE,
-  RECIPE_LIST_SORT_FIELDS,
-} from '../constants.js';
-import { buildNotFoundError, normalizeSlug } from './utils.js';
+import { SORT_FIELDS } from '../constants.js';
+import { resolveRecipeCuisine, resolveRecipeMealType } from './dictionaries.js';
 
-const ALLOWED_SORT_FIELDS = new Set(RECIPE_LIST_SORT_FIELDS);
+const ALLOWED_SORT_FIELDS = new Set(SORT_FIELDS);
 
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -42,17 +35,6 @@ export function buildSort(query) {
   return { [sortBy]: sortOrder, publicId: sortOrder };
 }
 
-async function resolveMealTypeId(mealTypeValue) {
-  const mealTypeSlug = normalizeSlug(mealTypeValue);
-  const mealType = await MealType.findOne({ slug: mealTypeSlug, isActive: true }).select('_id');
-
-  if (!mealType) {
-    buildNotFoundError('Meal type not found.', 'MEAL_TYPE_NOT_FOUND');
-  }
-
-  return mealType._id;
-}
-
 // Превращаем query-параметры в Mongo-фильтр для списка рецептов.
 export async function buildRecipeListFilter(query) {
   const filter = {};
@@ -76,25 +58,14 @@ export async function buildRecipeListFilter(query) {
   }
 
   if (mealTypeValue) {
-    filter.mealTypeIds = await resolveMealTypeId(mealTypeValue);
+    const mealType = await resolveRecipeMealType(mealTypeValue);
+    filter.mealTypeIds = mealType._id;
   }
 
   if (cuisineValue) {
-    const cuisineSlug = normalizeSlug(cuisineValue);
-    const cuisine = await Cuisine.findOne({ slug: cuisineSlug, isActive: true }).select('_id');
-
-    if (!cuisine) {
-      buildNotFoundError('Cuisine not found.', 'CUISINE_NOT_FOUND');
-    }
-
+    const cuisine = await resolveRecipeCuisine(cuisineValue);
     filter.cuisineId = cuisine._id;
   }
 
   return filter;
 }
-
-export {
-  RECIPE_LIST_DEFAULT_PAGE as DEFAULT_PAGE,
-  RECIPE_LIST_DEFAULT_PAGE_SIZE as DEFAULT_PAGE_SIZE,
-  RECIPE_LIST_MAX_PAGE_SIZE as MAX_PAGE_SIZE,
-};
