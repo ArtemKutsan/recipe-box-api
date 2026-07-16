@@ -37,7 +37,9 @@ export function buildSort(query) {
     : 'createdAt';
   const sortOrder = normalizeSortOrder(query.sortOrder);
 
-  return { [sortBy]: sortOrder };
+  // Добавляем стабильный второй ключ, чтобы при одинаковом основном значении
+  // рецепты не "прыгали" между страницами пагинации.
+  return { [sortBy]: sortOrder, publicId: sortOrder };
 }
 
 async function resolveMealTypeId(mealTypeValue) {
