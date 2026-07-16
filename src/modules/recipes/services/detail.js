@@ -14,9 +14,23 @@ import { toRecipeDetailResponse } from '../shared/response.js';
 // Возвращаем детальную карточку рецепта по публичному номеру.
 export async function getRecipeByPublicId(recipeId, currentUser = null) {
   const publicId = parseRecipePublicId(recipeId);
-  const publicRecipeVisibilityFilter = { $or: [{ visibility: 'public' }, { visibility: { $exists: false } }] };
+  const publicRecipeVisibilityFilter = {
+    $or: [{ visibility: 'public' }, { visibility: { $exists: false } }],
+  };
+
+  // TODO: разобраться с отсутствием поля visibility у старых рецептов. Сейчас мы считаем, что если его нет, то рецепт публичный.
+  // Если пользователь залогинен, он может открыть свой рецепт даже с visibility: private.
+  // Если пользователя нет, поиск оставляет только публичные и старые рецепты без visibility.
   const recipeFilter = currentUser?._id
-    ? { publicId, $or: [publicRecipeVisibilityFilter.$or[0], publicRecipeVisibilityFilter.$or[1], { authorId: currentUser._id }] }
+    ? // Первые два условия — public и старый рецепт; третье — рецепт текущего автора.
+      {
+        publicId,
+        $or: [
+          publicRecipeVisibilityFilter.$or[0],
+          publicRecipeVisibilityFilter.$or[1],
+          { authorId: currentUser._id },
+        ],
+      }
     : { publicId, $or: publicRecipeVisibilityFilter.$or };
 
   const recipe = await Recipe.findOne(recipeFilter)
