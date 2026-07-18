@@ -13,6 +13,7 @@ export function toRecipeListResponse(recipe) {
   return {
     id: recipe.publicId,
     title: recipe.title,
+    description: recipe.description ?? '',
     mealType: Array.isArray(recipe.mealTypeIds)
       ? recipe.mealTypeIds.map((item) => item.title).filter(Boolean)
       : [],
