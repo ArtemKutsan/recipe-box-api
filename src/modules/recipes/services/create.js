@@ -65,6 +65,7 @@ export async function createRecipe(payload, author) {
             authorId: author._id,
             title: payload.title.trim(),
             description: typeof payload.description === 'string' ? payload.description.trim() : '',
+            authorNote: typeof payload.authorNote === 'string' ? payload.authorNote.trim() : '',
             mealTypeIds,
             cuisineId: cuisine._id,
             tags,

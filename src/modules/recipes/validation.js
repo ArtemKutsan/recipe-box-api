@@ -8,6 +8,7 @@ import {
 const RECIPE_UPDATE_FIELDS = [
   'title',
   'description',
+  'authorNote',
   'mealType',
   'cuisine',
   'tags',
@@ -50,6 +51,10 @@ function validateRecipeFields(body, errors, { partial = false } = {}) {
 
   if ((!partial || body.cuisine !== undefined) && !isNonEmptyString(body.cuisine)) {
     errors.push('cuisine must be a non-empty string');
+  }
+
+  if (body.authorNote !== undefined && typeof body.authorNote !== 'string') {
+    errors.push('authorNote must be a string');
   }
 
   if (

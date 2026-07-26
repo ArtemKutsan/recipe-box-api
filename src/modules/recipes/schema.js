@@ -33,6 +33,12 @@ export const recipeSchema = new Schema(
       default: '',
       trim: true,
     },
+    // Заметка автора хранит историю или личный контекст самого рецепта.
+    authorNote: {
+      type: String,
+      default: '',
+      trim: true,
+    },
     // Один рецепт может относиться к нескольким типам блюда.
     mealTypeIds: [
       {

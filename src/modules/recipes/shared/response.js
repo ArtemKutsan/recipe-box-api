@@ -46,6 +46,7 @@ function buildRecipeDetailResponse(recipe, mealTypeTitles, cuisine, author) {
     id: recipe.publicId,
     title: recipe.title,
     description: recipe.description,
+    authorNote: recipe.authorNote ?? '',
     mealType: mealTypeTitles,
     tags: recipe.tags,
     cuisine: cuisine.title,

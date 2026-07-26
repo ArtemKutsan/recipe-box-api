@@ -54,6 +54,11 @@ function buildRecipeUpdate(payload, dictionaryData = {}) {
     'description',
     typeof payload.description === 'string' ? payload.description.trim() : payload.description,
   );
+  setIfDefined(
+    update,
+    'authorNote',
+    typeof payload.authorNote === 'string' ? payload.authorNote.trim() : payload.authorNote,
+  );
   setIfDefined(update, 'mealTypeIds', dictionaryData.mealTypeIds);
   setIfDefined(update, 'cuisineId', dictionaryData.cuisine?._id);
   setIfDefined(update, 'tags', payload.tags === undefined ? undefined : normalizeStringArray(payload.tags));
