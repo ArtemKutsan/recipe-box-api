@@ -83,6 +83,11 @@ function buildRecipeUpdate(payload, dictionaryData = {}) {
     payload.cookTimeMinutes === undefined ? undefined : Number(payload.cookTimeMinutes),
   );
   setIfDefined(update, 'servings', payload.servings === undefined ? undefined : Number(payload.servings));
+  setIfDefined(
+    update,
+    'caloriesPerServing',
+    payload.caloriesPerServing === undefined ? undefined : Number(payload.caloriesPerServing),
+  );
 
   if (payload.difficulty !== undefined) {
     const difficulty = String(payload.difficulty).trim().toLowerCase();

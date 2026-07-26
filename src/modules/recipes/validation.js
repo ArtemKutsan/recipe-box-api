@@ -17,6 +17,7 @@ const RECIPE_UPDATE_FIELDS = [
   'prepTimeMinutes',
   'cookTimeMinutes',
   'servings',
+  'caloriesPerServing',
   'difficulty',
   'images',
   'thumbnailUrl',
@@ -98,6 +99,13 @@ function validateRecipeFields(body, errors, { partial = false } = {}) {
     (!Number.isFinite(Number(body.servings)) || Number(body.servings) < 1)
   ) {
     errors.push('servings must be a positive number');
+  }
+
+  if (
+    body.caloriesPerServing !== undefined &&
+    (!Number.isFinite(Number(body.caloriesPerServing)) || Number(body.caloriesPerServing) < 0)
+  ) {
+    errors.push('caloriesPerServing must be a non-negative number');
   }
 
   if (body.difficulty !== undefined) {
