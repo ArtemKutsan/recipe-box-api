@@ -23,3 +23,5 @@ export const favoriteSchema = new Schema(
 
 // Один пользователь не может сохранить один рецепт несколько раз.
 favoriteSchema.index({ userId: 1, recipeId: 1 }, { unique: true });
+// Этот индекс обслуживает постраничный список от недавно сохраненных рецептов.
+favoriteSchema.index({ userId: 1, createdAt: -1 });
