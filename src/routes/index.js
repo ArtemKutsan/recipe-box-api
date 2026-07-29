@@ -6,6 +6,7 @@ import mealTypesRouter from '#modules/meal-types/router.js';
 import cuisinesRouter from '#modules/cuisines/router.js';
 import recipesRouter from '#modules/recipes/router.js';
 import mealPlansRouter from '#modules/meal-plans/router.js';
+import favoritesRouter from '#modules/favorites/router.js';
 
 const router = Router();
 
@@ -20,6 +21,8 @@ router.use('/cuisines', cuisinesRouter);
 router.use('/recipes', recipesRouter);
 // Meal planner работает от текущего пользователя и тоже защищён JWT.
 router.use('/meal-plans', mealPlansRouter);
+// Favorites хранят личную коллекцию сохраненных рецептов текущего пользователя.
+router.use('/favorites', favoritesRouter);
 router.use(healthRouter);
 
 export default router;
