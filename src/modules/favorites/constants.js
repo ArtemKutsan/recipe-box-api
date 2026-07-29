@@ -1,0 +1,3 @@
+export const DEFAULT_FAVORITES_PAGE = 1;
+export const DEFAULT_FAVORITES_PAGE_SIZE = 20;
+export const MAX_FAVORITES_PAGE_SIZE = 100;
