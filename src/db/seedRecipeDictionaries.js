@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { connectMongo } from '#db/providers/mongo.js';
 import { MealType } from '#modules/meal-types/model.js';
-import { Cuisine } from '#modules/cuisines/model.js';
+import { Cuisine } from '#db/models/Cuisine.js';
 
 const mealTypes = [
   { title: 'Appetizer', slug: 'appetizer', order: 10 },

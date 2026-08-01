@@ -7,7 +7,7 @@
  * Возвращает: `{ items, page, pageSize, total, totalPages, cuisines }`.
  * Пример: `getRecipes({ q: 'pasta', page: '1' })`.
  */
-import { Cuisine } from '#modules/cuisines/model.js';
+import { Cuisine } from '#db/models/Cuisine.js';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants.js';
 import { Recipe } from '../model.js';
 import { toRecipeListResponse } from '../shared/response.js';

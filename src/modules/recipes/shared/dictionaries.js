@@ -8,7 +8,7 @@
  * Пример: `resolveRecipeCuisine('italian')` возвращает запись кухни Italian.
  */
 import { MealType } from '#modules/meal-types/model.js';
-import { Cuisine } from '#modules/cuisines/model.js';
+import { Cuisine } from '#db/models/Cuisine.js';
 import { buildNotFoundError, normalizeSlug } from './utils.js';
 
 // Находим один тип блюда по slug и возвращаем документ справочника.

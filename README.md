@@ -10,6 +10,7 @@ src/
 ├── app.js
 ├── api/
 │   └── v1/
+│       ├── modules/
 │       ├── routes/
 │       └── router.js
 ├── config/
@@ -70,18 +71,27 @@ src/
 
 - `router.js` собирает все маршруты первой версии API
 - `routes/` связывает URL и HTTP-методы с middleware и контроллерами
+- `modules/` содержит controller, service, response и validation конкретной версии API
 - `app.js` подключает этот router по адресу `/api/v1`
+
+### `src/db/`
+
+Слой хранения данных:
+
+- подключение к выбранному провайдеру базы данных
+- Mongoose-схемы и модели в `models/`
+- seed и backfill скрипты для данных
 
 ### `src/modules/`
 
-Доменные модули приложения:
+Доменные модули, которые ещё переносятся в версионированный API-слой:
 
 - `auth/`
 - `users/`
 - `recipes/`
 - `meal-plans/`
 
-Каждый модуль должен содержать только свой доменный код и не тянуть чужие обязанности.
+После переноса HTTP-логика домена находится в `src/api/v1/modules/`, а его Mongoose-модель — в `src/db/models/`.
 
 ### `src/utils/`
 

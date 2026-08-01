@@ -1,7 +1,7 @@
-import { Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 // Схема кухни хранит справочник кухонь для фильтрации рецептов.
-export const cuisineSchema = new Schema(
+const cuisineSchema = new Schema(
   {
     title: {
       type: String,
@@ -34,7 +34,10 @@ export const cuisineSchema = new Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 cuisineSchema.index({ isActive: 1, order: 1 });
+
+// Модель кухни нужна рецептам и API справочника cuisines.
+export const Cuisine = model('Cuisine', cuisineSchema);

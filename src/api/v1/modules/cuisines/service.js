@@ -1,5 +1,5 @@
-import { Cuisine } from './model.js';
-import { toCuisineResponse } from './shared/response.js';
+import { Cuisine } from '#db/models/Cuisine.js';
+import { toCuisineResponse } from './response.js';
 
 export async function getCuisines() {
   // Показываем только активные кухни в ручном порядке.

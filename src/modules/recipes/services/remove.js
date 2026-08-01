@@ -10,7 +10,7 @@
 import mongoose from 'mongoose';
 import { Recipe } from '../model.js';
 import { MealType } from '#modules/meal-types/model.js';
-import { Cuisine } from '#modules/cuisines/model.js';
+import { Cuisine } from '#db/models/Cuisine.js';
 import { buildNotFoundError, parseRecipePublicId } from '../shared/utils.js';
 
 // Удаляем только рецепт текущего пользователя и уменьшаем счетчики справочников.

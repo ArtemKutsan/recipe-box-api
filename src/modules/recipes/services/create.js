@@ -11,7 +11,7 @@ import mongoose from 'mongoose';
 import { Recipe } from '../model.js';
 import { RECIPE_DIFFICULTIES, RECIPE_DIFFICULTY_ERROR, RECIPE_VISIBILITIES, RECIPE_VISIBILITY_ERROR } from '../constants.js';
 import { MealType } from '#modules/meal-types/model.js';
-import { Cuisine } from '#modules/cuisines/model.js';
+import { Cuisine } from '#db/models/Cuisine.js';
 import { getNextSequence } from '#shared/counters/service.js';
 import { normalizeStringArray } from '../shared/utils.js';
 import { resolveRecipeDictionaries } from '../shared/dictionaries.js';
