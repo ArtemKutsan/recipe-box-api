@@ -25,13 +25,16 @@ src/
 │       └── router.js
 ├── config/
 ├── db/
-│   └── models/
-│       ├── Cuisine.js
-│       ├── Favorite.js
-│       ├── MealPlan.js
-│       ├── MealType.js
-│       ├── Recipe.js
-│       └── User.js
+│   ├── models/
+│   │   ├── Cuisine.js
+│   │   ├── Favorite.js
+│   │   ├── MealPlan.js
+│   │   ├── MealType.js
+│   │   ├── Recipe.js
+│   │   └── User.js
+│   └── scripts/
+│       ├── backfillRecipePublicIds.js
+│       └── seedRecipeDictionaries.js
 ├── middlewares/
 │   ├── errorHandler.js
 │   └── notFound.js
@@ -102,7 +105,7 @@ src/
 
 - подключение к выбранному провайдеру базы данных
 - Mongoose-схемы и модели в `models/`
-- seed и backfill скрипты для данных
+- seed и backfill скрипты для данных в `scripts/`
 - `Cuisine.js`, `Favorite.js`, `MealPlan.js`, `MealType.js`, `Recipe.js` и `User.js` содержат Mongoose-схемы и модели доменов
 
 ### `src/shared/`
