@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import requireAuth from '#middlewares/requireAuth.js';
-import { login, me, register } from './controller.js';
+import { login, me, register } from '#modules/auth/controller.js';
 
 const router = Router();
 
-// Эти маршруты станут точкой входа для регистрации, входа и получения профиля.
+// Эти маршруты служат точкой входа для регистрации, входа и получения профиля.
 router.post('/register', register);
 router.post('/login', login);
 router.get('/me', requireAuth, me);

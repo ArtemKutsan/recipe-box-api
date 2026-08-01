@@ -1,6 +1,10 @@
 import { Router } from 'express';
 import requireAuth from '#middlewares/requireAuth.js';
-import { getMyRecipes, getPublicProfile, getPublicProfileRecipes } from './controller.js';
+import {
+  getMyRecipes,
+  getPublicProfile,
+  getPublicProfileRecipes,
+} from '#modules/users/controller.js';
 
 const router = Router();
 

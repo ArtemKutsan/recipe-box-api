@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import requireAuth from '#middlewares/requireAuth.js';
-import { add, list, listRecipes, remove } from './controller.js';
+import { add, list, listRecipes, remove } from '#modules/favorites/controller.js';
 
 const router = Router();
 

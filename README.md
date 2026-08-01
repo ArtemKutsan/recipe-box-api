@@ -8,10 +8,15 @@
 src/
 ├── server.js
 ├── app.js
+├── api/
+│   └── v1/
+│       ├── routes/
+│       └── router.js
 ├── config/
+├── db/
 ├── middlewares/
-├── routes/
 ├── modules/
+├── shared/
 └── utils/
 ```
 
@@ -59,15 +64,13 @@ src/
 - защита маршрутов
 - валидация входных данных
 
-### `src/routes/`
+### `src/api/v1/`
 
-Слой маршрутов верхнего уровня:
+Версионированный HTTP-слой приложения:
 
-- `/health`
-- `/api/v1/auth`
-- `/api/v1/users`
-- `/api/v1/recipes`
-- `/api/v1/meal-plans`
+- `router.js` собирает все маршруты первой версии API
+- `routes/` связывает URL и HTTP-методы с middleware и контроллерами
+- `app.js` подключает этот router по адресу `/api/v1`
 
 ### `src/modules/`
 
@@ -93,6 +96,7 @@ Backend использует переменные окружения:
 - `DB_PROVIDER`
 - `MONGODB_URI`
 - `JWT_SECRET`
+- `JWT_EXPIRES_IN`
 - `CLIENT_ORIGIN`
 
 ## API-подход

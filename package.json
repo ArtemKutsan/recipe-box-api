@@ -5,11 +5,11 @@
   "description": "RecipeBox backend API",
   "type": "module",
   "imports": {
+    "#api/*": "./src/api/*",
     "#config/*": "./src/config/*",
     "#middlewares/*": "./src/middlewares/*",
     "#db/*": "./src/db/*",
     "#modules/*": "./src/modules/*",
-    "#routes/*": "./src/routes/*",
     "#shared/*": "./src/shared/*",
     "#utils/*": "./src/utils/*"
   },

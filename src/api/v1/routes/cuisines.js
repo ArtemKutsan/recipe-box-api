@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getCuisinesList } from './controller.js';
+import { getCuisinesList } from '#modules/cuisines/controller.js';
 
 const router = Router();
 
