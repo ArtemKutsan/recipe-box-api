@@ -1,20 +1,22 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import env from '#config/env.js';
+import config from '#config/index.js';
 import { User } from '#modules/users/model.js';
 import { getNextSequence } from '#shared/counters/service.js';
 import { toUserResponse } from './shared/response.js';
 
 // Подписываем JWT тем секретом, который хранится в окружении сервера.
 function createToken(userId) {
-  if (!env.jwtSecret) {
+  if (!config.auth.jwtSecret) {
     const error = new Error('JWT_SECRET is required.');
     error.status = 500;
     error.code = 'JWT_SECRET_REQUIRED';
     throw error;
   }
 
-  return jwt.sign({ sub: userId }, env.jwtSecret, { expiresIn: '7d' });
+  return jwt.sign({ sub: userId }, config.auth.jwtSecret, {
+    expiresIn: config.auth.jwtExpiresIn,
+  });
 }
 
 export async function registerUser(payload) {

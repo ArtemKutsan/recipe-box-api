@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import env from '#config/env.js';
+import config from '#config/index.js';
 import { User } from '#modules/users/model.js';
 import { toUserResponse } from '#modules/auth/shared/response.js';
 
@@ -36,14 +36,14 @@ export default async function requireAuth(req, _res, next) {
       throw error;
     }
 
-    if (!env.jwtSecret) {
+    if (!config.auth.jwtSecret) {
       const error = new Error('JWT_SECRET is required.');
       error.status = 500;
       error.code = 'JWT_SECRET_REQUIRED';
       throw error;
     }
 
-    const payload = jwt.verify(token, env.jwtSecret);
+    const payload = jwt.verify(token, config.auth.jwtSecret);
     const user = await User.findById(payload.sub);
 
     if (!user) {

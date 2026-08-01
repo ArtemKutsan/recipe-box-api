@@ -1,5 +1,5 @@
 import app from './app.js';
-import config from '#config/env.js';
+import config from '#config/index.js';
 import { connectDb } from '#db/connect.js';
 
 try {
@@ -18,6 +18,6 @@ try {
 }
 
 // Поднимаем HTTP-сервер на порту из окружения или на дефолтном порту.
-app.listen(config.port, () => {
-  console.log(`recipe-box-api listening on ${config.port}`);
+app.listen(config.app.port, () => {
+  console.log(`recipe-box-api listening on ${config.app.port}`);
 });

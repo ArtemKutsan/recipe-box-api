@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
-import env from '#config/env.js';
+import config from '#config/index.js';
 
 // Подключаем MongoDB только тогда, когда база действительно включена.
 export async function connectMongo() {
-  if (!env.mongoUri) {
+  if (!config.db.mongoUri) {
     throw new Error('MONGODB_URI is required when DB_ENABLED is true.');
   }
 
-  await mongoose.connect(env.mongoUri);
+  await mongoose.connect(config.db.mongoUri);
 
   return {
     enabled: true,
