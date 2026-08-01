@@ -8,7 +8,7 @@
  * Пример: `createRecipe({ title: 'Pasta', mealType: ['dinner'], cuisine: 'italian' }, author)`.
  */
 import mongoose from 'mongoose';
-import { Recipe } from '../model.js';
+import { Recipe } from '#db/models/Recipe.js';
 import { RECIPE_DIFFICULTIES, RECIPE_DIFFICULTY_ERROR, RECIPE_VISIBILITIES, RECIPE_VISIBILITY_ERROR } from '../constants.js';
 import { MealType } from '#db/models/MealType.js';
 import { Cuisine } from '#db/models/Cuisine.js';

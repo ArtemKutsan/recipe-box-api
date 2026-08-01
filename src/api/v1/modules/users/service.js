@@ -1,5 +1,5 @@
 import { User } from '#db/models/User.js';
-import { getRecipesByAuthor } from '#modules/recipes/service.js';
+import { getRecipesByAuthor } from '../recipes/service.js';
 import { toPublicUserResponse } from './response.js';
 
 async function findUserByPublicId(publicId) {

@@ -8,7 +8,7 @@
  * Пример: `deleteRecipe('42', author)`.
  */
 import mongoose from 'mongoose';
-import { Recipe } from '../model.js';
+import { Recipe } from '#db/models/Recipe.js';
 import { MealType } from '#db/models/MealType.js';
 import { Cuisine } from '#db/models/Cuisine.js';
 import { buildNotFoundError, parseRecipePublicId } from '../shared/utils.js';

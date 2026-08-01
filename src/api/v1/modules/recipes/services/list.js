@@ -9,7 +9,7 @@
  */
 import { Cuisine } from '#db/models/Cuisine.js';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants.js';
-import { Recipe } from '../model.js';
+import { Recipe } from '#db/models/Recipe.js';
 import { toRecipeListResponse } from '../shared/response.js';
 import {
   buildRecipeListFilter,

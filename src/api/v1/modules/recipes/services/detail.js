@@ -7,7 +7,7 @@
  * Возвращает: `{ recipe: {...} }` с полными данными одного рецепта.
  * Пример: `getRecipeByPublicId('42', null)` для незалогиненного пользователя.
  */
-import { Recipe } from '../model.js';
+import { Recipe } from '#db/models/Recipe.js';
 import { buildNotFoundError, parseRecipePublicId } from '../shared/utils.js';
 import { toRecipeDetailResponse } from '../shared/response.js';
 

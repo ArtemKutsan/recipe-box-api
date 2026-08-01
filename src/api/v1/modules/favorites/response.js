@@ -1,4 +1,4 @@
-import { toRecipeListResponse } from '#modules/recipes/shared/response.js';
+import { toRecipeListResponse } from '../recipes/shared/response.js';
 
 // Возвращаем состояние одной связи после сохранения или удаления.
 export function toFavoriteStateResponse(recipeId, isFavorite, savedAt = null) {

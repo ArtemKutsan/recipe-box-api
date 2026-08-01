@@ -1,6 +1,6 @@
 import { Favorite } from '#db/models/Favorite.js';
-import { Recipe } from '#modules/recipes/model.js';
-import { buildNotFoundError, parseRecipePublicId } from '#modules/recipes/shared/utils.js';
+import { Recipe } from '#db/models/Recipe.js';
+import { buildNotFoundError, parseRecipePublicId } from '../recipes/shared/utils.js';
 import {
   DEFAULT_FAVORITES_PAGE,
   DEFAULT_FAVORITES_PAGE_SIZE,

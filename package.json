@@ -9,7 +9,6 @@
     "#config/*": "./src/config/*",
     "#middlewares/*": "./src/middlewares/*",
     "#db/*": "./src/db/*",
-    "#modules/*": "./src/modules/*",
     "#shared/*": "./src/shared/*",
     "#utils/*": "./src/utils/*"
   },

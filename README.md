@@ -19,6 +19,7 @@ src/
 │       │   ├── favorites/
 │       │   ├── meal-plans/
 │       │   ├── meal-types/
+│       │   ├── recipes/
 │       │   └── users/
 │       ├── routes/
 │       └── router.js
@@ -29,14 +30,15 @@ src/
 │       ├── Favorite.js
 │       ├── MealPlan.js
 │       ├── MealType.js
+│       ├── Recipe.js
 │       └── User.js
 ├── middlewares/
 │   ├── errorHandler.js
 │   └── notFound.js
-├── modules/
-│   └── recipes/
 ├── shared/
-│   └── meal-plans/
+│   ├── meal-plans/
+│   │   └── constants.js
+│   └── recipes/
 │       └── constants.js
 └── utils/
 ```
@@ -91,7 +93,7 @@ src/
 - `middleware/` определяет пользователя по JWT и защищает маршруты первой версии
 - `routes/` связывает URL и HTTP-методы с middleware и контроллерами
 - `modules/` содержит controller, service, response и validation конкретной версии API
-- `auth/`, `cuisines/`, `favorites/`, `meal-plans/`, `meal-types/` и `users/` уже перенесены в новый API-слой
+- `auth/`, `cuisines/`, `favorites/`, `meal-plans/`, `meal-types/`, `recipes/` и `users/` содержат HTTP-логику соответствующих доменов
 - `app.js` подключает этот router по адресу `/api/v1`
 
 ### `src/db/`
@@ -101,19 +103,11 @@ src/
 - подключение к выбранному провайдеру базы данных
 - Mongoose-схемы и модели в `models/`
 - seed и backfill скрипты для данных
-- `Cuisine.js`, `Favorite.js`, `MealPlan.js`, `MealType.js` и `User.js` уже перенесены в `models/`
-
-### `src/modules/`
-
-Доменные модули, которые ещё переносятся в версионированный API-слой:
-
-- `recipes/`
-
-После переноса HTTP-логика домена находится в `src/api/v1/modules/`, а его Mongoose-модель — в `src/db/models/`.
+- `Cuisine.js`, `Favorite.js`, `MealPlan.js`, `MealType.js`, `Recipe.js` и `User.js` содержат Mongoose-схемы и модели доменов
 
 ### `src/shared/`
 
-Общий код, который нужен нескольким слоям приложения. Например, Meal Plan schema и API используют один набор дней, периодов и пустых слотов из `shared/meal-plans/constants.js`.
+Общий код, который нужен нескольким слоям приложения. Meal Plan schema и API используют один набор дней, периодов и пустых слотов из `shared/meal-plans/constants.js`, а Recipe schema и API — общие значения сложности и видимости из `shared/recipes/constants.js`.
 
 ### `src/utils/`
 

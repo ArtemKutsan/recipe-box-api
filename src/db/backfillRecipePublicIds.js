@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { connectMongo } from '#db/providers/mongo.js';
-import { Recipe } from '#modules/recipes/model.js';
+import { Recipe } from '#db/models/Recipe.js';
 import { Counter } from '#shared/counters/model.js';
 import { getNextSequence } from '#shared/counters/service.js';
 

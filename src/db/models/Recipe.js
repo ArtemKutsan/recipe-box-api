@@ -1,12 +1,10 @@
-import { Schema } from 'mongoose';
-import { RECIPE_VISIBILITIES } from './constants.js';
+import { model, Schema } from 'mongoose';
+import { RECIPE_DIFFICULTIES, RECIPE_VISIBILITIES } from '#shared/recipes/constants.js';
 
 const { ObjectId } = Schema.Types;
 
-const RECIPE_DIFFICULTIES = ['easy', 'medium', 'hard'];
-
 // Схема рецепта хранит основной контент и связи со справочниками.
-export const recipeSchema = new Schema(
+const recipeSchema = new Schema(
   {
     // Короткий публичный номер рецепта для API и URL.
     publicId: {
@@ -115,8 +113,11 @@ export const recipeSchema = new Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 recipeSchema.index({ title: 'text', description: 'text', tags: 'text' });
 recipeSchema.index({ mealTypeIds: 1 });
+
+// Модель рецепта используют API-сервисы и служебные DB-скрипты.
+export const Recipe = model('Recipe', recipeSchema);
