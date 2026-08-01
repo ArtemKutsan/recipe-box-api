@@ -74,6 +74,8 @@ export async function createRecipe(payload, author) {
             prepTimeMinutes: Number(payload.prepTimeMinutes),
             cookTimeMinutes: Number(payload.cookTimeMinutes),
             servings: Number(payload.servings),
+            caloriesPerServing:
+              payload.caloriesPerServing === undefined ? null : Number(payload.caloriesPerServing),
             difficulty,
             visibility,
             images,

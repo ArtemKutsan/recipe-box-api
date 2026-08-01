@@ -5,6 +5,17 @@ import { User } from '#db/models/User.js';
 import { getNextSequence } from '#shared/counters/service.js';
 import { toUserResponse } from './response.js';
 
+function buildEmailAlreadyExistsError() {
+  const error = new Error('Email is already in use.');
+  error.status = 409;
+  error.code = 'EMAIL_ALREADY_EXISTS';
+  return error;
+}
+
+function isDuplicateEmailError(error) {
+  return error?.code === 11000 && Boolean(error?.keyPattern?.email || error?.keyValue?.email);
+}
+
 // Подписываем JWT тем секретом, который хранится в окружении сервера.
 function createToken(userId) {
   if (!config.auth.jwtSecret) {
@@ -25,21 +36,29 @@ export async function registerUser(payload) {
   const existingUser = await User.findOne({ email });
 
   if (existingUser) {
-    const error = new Error('Email is already in use.');
-    error.status = 409;
-    error.code = 'EMAIL_ALREADY_EXISTS';
-    throw error;
+    throw buildEmailAlreadyExistsError();
   }
 
   // Получаем публичный номер и хэшируем пароль перед сохранением.
   const publicId = await getNextSequence('users');
   const passwordHash = await bcrypt.hash(payload.password, 10);
-  const user = await User.create({
-    publicId,
-    name: payload.name.trim(),
-    email,
-    passwordHash,
-  });
+  let user;
+
+  try {
+    user = await User.create({
+      publicId,
+      name: payload.name.trim(),
+      email,
+      passwordHash,
+    });
+  } catch (error) {
+    // Уникальный индекс закрывает гонку между параллельными регистрациями одного email.
+    if (isDuplicateEmailError(error)) {
+      throw buildEmailAlreadyExistsError();
+    }
+
+    throw error;
+  }
 
   return {
     user: toUserResponse(user),

@@ -11,6 +11,7 @@ src/
 ├── api/
 │   └── v1/
 │       ├── middleware/
+│       │   ├── jwtErrors.js
 │       │   ├── optionalAuth.js
 │       │   └── requireAuth.js
 │       ├── modules/
@@ -93,7 +94,7 @@ src/
 Версионированный HTTP-слой приложения:
 
 - `router.js` собирает все маршруты первой версии API
-- `middleware/` определяет пользователя по JWT и защищает маршруты первой версии
+- `middleware/` определяет пользователя по JWT, защищает маршруты первой версии и одинаково нормализует JWT-ошибки
 - `routes/` связывает URL и HTTP-методы с middleware и контроллерами
 - `modules/` содержит controller, service, response и validation конкретной версии API
 - `auth/`, `cuisines/`, `favorites/`, `meal-plans/`, `meal-types/`, `recipes/` и `users/` содержат HTTP-логику соответствующих доменов

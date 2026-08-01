@@ -2,26 +2,7 @@ import jwt from 'jsonwebtoken';
 import config from '#config/index.js';
 import { User } from '#db/models/User.js';
 import { toUserResponse } from '../modules/auth/response.js';
-
-function buildUnauthorizedError(message) {
-  const error = new Error(message);
-  error.status = 401;
-  error.code = 'UNAUTHORIZED';
-  return error;
-}
-
-function normalizeJwtError(error) {
-  // Ошибки проверки JWT должны возвращать 401, а не проваливаться в общий 500.
-  if (error?.name === 'TokenExpiredError') {
-    return buildUnauthorizedError('Authorization token has expired.');
-  }
-
-  if (error?.name === 'JsonWebTokenError' || error?.name === 'NotBeforeError') {
-    return buildUnauthorizedError('Authorization token is invalid.');
-  }
-
-  return error;
-}
+import { buildUnauthorizedError, normalizeJwtError } from './jwtErrors.js';
 
 // Проверяем JWT до входа в защищённый контроллер.
 export default async function requireAuth(req, _res, next) {
@@ -30,10 +11,7 @@ export default async function requireAuth(req, _res, next) {
     const [type, token] = authHeader.split(' ');
 
     if (type !== 'Bearer' || !token) {
-      const error = new Error('Authorization token is required.');
-      error.status = 401;
-      error.code = 'UNAUTHORIZED';
-      throw error;
+      throw buildUnauthorizedError('Authorization token is required.');
     }
 
     if (!config.auth.jwtSecret) {

@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import config from '#config/index.js';
 import { User } from '#db/models/User.js';
 import { toUserResponse } from '../modules/auth/response.js';
+import { buildUnauthorizedError, normalizeJwtError } from './jwtErrors.js';
 
 // Пытаемся распознать JWT, но не ломаем публичный запрос, если токена нет.
 export default async function optionalAuth(req, _res, next) {
@@ -15,10 +16,7 @@ export default async function optionalAuth(req, _res, next) {
     const [type, token] = authHeader.split(' ');
 
     if (type !== 'Bearer' || !token) {
-      const error = new Error('Authorization token is required.');
-      error.status = 401;
-      error.code = 'UNAUTHORIZED';
-      throw error;
+      throw buildUnauthorizedError('Authorization token is required.');
     }
 
     if (!config.auth.jwtSecret) {
@@ -43,6 +41,6 @@ export default async function optionalAuth(req, _res, next) {
 
     next();
   } catch (error) {
-    next(error);
+    next(normalizeJwtError(error));
   }
 }
