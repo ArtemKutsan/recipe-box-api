@@ -10,6 +10,9 @@ src/
 ├── app.js
 ├── api/
 │   └── v1/
+│       ├── middleware/
+│       │   ├── optionalAuth.js
+│       │   └── requireAuth.js
 │       ├── modules/
 │       │   ├── auth/
 │       │   ├── cuisines/
@@ -24,6 +27,8 @@ src/
 │       ├── MealType.js
 │       └── User.js
 ├── middlewares/
+│   ├── errorHandler.js
+│   └── notFound.js
 ├── modules/
 │   ├── favorites/
 │   ├── meal-plans/
@@ -69,18 +74,17 @@ src/
 
 ### `src/middlewares/`
 
-Общий слой промежуточной обработки:
+Общий для всего Express-приложения слой промежуточной обработки:
 
 - обработка 404
 - обработка ошибок
-- защита маршрутов
-- валидация входных данных
 
 ### `src/api/v1/`
 
 Версионированный HTTP-слой приложения:
 
 - `router.js` собирает все маршруты первой версии API
+- `middleware/` определяет пользователя по JWT и защищает маршруты первой версии
 - `routes/` связывает URL и HTTP-методы с middleware и контроллерами
 - `modules/` содержит controller, service, response и validation конкретной версии API
 - `auth/`, `cuisines/`, `meal-types/` и `users/` уже перенесены в новый API-слой

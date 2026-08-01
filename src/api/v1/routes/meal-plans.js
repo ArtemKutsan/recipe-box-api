@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import requireAuth from '#middlewares/requireAuth.js';
+import requireAuth from '../middleware/requireAuth.js';
 import { getCurrent, updateCurrentSlot } from '#modules/meal-plans/controller.js';
 
 const router = Router();

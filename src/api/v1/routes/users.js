@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import requireAuth from '#middlewares/requireAuth.js';
+import requireAuth from '../middleware/requireAuth.js';
 import {
   getMyRecipes,
   getPublicProfile,

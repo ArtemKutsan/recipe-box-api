@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import requireAuth from '#middlewares/requireAuth.js';
-import optionalAuth from '#middlewares/optionalAuth.js';
+import requireAuth from '../middleware/requireAuth.js';
+import optionalAuth from '../middleware/optionalAuth.js';
 import { create, getById, list, remove, update } from '#modules/recipes/controller.js';
 
 const router = Router();
