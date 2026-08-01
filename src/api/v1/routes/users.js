@@ -4,7 +4,7 @@ import {
   getMyRecipes,
   getPublicProfile,
   getPublicProfileRecipes,
-} from '#modules/users/controller.js';
+} from '../modules/users/controller.js';
 
 const router = Router();
 

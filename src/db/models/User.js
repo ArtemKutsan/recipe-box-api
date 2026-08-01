@@ -1,8 +1,8 @@
-import { Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 // Схема пользователя хранит только данные, нужные для авторизации и профиля.
 // Дополнительные публичные поля профиля храним здесь же, чтобы не тащить DummyJSON-структуру.
-export const userSchema = new Schema(
+const userSchema = new Schema(
   {
     publicId: {
       type: Number,
@@ -56,5 +56,8 @@ export const userSchema = new Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
+
+// Модель пользователя нужна сервисам auth и профиля.
+export const User = model('User', userSchema);

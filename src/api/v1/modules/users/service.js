@@ -1,6 +1,6 @@
-import { User } from './model.js';
+import { User } from '#db/models/User.js';
 import { getRecipesByAuthor } from '#modules/recipes/service.js';
-import { toPublicUserResponse } from './shared/response.js';
+import { toPublicUserResponse } from './response.js';
 
 async function findUserByPublicId(publicId) {
   const userPublicId = Number(publicId);
