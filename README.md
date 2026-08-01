@@ -11,12 +11,22 @@ src/
 ├── api/
 │   └── v1/
 │       ├── modules/
+│       │   ├── cuisines/
+│       │   └── meal-types/
 │       ├── routes/
 │       └── router.js
 ├── config/
 ├── db/
+│   └── models/
+│       ├── Cuisine.js
+│       └── MealType.js
 ├── middlewares/
 ├── modules/
+│   ├── auth/
+│   ├── favorites/
+│   ├── meal-plans/
+│   ├── recipes/
+│   └── users/
 ├── shared/
 └── utils/
 ```
@@ -72,6 +82,7 @@ src/
 - `router.js` собирает все маршруты первой версии API
 - `routes/` связывает URL и HTTP-методы с middleware и контроллерами
 - `modules/` содержит controller, service, response и validation конкретной версии API
+- `cuisines/` и `meal-types/` уже перенесены в новый API-слой
 - `app.js` подключает этот router по адресу `/api/v1`
 
 ### `src/db/`
@@ -81,6 +92,7 @@ src/
 - подключение к выбранному провайдеру базы данных
 - Mongoose-схемы и модели в `models/`
 - seed и backfill скрипты для данных
+- `Cuisine.js` и `MealType.js` уже перенесены в `models/`
 
 ### `src/modules/`
 
@@ -89,6 +101,7 @@ src/
 - `auth/`
 - `users/`
 - `recipes/`
+- `favorites/`
 - `meal-plans/`
 
 После переноса HTTP-логика домена находится в `src/api/v1/modules/`, а его Mongoose-модель — в `src/db/models/`.

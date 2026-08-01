@@ -1,7 +1,7 @@
-import { Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 // Схема типа блюда хранит справочник категорий рецептов.
-export const mealTypeSchema = new Schema(
+const mealTypeSchema = new Schema(
   {
     title: {
       type: String,
@@ -34,7 +34,10 @@ export const mealTypeSchema = new Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 mealTypeSchema.index({ isActive: 1, order: 1 });
+
+// Третий аргумент фиксирует имя коллекции, чтобы Mongoose не создал mealtypes.
+export const MealType = model('MealType', mealTypeSchema, 'mealTypes');

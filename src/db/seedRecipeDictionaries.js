@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { connectMongo } from '#db/providers/mongo.js';
-import { MealType } from '#modules/meal-types/model.js';
+import { MealType } from '#db/models/MealType.js';
 import { Cuisine } from '#db/models/Cuisine.js';
 
 const mealTypes = [

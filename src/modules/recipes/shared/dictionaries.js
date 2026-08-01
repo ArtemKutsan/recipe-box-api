@@ -7,7 +7,7 @@
  * Возвращает: найденный документ справочника или id и названия найденных типов питания.
  * Пример: `resolveRecipeCuisine('italian')` возвращает запись кухни Italian.
  */
-import { MealType } from '#modules/meal-types/model.js';
+import { MealType } from '#db/models/MealType.js';
 import { Cuisine } from '#db/models/Cuisine.js';
 import { buildNotFoundError, normalizeSlug } from './utils.js';
 
