@@ -1,5 +1,9 @@
-import { Schema } from 'mongoose';
-import { MEAL_PLAN_DAYS, MEAL_PLAN_PERIODS, createEmptyMealPlanSlots } from './constants.js';
+import { Schema, model } from 'mongoose';
+import {
+  MEAL_PLAN_DAYS,
+  MEAL_PLAN_PERIODS,
+  createEmptyMealPlanSlots,
+} from '#shared/meal-plans/constants.js';
 
 const { ObjectId } = Schema.Types;
 
@@ -12,16 +16,16 @@ const createMealPeriodSchemaDefinition = () => ({
 
 const createDaySchemaDefinition = () =>
   Object.fromEntries(
-    MEAL_PLAN_PERIODS.map((mealPeriod) => [mealPeriod, createMealPeriodSchemaDefinition()])
+    MEAL_PLAN_PERIODS.map((mealPeriod) => [mealPeriod, createMealPeriodSchemaDefinition()]),
   );
 
 const slotsSchemaDefinition = Object.fromEntries(
-  MEAL_PLAN_DAYS.map((day) => [day, createDaySchemaDefinition()])
+  MEAL_PLAN_DAYS.map((day) => [day, createDaySchemaDefinition()]),
 );
 
 const slotsSchema = new Schema(slotsSchemaDefinition, { _id: false });
 
-export const mealPlanSchema = new Schema(
+const mealPlanSchema = new Schema(
   {
     // У пользователя один постоянный недельный шаблон питания.
     userId: {
@@ -38,5 +42,8 @@ export const mealPlanSchema = new Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
+
+// Явно задаем имя коллекции, чтобы Mongoose не создал mealplans.
+export const MealPlan = model('MealPlan', mealPlanSchema, 'mealPlans');

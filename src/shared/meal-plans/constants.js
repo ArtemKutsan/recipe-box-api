@@ -15,6 +15,6 @@ export function createEmptyMealPlanSlots() {
     MEAL_PLAN_DAYS.map((day) => [
       day,
       Object.fromEntries(MEAL_PLAN_PERIODS.map((mealPeriod) => [mealPeriod, null])),
-    ])
+    ]),
   );
 }

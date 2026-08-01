@@ -1,8 +1,8 @@
+import { MealPlan } from '#db/models/MealPlan.js';
 import { Recipe } from '#modules/recipes/model.js';
 import { buildNotFoundError } from '#modules/recipes/shared/utils.js';
-import { createEmptyMealPlanSlots } from './constants.js';
-import { MealPlan } from './model.js';
-import { toMealPlanResponse } from './shared/response.js';
+import { createEmptyMealPlanSlots } from '#shared/meal-plans/constants.js';
+import { toMealPlanResponse } from './response.js';
 
 async function ensureRecipeExists(recipeId) {
   if (recipeId === null) {

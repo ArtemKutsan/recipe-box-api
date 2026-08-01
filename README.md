@@ -17,6 +17,7 @@ src/
 │       │   ├── auth/
 │       │   ├── cuisines/
 │       │   ├── favorites/
+│       │   ├── meal-plans/
 │       │   ├── meal-types/
 │       │   └── users/
 │       ├── routes/
@@ -26,15 +27,17 @@ src/
 │   └── models/
 │       ├── Cuisine.js
 │       ├── Favorite.js
+│       ├── MealPlan.js
 │       ├── MealType.js
 │       └── User.js
 ├── middlewares/
 │   ├── errorHandler.js
 │   └── notFound.js
 ├── modules/
-│   ├── meal-plans/
 │   └── recipes/
 ├── shared/
+│   └── meal-plans/
+│       └── constants.js
 └── utils/
 ```
 
@@ -88,7 +91,7 @@ src/
 - `middleware/` определяет пользователя по JWT и защищает маршруты первой версии
 - `routes/` связывает URL и HTTP-методы с middleware и контроллерами
 - `modules/` содержит controller, service, response и validation конкретной версии API
-- `auth/`, `cuisines/`, `favorites/`, `meal-types/` и `users/` уже перенесены в новый API-слой
+- `auth/`, `cuisines/`, `favorites/`, `meal-plans/`, `meal-types/` и `users/` уже перенесены в новый API-слой
 - `app.js` подключает этот router по адресу `/api/v1`
 
 ### `src/db/`
@@ -98,16 +101,19 @@ src/
 - подключение к выбранному провайдеру базы данных
 - Mongoose-схемы и модели в `models/`
 - seed и backfill скрипты для данных
-- `Cuisine.js`, `Favorite.js`, `MealType.js` и `User.js` уже перенесены в `models/`
+- `Cuisine.js`, `Favorite.js`, `MealPlan.js`, `MealType.js` и `User.js` уже перенесены в `models/`
 
 ### `src/modules/`
 
 Доменные модули, которые ещё переносятся в версионированный API-слой:
 
 - `recipes/`
-- `meal-plans/`
 
 После переноса HTTP-логика домена находится в `src/api/v1/modules/`, а его Mongoose-модель — в `src/db/models/`.
+
+### `src/shared/`
+
+Общий код, который нужен нескольким слоям приложения. Например, Meal Plan schema и API используют один набор дней, периодов и пустых слотов из `shared/meal-plans/constants.js`.
 
 ### `src/utils/`
 
