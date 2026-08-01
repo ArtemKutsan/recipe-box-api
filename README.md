@@ -11,6 +11,7 @@ src/
 ├── api/
 │   └── v1/
 │       ├── modules/
+│       │   ├── auth/
 │       │   ├── cuisines/
 │       │   ├── meal-types/
 │       │   └── users/
@@ -24,7 +25,6 @@ src/
 │       └── User.js
 ├── middlewares/
 ├── modules/
-│   ├── auth/
 │   ├── favorites/
 │   ├── meal-plans/
 │   └── recipes/
@@ -83,7 +83,7 @@ src/
 - `router.js` собирает все маршруты первой версии API
 - `routes/` связывает URL и HTTP-методы с middleware и контроллерами
 - `modules/` содержит controller, service, response и validation конкретной версии API
-- `cuisines/`, `meal-types/` и `users/` уже перенесены в новый API-слой
+- `auth/`, `cuisines/`, `meal-types/` и `users/` уже перенесены в новый API-слой
 - `app.js` подключает этот router по адресу `/api/v1`
 
 ### `src/db/`
@@ -99,7 +99,6 @@ src/
 
 Доменные модули, которые ещё переносятся в версионированный API-слой:
 
-- `auth/`
 - `recipes/`
 - `favorites/`
 - `meal-plans/`

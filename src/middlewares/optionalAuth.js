@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import config from '#config/index.js';
 import { User } from '#db/models/User.js';
-import { toUserResponse } from '#modules/auth/shared/response.js';
+import { toUserResponse } from '#api/v1/modules/auth/response.js';
 
 // Пытаемся распознать JWT, но не ломаем публичный запрос, если токена нет.
 export default async function optionalAuth(req, _res, next) {

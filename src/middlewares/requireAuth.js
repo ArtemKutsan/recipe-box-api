@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import config from '#config/index.js';
 import { User } from '#db/models/User.js';
-import { toUserResponse } from '#modules/auth/shared/response.js';
+import { toUserResponse } from '#api/v1/modules/auth/response.js';
 
 function buildUnauthorizedError(message) {
   const error = new Error(message);
