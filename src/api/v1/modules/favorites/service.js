@@ -1,3 +1,4 @@
+import { Favorite } from '#db/models/Favorite.js';
 import { Recipe } from '#modules/recipes/model.js';
 import { buildNotFoundError, parseRecipePublicId } from '#modules/recipes/shared/utils.js';
 import {
@@ -5,8 +6,7 @@ import {
   DEFAULT_FAVORITES_PAGE_SIZE,
   MAX_FAVORITES_PAGE_SIZE,
 } from './constants.js';
-import { Favorite } from './model.js';
-import { toFavoriteRecipeResponse, toFavoriteStateResponse } from './shared/response.js';
+import { toFavoriteRecipeResponse, toFavoriteStateResponse } from './response.js';
 
 function parsePositiveInteger(value, fallback, max = Number.MAX_SAFE_INTEGER) {
   const parsed = Number.parseInt(String(value ?? ''), 10);

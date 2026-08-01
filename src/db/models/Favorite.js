@@ -1,9 +1,9 @@
-import { Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const { ObjectId } = Schema.Types;
 
 // Favorite хранит только связь пользователя с сохраненным рецептом.
-export const favoriteSchema = new Schema(
+const favoriteSchema = new Schema(
   {
     userId: {
       type: ObjectId,
@@ -25,3 +25,6 @@ export const favoriteSchema = new Schema(
 favoriteSchema.index({ userId: 1, recipeId: 1 }, { unique: true });
 // Этот индекс обслуживает постраничный список от недавно сохраненных рецептов.
 favoriteSchema.index({ userId: 1, createdAt: -1 });
+
+// Явно фиксируем имя коллекции, чтобы оно не зависело от правил Mongoose.
+export const Favorite = model('Favorite', favoriteSchema, 'favorites');
