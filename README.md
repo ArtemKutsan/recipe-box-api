@@ -27,6 +27,7 @@ src/
 ├── config/
 ├── db/
 │   ├── models/
+│   │   ├── AuthSession.js
 │   │   ├── Cuisine.js
 │   │   ├── Favorite.js
 │   │   ├── MealPlan.js
@@ -51,7 +52,7 @@ src/
 
 `recipe-box-api` отвечает за серверную часть RecipeBox:
 
-- аутентификацию и авторизацию на JWT
+- аутентификацию и авторизацию на JWT с подготовкой серверных сессий
 - работу с пользователями
 - работу с рецептами
 - работу с планами питания
@@ -107,7 +108,8 @@ src/
 - подключение к выбранному провайдеру базы данных
 - Mongoose-схемы и модели в `models/`
 - seed и backfill скрипты для данных в `scripts/`
-- `Cuisine.js`, `Favorite.js`, `MealPlan.js`, `MealType.js`, `Recipe.js` и `User.js` содержат Mongoose-схемы и модели доменов
+- `AuthSession.js`, `Cuisine.js`, `Favorite.js`, `MealPlan.js`, `MealType.js`, `Recipe.js` и `User.js` содержат Mongoose-схемы и модели доменов
+- `AuthSession.js` хранит отдельные серверные сессии пользователей; подключение к Login/Register будет отдельным шагом
 
 ### `src/shared/`
 
@@ -127,6 +129,10 @@ Backend использует переменные окружения:
 - `MONGODB_URI`
 - `JWT_SECRET`
 - `JWT_EXPIRES_IN`
+- `SESSION_COOKIE_NAME`
+- `SESSION_EXPIRES_IN`
+- `SESSION_COOKIE_SECURE`
+- `SESSION_COOKIE_SAME_SITE`
 - `CLIENT_ORIGIN`
 
 ## API-подход

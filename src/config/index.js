@@ -10,6 +10,10 @@ const config = {
   auth: {
     jwtSecret: process.env.JWT_SECRET || '',
     jwtExpiresIn: process.env.JWT_EXPIRES_IN || '7d',
+    sessionCookieName: process.env.SESSION_COOKIE_NAME || 'recipebox_session',
+    sessionExpiresIn: process.env.SESSION_EXPIRES_IN || '30d',
+    sessionCookieSecure: process.env.SESSION_COOKIE_SECURE === 'true',
+    sessionCookieSameSite: process.env.SESSION_COOKIE_SAME_SITE || 'lax',
   },
   db: {
     enabled: process.env.DB_ENABLED === 'true',
