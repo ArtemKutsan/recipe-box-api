@@ -12,6 +12,7 @@ const config = {
     jwtExpiresIn: process.env.JWT_EXPIRES_IN || '7d',
     sessionCookieName: process.env.SESSION_COOKIE_NAME || 'recipebox_session',
     sessionExpiresIn: process.env.SESSION_EXPIRES_IN || '30d',
+    sessionStore: process.env.SESSION_STORE || 'mongo',
     sessionCookieSecure: process.env.SESSION_COOKIE_SECURE === 'true',
     sessionCookieSameSite: process.env.SESSION_COOKIE_SAME_SITE || 'lax',
   },
