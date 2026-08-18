@@ -1,6 +1,7 @@
 import config from '#config/index.js';
 import { loginUser, registerUser } from './service.js';
-import { getSessionLifetimeMs } from './session/service.js';
+import { getSessionLifetimeMs, revokeUserSession } from './session/service.js';
+import { getSessionTokenFromRequest } from '../../middleware/auth/session.js';
 import { validateLogin, validateRegister } from './validation.js';
 
 // Кладём session token в cookie, чтобы браузер отправлял его сам.
@@ -11,6 +12,16 @@ function setSessionCookie(res, sessionToken) {
     sameSite: config.auth.sessionCookieSameSite, // Ограничиваем отправку cookie между сайтами.
     maxAge: getSessionLifetimeMs(), // Cookie живёт столько же, сколько серверная сессия.
     path: '/api/v1', // Cookie отправляется только API-маршрутам.
+  });
+}
+
+// Удаляем cookie с теми же настройками, с которыми она была создана.
+function clearSessionCookie(res) {
+  res.clearCookie(config.auth.sessionCookieName, {
+    httpOnly: true,
+    secure: config.auth.sessionCookieSecure,
+    sameSite: config.auth.sessionCookieSameSite,
+    path: '/api/v1',
   });
 }
 
@@ -51,8 +62,20 @@ export async function login(req, res, next) {
 export async function me(req, res, next) {
   try {
     // Текущий пользователь уже лежит в req.user после проверки middleware.
-    // Пока middleware проверяет JWT; позже здесь будет работать cookie-сессия.
+    // Middleware уже проверяет cookie-сессию и временно поддерживает JWT.
     return res.status(200).json({ user: req.user });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function logout(req, res, next) {
+  try {
+    // Отзываем только текущую сессию, а не все входы пользователя.
+    await revokeUserSession(getSessionTokenFromRequest(req));
+    clearSessionCookie(res);
+
+    return res.status(204).send();
   } catch (error) {
     next(error);
   }

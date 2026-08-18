@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import config from '#config/index.js';
 import { User } from '#db/models/User.js';
-import { toUserResponse } from '../modules/auth/response.js';
+import { toUserResponse } from '../../modules/auth/response.js';
 import { findUserBySessionCookie } from './session.js';
 import { buildUnauthorizedError, normalizeJwtError } from './jwtErrors.js';
 
