@@ -4,6 +4,7 @@ import config from '#config/index.js';
 import { User } from '#db/models/User.js';
 import { getNextSequence } from '#shared/counters/service.js';
 import { toUserResponse } from './response.js';
+import { createUserSession } from './session/service.js';
 
 function buildEmailAlreadyExistsError() {
   const error = new Error('Email is already in use.');
@@ -30,7 +31,7 @@ function createToken(userId) {
   });
 }
 
-export async function registerUser(payload) {
+export async function registerUser(payload, sessionMetadata = {}) {
   // Нормализуем email и проверяем, что такой пользователь ещё не существует.
   const email = payload.email.toLowerCase().trim();
   const existingUser = await User.findOne({ email });
@@ -60,13 +61,17 @@ export async function registerUser(payload) {
     throw error;
   }
 
+  const token = createToken(user._id.toString());
+  const { sessionToken } = await createUserSession(user._id.toString(), sessionMetadata);
+
   return {
     user: toUserResponse(user),
-    token: createToken(user._id.toString()),
+    token,
+    sessionToken,
   };
 }
 
-export async function loginUser(payload) {
+export async function loginUser(payload, sessionMetadata = {}) {
   // Ищем пользователя по email и сверяем пароль с хэшем из базы.
   const email = payload.email.toLowerCase().trim();
   const user = await User.findOne({ email });
@@ -87,8 +92,12 @@ export async function loginUser(payload) {
     throw error;
   }
 
+  const token = createToken(user._id.toString());
+  const { sessionToken } = await createUserSession(user._id.toString(), sessionMetadata);
+
   return {
     user: toUserResponse(user),
-    token: createToken(user._id.toString()),
+    token,
+    sessionToken,
   };
 }

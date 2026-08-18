@@ -23,21 +23,26 @@ function parseSessionLifetime(value) {
   return Number(match[1]) * units[match[2]];
 }
 
+// Возвращаем срок в миллисекундах для cookie и даты сессии.
+export function getSessionLifetimeMs() {
+  return parseSessionLifetime(config.auth.sessionExpiresIn);
+}
+
 // Превращаем token в хэш для хранения и поиска в базе.
 export function hashSessionToken(sessionToken) {
   return createHash('sha256').update(sessionToken).digest('hex');
 }
 
 // Создаём случайный token и сохраняем только его хэш.
-export async function createUserSession(userId, metadata = {}) {
+export async function createUserSession(userId, sessionMetadata = {}) {
   const sessionToken = randomBytes(32).toString('hex');
-  const expiresAt = new Date(Date.now() + parseSessionLifetime(config.auth.sessionExpiresIn));
+  const expiresAt = new Date(Date.now() + getSessionLifetimeMs());
 
   const session = await createSession({
     userId,
     sessionTokenHash: hashSessionToken(sessionToken),
     expiresAt,
-    userAgent: metadata.userAgent || null,
+    userAgent: sessionMetadata.userAgent || null,
   });
 
   return { sessionToken, session };

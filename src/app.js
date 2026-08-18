@@ -7,8 +7,14 @@ import errorHandler from '#middlewares/errorHandler.js';
 
 const app = express();
 
-// Разрешаем запросы с фронтенда; если origin не задан, оставляем CORS открытым для локальных проверок и первого деплоя.
-app.use(cors(config.app.clientOrigin ? { origin: config.app.clientOrigin } : undefined));
+// Разрешаем frontend отправлять cookie на backend.
+app.use(
+  cors(
+    config.app.clientOrigin
+      ? { origin: config.app.clientOrigin, credentials: true }
+      : undefined,
+  ),
+);
 // Парсим JSON-тела запросов.
 app.use(express.json());
 // Монтируем все API-маршруты под версию.
