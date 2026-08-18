@@ -2,11 +2,22 @@ import jwt from 'jsonwebtoken';
 import config from '#config/index.js';
 import { User } from '#db/models/User.js';
 import { toUserResponse } from '../modules/auth/response.js';
+import { findUserBySessionCookie } from './session.js';
 import { buildUnauthorizedError, normalizeJwtError } from './jwtErrors.js';
 
 // Пытаемся распознать JWT, но не ломаем публичный запрос, если токена нет.
 export default async function optionalAuth(req, _res, next) {
   try {
+    // Если есть действующая cookie-сессия, добавляем пользователя в запрос.
+    const sessionUser = await findUserBySessionCookie(req);
+
+    if (sessionUser) {
+      req.user = toUserResponse(sessionUser);
+      req.authUser = sessionUser;
+      return next();
+    }
+
+    // JWT оставляем как временный вариант для старого frontend.
     const authHeader = req.headers.authorization || '';
 
     if (!authHeader) {

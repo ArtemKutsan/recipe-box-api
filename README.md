@@ -12,8 +12,11 @@ src/
 │   └── v1/
 │       ├── middleware/
 │       │   ├── jwtErrors.js
-│       │   ├── optionalAuth.js
-│       │   └── requireAuth.js
+│       │   └── auth/
+│       │       ├── jwtErrors.js
+│       │       ├── optional.js
+│       │       ├── require.js
+│       │       └── session.js
 │       ├── modules/
 │       │   ├── auth/
 │       │   ├── cuisines/

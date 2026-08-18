@@ -2,11 +2,22 @@ import jwt from 'jsonwebtoken';
 import config from '#config/index.js';
 import { User } from '#db/models/User.js';
 import { toUserResponse } from '../modules/auth/response.js';
+import { findUserBySessionCookie } from './session.js';
 import { buildUnauthorizedError, normalizeJwtError } from './jwtErrors.js';
 
 // Проверяем JWT до входа в защищённый контроллер.
 export default async function requireAuth(req, _res, next) {
   try {
+    // Сначала пробуем новую серверную сессию из cookie.
+    const sessionUser = await findUserBySessionCookie(req);
+
+    if (sessionUser) {
+      req.user = toUserResponse(sessionUser);
+      req.authUser = sessionUser;
+      return next();
+    }
+
+    // JWT оставляем как временный вариант для старого frontend.
     const authHeader = req.headers.authorization || '';
     const [type, token] = authHeader.split(' ');
 
