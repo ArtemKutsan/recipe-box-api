@@ -14,10 +14,7 @@ export function findActiveSessionByTokenHash(sessionTokenHash) {
   });
 }
 
-// Отзываем текущую сессию пользователя.
-export function revokeSessionByTokenHash(sessionTokenHash) {
-  return AuthSession.updateOne(
-    { sessionTokenHash, revokedAt: null },
-    { $set: { revokedAt: new Date() } },
-  );
+// Удаляем текущую сессию пользователя сразу после Logout.
+export function deleteSessionByTokenHash(sessionTokenHash) {
+  return AuthSession.deleteOne({ sessionTokenHash });
 }

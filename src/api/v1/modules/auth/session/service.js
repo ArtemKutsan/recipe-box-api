@@ -2,8 +2,8 @@ import { createHash, randomBytes } from 'node:crypto';
 import config from '#config/index.js';
 import {
   createSession,
+  deleteSessionByTokenHash,
   findActiveSessionByTokenHash,
-  revokeSessionByTokenHash,
 } from './repositories/index.js';
 
 // Нужен, чтобы задавать срок сессии в env как 30d и получать дату её окончания.
@@ -57,11 +57,11 @@ export function findUserSession(sessionToken) {
   return findActiveSessionByTokenHash(hashSessionToken(sessionToken));
 }
 
-// Завершаем сессию по token из cookie.
-export function revokeUserSession(sessionToken) {
+// Удаляем сессию по token из cookie.
+export function deleteUserSession(sessionToken) {
   if (!sessionToken) {
     return null;
   }
 
-  return revokeSessionByTokenHash(hashSessionToken(sessionToken));
+  return deleteSessionByTokenHash(hashSessionToken(sessionToken));
 }

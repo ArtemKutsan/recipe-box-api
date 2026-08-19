@@ -1,6 +1,6 @@
 import config from '#config/index.js';
 import { loginUser, registerUser } from './service.js';
-import { getSessionLifetimeMs, revokeUserSession } from './session/service.js';
+import { deleteUserSession, getSessionLifetimeMs } from './session/service.js';
 import { getSessionTokenFromRequest } from '../../middleware/auth/session.js';
 import { validateLogin, validateRegister } from './validation.js';
 
@@ -71,8 +71,8 @@ export async function me(req, res, next) {
 
 export async function logout(req, res, next) {
   try {
-    // Отзываем только текущую сессию, а не все входы пользователя.
-    await revokeUserSession(getSessionTokenFromRequest(req));
+    // Удаляем только текущую сессию, а не все входы пользователя.
+    await deleteUserSession(getSessionTokenFromRequest(req));
     clearSessionCookie(res);
 
     return res.status(204).send();

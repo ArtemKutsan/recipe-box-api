@@ -17,4 +17,4 @@ if (!repository) {
 // Выбираем хранилище сессий через одну настройку.
 export const createSession = repository.createSession;
 export const findActiveSessionByTokenHash = repository.findActiveSessionByTokenHash;
-export const revokeSessionByTokenHash = repository.revokeSessionByTokenHash;
+export const deleteSessionByTokenHash = repository.deleteSessionByTokenHash;
