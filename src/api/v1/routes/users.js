@@ -8,7 +8,7 @@ import {
 
 const router = Router();
 
-// Текущий пользователь получает список своих рецептов после проверки JWT.
+// Текущий пользователь получает список своих рецептов после проверки cookie-сессии.
 router.get('/me/recipes', requireAuth, getMyRecipes);
 // Публичные рецепты автора читаются по короткому publicId.
 router.get('/:publicId/recipes', getPublicProfileRecipes);

@@ -62,7 +62,7 @@ export async function login(req, res, next) {
 export async function me(req, res, next) {
   try {
     // Текущий пользователь уже лежит в req.user после проверки middleware.
-    // Middleware уже проверяет cookie-сессию и временно поддерживает JWT.
+    // Middleware уже проверяет cookie-сессию.
     return res.status(200).json({ user: req.user });
   } catch (error) {
     next(error);

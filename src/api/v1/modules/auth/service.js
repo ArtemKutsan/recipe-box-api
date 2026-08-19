@@ -1,6 +1,4 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import config from '#config/index.js';
 import { User } from '#db/models/User.js';
 import { getNextSequence } from '#shared/counters/service.js';
 import { toUserResponse } from './response.js';
@@ -15,20 +13,6 @@ function buildEmailAlreadyExistsError() {
 
 function isDuplicateEmailError(error) {
   return error?.code === 11000 && Boolean(error?.keyPattern?.email || error?.keyValue?.email);
-}
-
-// Подписываем JWT тем секретом, который хранится в окружении сервера.
-function createToken(userId) {
-  if (!config.auth.jwtSecret) {
-    const error = new Error('JWT_SECRET is required.');
-    error.status = 500;
-    error.code = 'JWT_SECRET_REQUIRED';
-    throw error;
-  }
-
-  return jwt.sign({ sub: userId }, config.auth.jwtSecret, {
-    expiresIn: config.auth.jwtExpiresIn,
-  });
 }
 
 export async function registerUser(payload, sessionMetadata = {}) {
@@ -61,12 +45,10 @@ export async function registerUser(payload, sessionMetadata = {}) {
     throw error;
   }
 
-  const token = createToken(user._id.toString());
   const { sessionToken } = await createUserSession(user._id.toString(), sessionMetadata);
 
   return {
     user: toUserResponse(user),
-    token,
     sessionToken,
   };
 }
@@ -92,12 +74,10 @@ export async function loginUser(payload, sessionMetadata = {}) {
     throw error;
   }
 
-  const token = createToken(user._id.toString());
   const { sessionToken } = await createUserSession(user._id.toString(), sessionMetadata);
 
   return {
     user: toUserResponse(user),
-    token,
     sessionToken,
   };
 }

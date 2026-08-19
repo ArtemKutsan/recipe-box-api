@@ -3,7 +3,7 @@ import { validateUpdateMealPlanSlot } from './validation.js';
 
 export async function getCurrent(req, res, next) {
   try {
-    // Возвращаем текущий план питания пользователя по JWT.
+    // Возвращаем текущий план питания пользователя из cookie-сессии.
     const result = await getCurrentMealPlan(req.authUser);
 
     return res.status(200).json(result);

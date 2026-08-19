@@ -8,8 +8,6 @@ const config = {
     nodeEnv: process.env.NODE_ENV || 'development',
   },
   auth: {
-    jwtSecret: process.env.JWT_SECRET || '',
-    jwtExpiresIn: process.env.JWT_EXPIRES_IN || '7d',
     sessionCookieName: process.env.SESSION_COOKIE_NAME || 'recipebox_session',
     sessionExpiresIn: process.env.SESSION_EXPIRES_IN || '30d',
     sessionStore: process.env.SESSION_STORE || 'mongo',

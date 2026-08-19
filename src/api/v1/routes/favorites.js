@@ -4,7 +4,7 @@ import { add, list, listRecipes, remove } from '../modules/favorites/controller.
 
 const router = Router();
 
-// Все Favorites принадлежат текущему пользователю из JWT.
+// Все Favorites принадлежат текущему пользователю из cookie-сессии.
 router.get('/', requireAuth, list);
 router.get('/recipes', requireAuth, listRecipes);
 router.put('/:recipeId', requireAuth, add);

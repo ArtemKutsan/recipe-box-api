@@ -11,9 +11,7 @@ src/
 ├── api/
 │   └── v1/
 │       ├── middleware/
-│       │   ├── jwtErrors.js
 │       │   └── auth/
-│       │       ├── jwtErrors.js
 │       │       ├── optional.js
 │       │       ├── require.js
 │       │       └── session.js
@@ -55,7 +53,7 @@ src/
 
 `recipe-box-api` отвечает за серверную часть RecipeBox:
 
-- аутентификацию и авторизацию на JWT с подготовкой серверных сессий
+- аутентификацию и авторизацию через серверные сессии в HttpOnly cookie
 - работу с пользователями
 - работу с рецептами
 - работу с планами питания
@@ -83,7 +81,7 @@ src/
 - чтение переменных окружения
 - настройки порта
 - настройки MongoDB
-- настройки JWT
+- настройки серверных сессий и cookie
 - настройки CORS-origin
 
 ### `src/middlewares/`
@@ -98,7 +96,7 @@ src/
 Версионированный HTTP-слой приложения:
 
 - `router.js` собирает все маршруты первой версии API
-- `middleware/` определяет пользователя по JWT, защищает маршруты первой версии и одинаково нормализует JWT-ошибки
+- `middleware/` определяет пользователя по cookie-сессии и защищает маршруты первой версии
 - `routes/` связывает URL и HTTP-методы с middleware и контроллерами
 - `modules/` содержит controller, service, response и validation конкретной версии API
 - `auth/`, `cuisines/`, `favorites/`, `meal-plans/`, `meal-types/`, `recipes/` и `users/` содержат HTTP-логику соответствующих доменов
@@ -112,7 +110,7 @@ src/
 - Mongoose-схемы и модели в `models/`
 - seed и backfill скрипты для данных в `scripts/`
 - `AuthSession.js`, `Cuisine.js`, `Favorite.js`, `MealPlan.js`, `MealType.js`, `Recipe.js` и `User.js` содержат Mongoose-схемы и модели доменов
-- `AuthSession.js` хранит отдельные серверные сессии пользователей; подключение к Login/Register будет отдельным шагом
+- `AuthSession.js` описывает одну запись о входе; такие записи хранятся в коллекции `authSessions` и уже подключены к Login/Register
 
 ### `src/shared/`
 
@@ -130,8 +128,6 @@ Backend использует переменные окружения:
 - `DB_ENABLED`
 - `DB_PROVIDER`
 - `MONGODB_URI`
-- `JWT_SECRET`
-- `JWT_EXPIRES_IN`
 - `SESSION_COOKIE_NAME`
 - `SESSION_EXPIRES_IN`
 - `SESSION_STORE`

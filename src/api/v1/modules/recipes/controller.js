@@ -37,7 +37,7 @@ export async function create(req, res, next) {
 
 export async function update(req, res, next) {
   try {
-    // Обновлять рецепт может только владелец с валидным JWT.
+    // Обновлять рецепт может только владелец с действующей cookie-сессией.
     validateUpdateRecipe(req.body);
     const result = await updateRecipe(req.params.id, req.body, req.authUser);
 
@@ -49,7 +49,7 @@ export async function update(req, res, next) {
 
 export async function remove(req, res, next) {
   try {
-    // Удалять рецепт может только владелец с валидным JWT.
+    // Удалять рецепт может только владелец с действующей cookie-сессией.
     const result = await deleteRecipe(req.params.id, req.authUser);
 
     return res.status(200).json(result);
