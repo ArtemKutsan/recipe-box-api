@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import mongoose from 'mongoose';
 import { User } from '#db/models/User.js';
 import { getNextSequence } from '#shared/counters/service.js';
 import { toUserResponse } from './response.js';
@@ -24,17 +25,33 @@ export async function registerUser(payload, sessionMetadata = {}) {
     throw buildEmailAlreadyExistsError();
   }
 
-  // Получаем публичный номер и хэшируем пароль перед сохранением.
-  const publicId = await getNextSequence('users');
+  // Хэшируем пароль до транзакции, чтобы не держать её открытой во время bcrypt.
   const passwordHash = await bcrypt.hash(payload.password, 10);
+  const mongoSession = await mongoose.startSession();
   let user;
+  let sessionToken;
 
   try {
-    user = await User.create({
-      publicId,
-      name: payload.name.trim(),
-      email,
-      passwordHash,
+    await mongoSession.withTransaction(async () => {
+      // publicId, User и AuthSession должны сохраниться или откатиться вместе.
+      const publicId = await getNextSequence('users', { session: mongoSession });
+      [user] = await User.create(
+        [
+          {
+            publicId,
+            name: payload.name.trim(),
+            email,
+            passwordHash,
+          },
+        ],
+        { session: mongoSession },
+      );
+
+      ({ sessionToken } = await createUserSession(
+        user._id.toString(),
+        sessionMetadata,
+        { session: mongoSession },
+      ));
     });
   } catch (error) {
     // Уникальный индекс закрывает гонку между параллельными регистрациями одного email.
@@ -43,9 +60,9 @@ export async function registerUser(payload, sessionMetadata = {}) {
     }
 
     throw error;
+  } finally {
+    await mongoSession.endSession();
   }
-
-  const { sessionToken } = await createUserSession(user._id.toString(), sessionMetadata);
 
   return {
     user: toUserResponse(user),

@@ -34,7 +34,7 @@ export function hashSessionToken(sessionToken) {
 }
 
 // Создаём случайный token и сохраняем только его хэш.
-export async function createUserSession(userId, sessionMetadata = {}) {
+export async function createUserSession(userId, sessionMetadata = {}, options = {}) {
   const sessionToken = randomBytes(32).toString('hex');
   const expiresAt = new Date(Date.now() + getSessionLifetimeMs());
 
@@ -43,7 +43,7 @@ export async function createUserSession(userId, sessionMetadata = {}) {
     sessionTokenHash: hashSessionToken(sessionToken),
     expiresAt,
     userAgent: sessionMetadata.userAgent || null,
-  });
+  }, options);
 
   return { sessionToken, session };
 }
