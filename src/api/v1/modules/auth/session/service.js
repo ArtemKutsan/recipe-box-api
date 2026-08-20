@@ -1,7 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
 import config from '#config/index.js';
 import {
-  createSession,
+  createAuthSession,
   deleteSessionByTokenHash,
   findActiveSessionByTokenHash,
 } from './repositories/index.js';
@@ -34,18 +34,18 @@ export function hashSessionToken(sessionToken) {
 }
 
 // Создаём случайный token и сохраняем только его хэш.
-export async function createUserSession(userId, sessionMetadata = {}, options = {}) {
+export async function createSession(userId, sessionMetadata = {}, options = {}) {
   const sessionToken = randomBytes(32).toString('hex');
   const expiresAt = new Date(Date.now() + getSessionLifetimeMs());
 
-  const session = await createSession({
+  const authSession = await createAuthSession({
     userId,
     sessionTokenHash: hashSessionToken(sessionToken),
     expiresAt,
     userAgent: sessionMetadata.userAgent || null,
   }, options);
 
-  return { sessionToken, session };
+  return { sessionToken, authSession };
 }
 
 // Ищем действующую сессию по token из cookie.

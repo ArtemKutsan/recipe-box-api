@@ -3,12 +3,19 @@ import mongoose from 'mongoose';
 import { User } from '#db/models/User.js';
 import { getNextSequence } from '#shared/counters/service.js';
 import { toUserResponse } from './response.js';
-import { createUserSession } from './session/service.js';
+import { createSession } from './session/service.js';
 
 function buildEmailAlreadyExistsError() {
   const error = new Error('Email is already in use.');
   error.status = 409;
   error.code = 'EMAIL_ALREADY_EXISTS';
+  return error;
+}
+
+function buildInvalidCredentialsError() {
+  const error = new Error('Invalid email or password.');
+  error.status = 401;
+  error.code = 'INVALID_CREDENTIALS';
   return error;
 }
 
@@ -28,31 +35,32 @@ export async function registerUser(payload, sessionMetadata = {}) {
   // Хэшируем пароль до транзакции, чтобы не держать её открытой во время bcrypt.
   const passwordHash = await bcrypt.hash(payload.password, 10);
   const mongoSession = await mongoose.startSession();
-  let user;
-  let sessionToken;
 
   try {
-    await mongoSession.withTransaction(async () => {
-      // publicId, User и AuthSession должны сохраниться или откатиться вместе.
+    // publicId, User и AuthSession должны сохраниться или откатиться вместе.
+    const transactionResult = await mongoSession.withTransaction(async () => {
       const publicId = await getNextSequence('users', { session: mongoSession });
-      [user] = await User.create(
-        [
-          {
-            publicId,
-            name: payload.name.trim(),
-            email,
-            passwordHash,
-          },
-        ],
+      const user = await User.create(
+        {
+          publicId,
+          name: payload.name.trim(),
+          email,
+          passwordHash,
+        },
         { session: mongoSession },
       );
 
-      ({ sessionToken } = await createUserSession(
-        user._id.toString(),
-        sessionMetadata,
-        { session: mongoSession },
-      ));
+      const { sessionToken } = await createSession(user._id.toString(), sessionMetadata, {
+        session: mongoSession,
+      });
+
+      return { user, sessionToken };
     });
+
+    return {
+      user: toUserResponse(transactionResult.user),
+      sessionToken: transactionResult.sessionToken,
+    };
   } catch (error) {
     // Уникальный индекс закрывает гонку между параллельными регистрациями одного email.
     if (isDuplicateEmailError(error)) {
@@ -63,11 +71,6 @@ export async function registerUser(payload, sessionMetadata = {}) {
   } finally {
     await mongoSession.endSession();
   }
-
-  return {
-    user: toUserResponse(user),
-    sessionToken,
-  };
 }
 
 export async function loginUser(payload, sessionMetadata = {}) {
@@ -76,22 +79,16 @@ export async function loginUser(payload, sessionMetadata = {}) {
   const user = await User.findOne({ email });
 
   if (!user) {
-    const error = new Error('Invalid email or password.');
-    error.status = 401;
-    error.code = 'INVALID_CREDENTIALS';
-    throw error;
+    throw buildInvalidCredentialsError();
   }
 
   const isPasswordValid = await bcrypt.compare(payload.password, user.passwordHash);
 
   if (!isPasswordValid) {
-    const error = new Error('Invalid email or password.');
-    error.status = 401;
-    error.code = 'INVALID_CREDENTIALS';
-    throw error;
+    throw buildInvalidCredentialsError();
   }
 
-  const { sessionToken } = await createUserSession(user._id.toString(), sessionMetadata);
+  const { sessionToken } = await createSession(user._id.toString(), sessionMetadata);
 
   return {
     user: toUserResponse(user),

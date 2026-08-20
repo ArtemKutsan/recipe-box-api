@@ -1,9 +1,8 @@
 import { AuthSession } from '#db/models/AuthSession.js';
 
 // Создаём отдельную запись для каждого входа.
-export async function createSession(data, options = {}) {
-  const [session] = await AuthSession.create([data], { session: options.session });
-  return session;
+export function createAuthSession(data, options = {}) {
+  return AuthSession.create(data, { session: options.session });
 }
 
 // Ищем только действующую сессию по хэшу токена.
