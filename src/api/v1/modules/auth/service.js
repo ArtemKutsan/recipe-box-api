@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
-import { getNextSequence } from '#shared/counters/service.js';
+import { getNextSequence } from '#db/services/counter.js';
 import { toUserResponse } from './response.js';
 import { createSession } from './session/service.js';
 import { createUser, findUserByEmail } from '../users/repositories/index.js';

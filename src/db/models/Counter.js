@@ -1,7 +1,7 @@
-import { Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 // Счётчик хранит последний выданный публичный номер для сущности.
-export const counterSchema = new Schema({
+const counterSchema = new Schema({
   _id: {
     type: String,
     required: true,
@@ -12,3 +12,6 @@ export const counterSchema = new Schema({
     default: 0,
   },
 });
+
+// Модель нужна для атомарной выдачи publicId.
+export const Counter = model('Counter', counterSchema);
