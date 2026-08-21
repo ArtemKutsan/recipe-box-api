@@ -35,7 +35,7 @@ export async function getRecipeByPublicId(recipeId, currentUser = null) {
     : { publicId, $or: publicRecipeVisibilityFilter.$or };
 
   const recipe = await Recipe.findOne(recipeFilter)
-    .populate('authorId', 'publicId name avatarUrl')
+    .populate('authorId', 'publicId name avatarUrl avatarKey')
     .populate('mealTypeIds', 'title')
     .populate('cuisineId', 'title')
     .lean();

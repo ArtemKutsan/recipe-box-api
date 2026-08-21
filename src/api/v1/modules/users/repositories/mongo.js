@@ -42,3 +42,12 @@ export async function createUser(data, options = {}) {
 
   return user;
 }
+
+// Сохраняем ключ нового аватара у текущего пользователя.
+export function updateUserAvatar(userId, avatarKey, options = {}) {
+  return User.findByIdAndUpdate(
+    userId,
+    { $set: { avatarKey } },
+    { new: true, session: options.session },
+  );
+}

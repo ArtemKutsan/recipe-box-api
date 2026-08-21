@@ -4,6 +4,7 @@ import { getNextSequence } from '#db/services/counter.js';
 import { toUserResponse } from './response.js';
 import { createSession } from './session/service.js';
 import { createUser, findUserByEmail } from '../users/repositories/index.js';
+import { resolveUserAvatar } from '../users/media.js';
 
 function buildEmailAlreadyExistsError() {
   const error = new Error('Email is already in use.');
@@ -58,7 +59,7 @@ export async function registerUser(payload, sessionMetadata = {}) {
     });
 
     return {
-      user: toUserResponse(transactionResult.user),
+      user: toUserResponse(await resolveUserAvatar(transactionResult.user)),
       sessionToken: transactionResult.sessionToken,
     };
   } catch (error) {
@@ -91,7 +92,7 @@ export async function loginUser(payload, sessionMetadata = {}) {
   const { sessionToken } = await createSession(user._id.toString(), sessionMetadata);
 
   return {
-    user: toUserResponse(user),
+    user: toUserResponse(await resolveUserAvatar(user)),
     sessionToken,
   };
 }

@@ -3,4 +3,5 @@ export {
   findUserByEmail,
   findUserById,
   findUserByPublicId,
+  updateUserAvatar,
 } from './mongo.js';

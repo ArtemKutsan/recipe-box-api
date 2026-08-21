@@ -1,6 +1,7 @@
 import { toUserResponse } from '../../modules/auth/response.js';
 import { getSessionTokenFromRequest } from '../../modules/auth/session/cookie.js';
 import { findUserBySessionToken } from '../../modules/auth/session/service.js';
+import { resolveUserAvatar } from '../../modules/users/media.js';
 
 function buildUnauthorizedError() {
   const error = new Error('Authentication is required.');
@@ -20,7 +21,7 @@ export default async function requireAuth(req, _res, next) {
     }
 
     // Кладём в запрос публичного пользователя для ответа и сырой документ для сервисов.
-    req.user = toUserResponse(sessionUser);
+    req.user = toUserResponse(await resolveUserAvatar(sessionUser));
     req.authUser = sessionUser;
 
     return next();

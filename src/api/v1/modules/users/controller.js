@@ -1,4 +1,9 @@
-import { getCurrentUserRecipes, getPublicUserProfile, getPublicUserRecipes } from './service.js';
+import {
+  getCurrentUserRecipes,
+  getPublicUserProfile,
+  getPublicUserRecipes,
+  updateCurrentUserAvatar,
+} from './service.js';
 
 export async function getPublicProfile(req, res, next) {
   try {
@@ -26,6 +31,16 @@ export async function getPublicProfileRecipes(req, res, next) {
   try {
     // Берём publicId из URL и отдаём публичные рецепты этого автора.
     const result = await getPublicUserRecipes(req.params.publicId, req.query);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function updateMyAvatar(req, res, next) {
+  try {
+    const result = await updateCurrentUserAvatar(req.authUser, req.body?.avatarKey);
 
     return res.status(200).json(result);
   } catch (error) {

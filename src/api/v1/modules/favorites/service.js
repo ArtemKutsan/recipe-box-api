@@ -144,7 +144,7 @@ export async function getCurrentUserFavoriteRecipes(query = {}, user) {
   const favoriteRows = result?.favorites ?? [];
   const recipeIds = favoriteRows.map(({ recipeId }) => recipeId);
   const recipes = await Recipe.find({ _id: { $in: recipeIds } })
-    .populate('authorId', 'publicId name avatarUrl')
+    .populate('authorId', 'publicId name avatarUrl avatarKey')
     .populate('mealTypeIds', 'title')
     .populate('cuisineId', 'title')
     .lean();

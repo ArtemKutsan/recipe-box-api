@@ -39,7 +39,7 @@ function isRecipeOwner(recipe, user) {
 
 async function ensureRecipeMediaAccess(fileKey, user) {
   const recipe = await Recipe.findOne({
-    $or: [{ thumbnailUrl: fileKey }, { images: fileKey }],
+    $or: [{ thumbnailKey: fileKey }, { thumbnailUrl: fileKey }, { images: fileKey }],
   }).select('authorId visibility');
 
   if (!recipe) {
@@ -54,7 +54,7 @@ async function ensureRecipeMediaAccess(fileKey, user) {
 }
 
 async function ensureAvatarMediaAccess(fileKey) {
-  const user = await User.findOne({ avatarUrl: fileKey }).select('_id');
+  const user = await User.findOne({ $or: [{ avatarKey: fileKey }, { avatarUrl: fileKey }] }).select('_id');
 
   if (!user) {
     throw buildMediaNotFoundError();

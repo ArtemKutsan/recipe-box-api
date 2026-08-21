@@ -30,6 +30,10 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+    avatarKey: {
+      type: String,
+      default: null,
+    },
     bio: {
       type: String,
       default: null,

@@ -5,17 +5,23 @@
  * Возвращает: тот же рецепт с готовым `thumbnailUrl`.
  */
 import { createDownloadUrl } from '../../uploads/service.js';
+import { resolveUserAvatar } from '../../users/media.js';
 
 // Для старой внешней ссылки ничего дополнительно не делаем.
 export async function resolveRecipeThumbnail(recipe) {
-  if (!recipe.thumbnailKey) {
-    return recipe;
+  const resolvedRecipe = recipe.thumbnailKey
+    ? {
+        ...recipe,
+        thumbnailUrl: (await createDownloadUrl(recipe.thumbnailKey)).downloadUrl,
+      }
+    : recipe;
+
+  if (!resolvedRecipe.authorId?.avatarKey) {
+    return resolvedRecipe;
   }
 
-  const { downloadUrl } = await createDownloadUrl(recipe.thumbnailKey);
-
   return {
-    ...recipe,
-    thumbnailUrl: downloadUrl,
+    ...resolvedRecipe,
+    authorId: await resolveUserAvatar(resolvedRecipe.authorId),
   };
 }
