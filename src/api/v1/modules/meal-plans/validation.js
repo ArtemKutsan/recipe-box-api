@@ -1,4 +1,4 @@
-import { MEAL_PLAN_DAYS, MEAL_PLAN_PERIODS } from '#shared/meal-plans/constants.js';
+import { MEAL_PLAN_DAYS, MEAL_PLAN_PERIODS } from '#domain/meal-plans/constants.js';
 
 const MEAL_PLAN_DAY_SET = new Set(MEAL_PLAN_DAYS);
 const MEAL_PLAN_PERIOD_SET = new Set(MEAL_PLAN_PERIODS);

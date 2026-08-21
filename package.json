@@ -9,7 +9,7 @@
     "#config/*": "./src/config/*",
     "#middlewares/*": "./src/middlewares/*",
     "#db/*": "./src/db/*",
-    "#shared/*": "./src/shared/*",
+    "#domain/*": "./src/domain/*",
     "#utils/*": "./src/utils/*"
   },
   "main": "src/server.js",

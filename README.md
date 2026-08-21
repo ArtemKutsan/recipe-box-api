@@ -41,7 +41,7 @@ src/
 ├── middlewares/
 │   ├── errorHandler.js
 │   └── notFound.js
-├── shared/
+├── domain/
 │   ├── meal-plans/
 │   │   └── constants.js
 │   └── recipes/
@@ -112,9 +112,9 @@ src/
 - `AuthSession.js`, `Cuisine.js`, `Favorite.js`, `MealPlan.js`, `MealType.js`, `Recipe.js` и `User.js` содержат Mongoose-схемы и модели доменов
 - `AuthSession.js` описывает одну запись о входе; такие записи хранятся в коллекции `authSessions` и уже подключены к Login/Register
 
-### `src/shared/`
+### `src/domain/`
 
-Общий код, который нужен нескольким слоям приложения. Meal Plan schema и API используют один набор дней, периодов и пустых слотов из `shared/meal-plans/constants.js`, а Recipe schema и API — общие значения сложности и видимости из `shared/recipes/constants.js`.
+Правила предметной области, которые нужны нескольким слоям приложения. Meal Plan schema и API используют один набор дней, периодов и пустых слотов из `domain/meal-plans/constants.js`, а Recipe schema и API — общие значения сложности и видимости из `domain/recipes/constants.js`.
 
 ### `src/utils/`
 

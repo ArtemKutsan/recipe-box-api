@@ -1,4 +1,4 @@
-import { createEmptyMealPlanSlots } from '#shared/meal-plans/constants.js';
+import { createEmptyMealPlanSlots } from '#domain/meal-plans/constants.js';
 
 // Подставляем пустые null-слоты, если план еще не создан или документ неполный.
 function mergeMealPlanSlots(slots = {}) {
