@@ -11,6 +11,8 @@ const UPLOAD_PURPOSES = {
   recipe: 'recipes',
 };
 
+const MEDIA_KEY_PATTERN = /^(recipes|avatars)\/[a-f0-9]{24}\/[a-zA-Z0-9-]+\.(jpg|png|webp)$/;
+
 function throwValidationError(details) {
   const error = new Error('Validation failed.');
   error.status = 400;
@@ -50,4 +52,18 @@ export function validatePresignedUpload(payload) {
     folder: UPLOAD_PURPOSES[purpose],
     extension: CONTENT_TYPE_EXTENSIONS[contentType],
   };
+}
+
+// Проверяем fileKey из запроса, чтобы по нему нельзя было выйти за папки медиа.
+export function validateMediaFileKey(fileKey) {
+  const normalizedFileKey = String(fileKey || '').trim();
+
+  if (!MEDIA_KEY_PATTERN.test(normalizedFileKey)) {
+    const error = new Error('Invalid media file key.');
+    error.status = 400;
+    error.code = 'INVALID_MEDIA_KEY';
+    throw error;
+  }
+
+  return normalizedFileKey;
 }

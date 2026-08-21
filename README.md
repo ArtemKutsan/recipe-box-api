@@ -151,7 +151,7 @@ API строится как REST-сервис с единым префиксом
 
 ### Загрузка медиафайлов
 
-`POST /api/v1/uploads/presign` требует cookie-сессию и принимает:
+`POST /api/v1/uploads/upload-url` требует cookie-сессию и принимает:
 
 ```json
 {
@@ -164,6 +164,10 @@ API строится как REST-сервис с единым префиксом
 Backend возвращает временный `uploadUrl` и `fileKey`. Frontend использует `uploadUrl`
 для прямой загрузки файла в S3, а `fileKey` позже сохраняется в рецепте или профиле.
 Сейчас этот endpoint не меняет Recipe/User и не принимает сам файл через API.
+
+Для чтения файла используется `POST /api/v1/uploads/download-url` с `fileKey` в теле.
+Backend сначала проверяет связь файла с Recipe или User и доступ текущего пользователя,
+а затем возвращает временный `downloadUrl`.
 
 ## Запуск
 
