@@ -1,5 +1,8 @@
 import { randomUUID } from 'node:crypto';
-import { createPresignedUpload } from '#integrations/storage/s3.js';
+import {
+  createPresignedDownload,
+  createPresignedUpload,
+} from '#integrations/storage/s3.js';
 
 export async function createUploadUrl(payload, user) {
   const fileKey = `${payload.folder}/${user._id.toString()}/${randomUUID()}.${payload.extension}`;
@@ -15,4 +18,8 @@ export async function createUploadUrl(payload, user) {
     contentType: payload.contentType,
     sizeBytes: payload.sizeBytes,
   };
+}
+
+export function createDownloadUrl(fileKey) {
+  return createPresignedDownload(fileKey);
 }
