@@ -19,6 +19,28 @@ import { toRecipeDetailResponse } from '../shared/response.js';
 const ALLOWED_DIFFICULTIES = new Set(RECIPE_DIFFICULTIES);
 const ALLOWED_VISIBILITIES = new Set(RECIPE_VISIBILITIES);
 
+function getRecipeThumbnailKey(value, authorId) {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (value === null || value === '') {
+    return null;
+  }
+
+  const thumbnailKey = String(value).trim();
+  const authorFolder = `recipes/${authorId.toString()}/`;
+
+  if (!thumbnailKey.startsWith(authorFolder)) {
+    const error = new Error('thumbnailKey must belong to the current user.');
+    error.status = 403;
+    error.code = 'MEDIA_ACCESS_DENIED';
+    throw error;
+  }
+
+  return thumbnailKey;
+}
+
 function toIdString(value) {
   return value?.toString();
 }
@@ -45,7 +67,7 @@ function setIfDefined(target, field, value) {
 }
 
 // Собираем Mongo `$set` только из полей, которые можно менять через PATCH.
-function buildRecipeUpdate(payload, dictionaryData = {}) {
+function buildRecipeUpdate(payload, dictionaryData = {}, authorId) {
   const update = {};
 
   setIfDefined(update, 'title', payload.title?.trim());
@@ -126,6 +148,8 @@ function buildRecipeUpdate(payload, dictionaryData = {}) {
         : null;
   }
 
+  setIfDefined(update, 'thumbnailKey', getRecipeThumbnailKey(payload.thumbnailKey, authorId));
+
   return update;
 }
 
@@ -151,7 +175,7 @@ export async function updateRecipe(recipeId, payload, author) {
     dictionaryData.cuisine = cuisine;
   }
 
-  const update = buildRecipeUpdate(payload, dictionaryData);
+  const update = buildRecipeUpdate(payload, dictionaryData, author._id);
   const previousMealTypeIds = recipe.mealTypeIds;
   const nextMealTypeIds = update.mealTypeIds ?? recipe.mealTypeIds;
   const addedMealTypeIds = getAddedIds(previousMealTypeIds, nextMealTypeIds);

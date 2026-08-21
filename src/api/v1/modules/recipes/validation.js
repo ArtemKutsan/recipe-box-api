@@ -21,6 +21,7 @@ const RECIPE_UPDATE_FIELDS = [
   'difficulty',
   'images',
   'thumbnailUrl',
+  'thumbnailKey',
   'visibility',
 ];
 
@@ -78,6 +79,10 @@ function validateRecipeFields(body, errors, { partial = false } = {}) {
 
   if (body.images !== undefined && !isStringArray(body.images)) {
     errors.push('images must be an array of strings');
+  }
+
+  if (body.thumbnailKey !== undefined && body.thumbnailKey !== null && typeof body.thumbnailKey !== 'string') {
+    errors.push('thumbnailKey must be a string or null');
   }
 
   if (

@@ -20,6 +20,24 @@ import { toRecipeDetailResponseFromCreate } from '../shared/response.js';
 const ALLOWED_DIFFICULTIES = new Set(RECIPE_DIFFICULTIES);
 const ALLOWED_VISIBILITIES = new Set(RECIPE_VISIBILITIES);
 
+function getRecipeThumbnailKey(value, authorId) {
+  if (value === undefined || value === null || value === '') {
+    return null;
+  }
+
+  const thumbnailKey = String(value).trim();
+  const authorFolder = `recipes/${authorId.toString()}/`;
+
+  if (!thumbnailKey.startsWith(authorFolder)) {
+    const error = new Error('thumbnailKey must belong to the current user.');
+    error.status = 403;
+    error.code = 'MEDIA_ACCESS_DENIED';
+    throw error;
+  }
+
+  return thumbnailKey;
+}
+
 // Создаем рецепт и обновляем связанные справочники в одной транзакции.
 export async function createRecipe(payload, author) {
   const tags = normalizeStringArray(payload.tags);
@@ -83,6 +101,7 @@ export async function createRecipe(payload, author) {
               typeof payload.thumbnailUrl === 'string' && payload.thumbnailUrl.trim()
                 ? payload.thumbnailUrl.trim()
                 : null,
+            thumbnailKey: getRecipeThumbnailKey(payload.thumbnailKey, author._id),
           },
         ],
         { session },

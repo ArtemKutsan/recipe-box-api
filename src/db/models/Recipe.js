@@ -110,6 +110,11 @@ const recipeSchema = new Schema(
       type: String,
       default: null,
     },
+    // Ключ картинки рецепта в приватном S3 bucket.
+    thumbnailKey: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,
