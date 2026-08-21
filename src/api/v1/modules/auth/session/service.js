@@ -5,6 +5,7 @@ import {
   deleteSessionByTokenHash,
   findActiveSessionByTokenHash,
 } from './repositories/index.js';
+import { findUserById } from '../../users/repositories/index.js';
 
 // Нужен, чтобы задавать срок сессии в env как 30d и получать дату её окончания.
 function parseSessionLifetime(value) {
@@ -55,6 +56,21 @@ export function findUserSession(sessionToken) {
   }
 
   return findActiveSessionByTokenHash(hashSessionToken(sessionToken));
+}
+
+// По token находим AuthSession и связанного с ней пользователя.
+export async function findUserBySessionToken(sessionToken) {
+  if (!sessionToken) {
+    return null;
+  }
+
+  const authSession = await findUserSession(sessionToken);
+
+  if (!authSession) {
+    return null;
+  }
+
+  return findUserById(authSession.userId);
 }
 
 // Удаляем сессию по token из cookie.

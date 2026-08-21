@@ -1,7 +1,10 @@
 import { loginUser, registerUser } from './service.js';
 import { deleteUserSession } from './session/service.js';
-import { clearSessionCookie, setSessionCookie } from './session/cookie.js';
-import { getSessionTokenFromRequest } from '../../middleware/auth/session.js';
+import {
+  clearSessionCookie,
+  getSessionTokenFromRequest,
+  setSessionCookie,
+} from './session/cookie.js';
 import { validateLogin, validateRegister } from './validation.js';
 
 export async function register(req, res, next) {
