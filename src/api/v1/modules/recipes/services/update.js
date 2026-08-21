@@ -15,6 +15,7 @@ import { Cuisine } from '#db/models/Cuisine.js';
 import { buildNotFoundError, normalizeStringArray, parseRecipePublicId } from '../shared/utils.js';
 import { resolveRecipeCuisine, resolveRecipeMealTypes } from '../shared/dictionaries.js';
 import { toRecipeDetailResponse } from '../shared/response.js';
+import { resolveRecipeThumbnail } from './media.js';
 
 const ALLOWED_DIFFICULTIES = new Set(RECIPE_DIFFICULTIES);
 const ALLOWED_VISIBILITIES = new Set(RECIPE_VISIBILITIES);
@@ -225,6 +226,6 @@ export async function updateRecipe(recipeId, payload, author) {
     .lean();
 
   return {
-    recipe: toRecipeDetailResponse(updatedRecipe),
+    recipe: toRecipeDetailResponse(await resolveRecipeThumbnail(updatedRecipe)),
   };
 }

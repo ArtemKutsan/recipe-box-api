@@ -10,6 +10,7 @@
 import { Recipe } from '#db/models/Recipe.js';
 import { buildNotFoundError, parseRecipePublicId } from '../shared/utils.js';
 import { toRecipeDetailResponse } from '../shared/response.js';
+import { resolveRecipeThumbnail } from './media.js';
 
 // Возвращаем детальную карточку рецепта по публичному номеру.
 export async function getRecipeByPublicId(recipeId, currentUser = null) {
@@ -44,6 +45,6 @@ export async function getRecipeByPublicId(recipeId, currentUser = null) {
   }
 
   return {
-    recipe: toRecipeDetailResponse(recipe),
+    recipe: toRecipeDetailResponse(await resolveRecipeThumbnail(recipe)),
   };
 }

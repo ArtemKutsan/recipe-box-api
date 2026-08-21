@@ -26,7 +26,7 @@ export function toRecipeListResponse(recipe) {
     cookTimeMinutes: recipe.cookTimeMinutes,
     servings: recipe.servings,
     difficulty: recipe.difficulty ?? null,
-    thumbnailUrl: recipe.thumbnailUrl,
+    thumbnailUrl: recipe.thumbnailUrl ?? null,
     thumbnailKey: recipe.thumbnailKey ?? null,
     author: toRecipeAuthorResponse(recipe.authorId),
   };
@@ -60,7 +60,7 @@ function buildRecipeDetailResponse(recipe, mealTypeTitles, cuisine, author) {
     difficulty: recipe.difficulty,
     ingredients: recipe.ingredients,
     instructions: recipe.instructions,
-    thumbnailUrl: recipe.thumbnailUrl,
+    thumbnailUrl: recipe.thumbnailUrl ?? null,
     thumbnailKey: recipe.thumbnailKey ?? null,
     images: recipe.images,
     author: toRecipeAuthorResponse(author),

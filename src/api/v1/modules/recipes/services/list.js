@@ -11,6 +11,7 @@ import { Cuisine } from '#db/models/Cuisine.js';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants.js';
 import { Recipe } from '#db/models/Recipe.js';
 import { toRecipeListResponse } from '../shared/response.js';
+import { resolveRecipeThumbnail } from './media.js';
 import {
   buildRecipeListFilter,
   buildSort,
@@ -105,8 +106,10 @@ async function getRecipesByFilter(filter, query = {}) {
 
   const totalPages = total === 0 ? 0 : Math.ceil(total / pageSize);
 
+  const recipesWithMedia = await Promise.all(recipes.map(resolveRecipeThumbnail));
+
   return {
-    items: recipes.map(toRecipeListResponse),
+    items: recipesWithMedia.map(toRecipeListResponse),
     page,
     pageSize,
     total,

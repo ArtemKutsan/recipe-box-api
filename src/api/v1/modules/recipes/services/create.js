@@ -16,6 +16,7 @@ import { getNextSequence } from '#db/services/counter.js';
 import { normalizeStringArray } from '../shared/utils.js';
 import { resolveRecipeDictionaries } from '../shared/dictionaries.js';
 import { toRecipeDetailResponseFromCreate } from '../shared/response.js';
+import { resolveRecipeThumbnail } from './media.js';
 
 const ALLOWED_DIFFICULTIES = new Set(RECIPE_DIFFICULTIES);
 const ALLOWED_VISIBILITIES = new Set(RECIPE_VISIBILITIES);
@@ -121,7 +122,12 @@ export async function createRecipe(payload, author) {
     });
 
     return {
-      recipe: toRecipeDetailResponseFromCreate(createdRecipe, mealTypeTitles, cuisine, author),
+      recipe: toRecipeDetailResponseFromCreate(
+        await resolveRecipeThumbnail(createdRecipe),
+        mealTypeTitles,
+        cuisine,
+        author,
+      ),
     };
   } finally {
     await session.endSession();

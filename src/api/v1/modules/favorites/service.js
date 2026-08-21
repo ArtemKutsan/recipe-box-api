@@ -7,6 +7,7 @@ import {
   MAX_FAVORITES_PAGE_SIZE,
 } from './constants.js';
 import { toFavoriteRecipeResponse, toFavoriteStateResponse } from './response.js';
+import { resolveRecipeThumbnail } from '../recipes/services/media.js';
 
 function parsePositiveInteger(value, fallback, max = Number.MAX_SAFE_INTEGER) {
   const parsed = Number.parseInt(String(value ?? ''), 10);
@@ -148,12 +149,15 @@ export async function getCurrentUserFavoriteRecipes(query = {}, user) {
     .populate('cuisineId', 'title')
     .lean();
   const recipesById = new Map(recipes.map((recipe) => [recipe._id.toString(), recipe]));
-  const items = favoriteRows
-    .map(({ recipeId, savedAt }) => {
+  const items = (await Promise.all(
+    favoriteRows.map(async ({ recipeId, savedAt }) => {
       const recipe = recipesById.get(recipeId.toString());
 
-      return recipe ? toFavoriteRecipeResponse(recipe, savedAt) : null;
-    })
+      return recipe
+        ? toFavoriteRecipeResponse(await resolveRecipeThumbnail(recipe), savedAt)
+        : null;
+    }),
+  ))
     .filter(Boolean);
   const total = result?.metadata?.[0]?.total ?? 0;
 
