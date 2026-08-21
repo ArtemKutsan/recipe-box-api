@@ -22,7 +22,7 @@ coverage/
 # Runtime data
 tmp/
 temp/
-uploads/
+/uploads/
 
 # Editor directories and files
 .vscode/
