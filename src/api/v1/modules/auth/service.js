@@ -1,9 +1,9 @@
 import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
-import { User } from '#db/models/User.js';
 import { getNextSequence } from '#shared/counters/service.js';
 import { toUserResponse } from './response.js';
 import { createSession } from './session/service.js';
+import { createUser, findUserByEmail } from '../users/repositories/index.js';
 
 function buildEmailAlreadyExistsError() {
   const error = new Error('Email is already in use.');
@@ -26,7 +26,7 @@ function isDuplicateEmailError(error) {
 export async function registerUser(payload, sessionMetadata = {}) {
   // Нормализуем email и проверяем, что такой пользователь ещё не существует.
   const email = payload.email.toLowerCase().trim();
-  const existingUser = await User.findOne({ email });
+  const existingUser = await findUserByEmail(email);
 
   if (existingUser) {
     throw buildEmailAlreadyExistsError();
@@ -40,7 +40,7 @@ export async function registerUser(payload, sessionMetadata = {}) {
     // publicId, User и AuthSession должны сохраниться или откатиться вместе.
     const transactionResult = await mongoSession.withTransaction(async () => {
       const publicId = await getNextSequence('users', { session: mongoSession });
-      const user = await User.create(
+      const user = await createUser(
         {
           publicId,
           name: payload.name.trim(),
@@ -76,7 +76,7 @@ export async function registerUser(payload, sessionMetadata = {}) {
 export async function loginUser(payload, sessionMetadata = {}) {
   // Ищем пользователя по email и сверяем пароль с хэшем из базы.
   const email = payload.email.toLowerCase().trim();
-  const user = await User.findOne({ email });
+  const user = await findUserByEmail(email);
 
   if (!user) {
     throw buildInvalidCredentialsError();
