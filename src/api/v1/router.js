@@ -6,6 +6,7 @@ import healthRouter from './routes/health.js';
 import mealPlansRouter from './routes/meal-plans.js';
 import mealTypesRouter from './routes/meal-types.js';
 import recipesRouter from './routes/recipes.js';
+import uploadsRouter from './routes/uploads.js';
 import usersRouter from './routes/users.js';
 
 const router = Router();
@@ -18,6 +19,7 @@ router.use('/cuisines', cuisinesRouter);
 router.use('/recipes', recipesRouter);
 router.use('/meal-plans', mealPlansRouter);
 router.use('/favorites', favoritesRouter);
+router.use('/uploads', uploadsRouter);
 router.use(healthRouter);
 
 export default router;

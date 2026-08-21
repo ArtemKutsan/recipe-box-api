@@ -49,6 +49,9 @@ src/
 └── utils/
 ```
 
+Для медиафайлов backend использует отдельную интеграцию `src/integrations/storage/`.
+Она выдаёт временные S3-ссылки, но не хранит файлы в API и не отдаёт AWS-ключи frontend.
+
 ## Назначение
 
 `recipe-box-api` отвечает за серверную часть RecipeBox:
@@ -134,6 +137,9 @@ Backend использует переменные окружения:
 - `SESSION_COOKIE_SECURE`
 - `SESSION_COOKIE_SAME_SITE`
 - `CLIENT_ORIGIN`
+- `MEDIA_STORAGE_PROVIDER`
+- `AWS_REGION`
+- `AWS_S3_BUCKET`
 
 Для изменяющих запросов backend требует заголовок `Origin`. Он должен совпадать
 с `CLIENT_ORIGIN`; запросы без `Origin` получают `403`. В Postman этот заголовок
@@ -142,6 +148,22 @@ Backend использует переменные окружения:
 ## API-подход
 
 API строится как REST-сервис с единым префиксом `/api/v1`.
+
+### Загрузка медиафайлов
+
+`POST /api/v1/uploads/presign` требует cookie-сессию и принимает:
+
+```json
+{
+  "purpose": "recipe",
+  "contentType": "image/jpeg",
+  "sizeBytes": 123456
+}
+```
+
+Backend возвращает временный `uploadUrl` и `fileKey`. Frontend использует `uploadUrl`
+для прямой загрузки файла в S3, а `fileKey` позже сохраняется в рецепте или профиле.
+Сейчас этот endpoint не меняет Recipe/User и не принимает сам файл через API.
 
 ## Запуск
 

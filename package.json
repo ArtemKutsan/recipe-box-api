@@ -10,6 +10,7 @@
     "#middlewares/*": "./src/middlewares/*",
     "#db/*": "./src/db/*",
     "#domain/*": "./src/domain/*",
+    "#integrations/*": "./src/integrations/*",
     "#utils/*": "./src/utils/*"
   },
   "main": "src/server.js",

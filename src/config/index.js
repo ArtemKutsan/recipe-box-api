@@ -19,6 +19,11 @@ const config = {
     provider: process.env.DB_PROVIDER || 'mongo',
     mongoUri: process.env.MONGODB_URI || '',
   },
+  storage: {
+    provider: process.env.MEDIA_STORAGE_PROVIDER || 's3',
+    awsRegion: process.env.AWS_REGION || '',
+    awsS3Bucket: process.env.AWS_S3_BUCKET || '',
+  },
 };
 
 export default config;
