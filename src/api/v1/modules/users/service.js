@@ -3,6 +3,7 @@ import { toPublicUserResponse } from './response.js';
 import { findUserByPublicId, updateUserAvatar } from './repositories/index.js';
 import { resolveUserAvatar } from './media.js';
 import { validateMediaFileKey } from '../uploads/validation.js';
+import { deleteMediaObject } from '../uploads/service.js';
 
 function buildUserNotFoundError() {
   const error = new Error('User not found.');
@@ -53,6 +54,10 @@ export async function getPublicUserProfile(publicId) {
 export async function updateCurrentUserAvatar(user, avatarKey) {
   const normalizedKey = getAvatarKey(user._id, avatarKey);
   const updatedUser = await updateUserAvatar(user._id, normalizedKey);
+
+  if (user.avatarKey && user.avatarKey !== normalizedKey) {
+    await deleteMediaObject(user.avatarKey);
+  }
 
   return {
     user: toPublicUserResponse(await resolveUserAvatar(updatedUser)),

@@ -3,6 +3,7 @@ import { Recipe } from '#db/models/Recipe.js';
 import { User } from '#db/models/User.js';
 import {
   createPresignedDownload,
+  deleteStoredObject,
   createPresignedUpload,
 } from '#integrations/storage/s3.js';
 
@@ -24,6 +25,19 @@ export async function createUploadUrl(payload, user) {
 
 export function createDownloadUrl(fileKey) {
   return createPresignedDownload(fileKey);
+}
+
+// Ошибка очистки не должна отменять уже сохранённую новую ссылку.
+export async function deleteMediaObject(fileKey) {
+  if (!fileKey) {
+    return;
+  }
+
+  try {
+    await deleteStoredObject(fileKey);
+  } catch (error) {
+    console.error('Failed to delete old media object.', { fileKey, error });
+  }
 }
 
 function buildMediaNotFoundError() {

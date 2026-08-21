@@ -16,6 +16,7 @@ import { buildNotFoundError, normalizeStringArray, parseRecipePublicId } from '.
 import { resolveRecipeCuisine, resolveRecipeMealTypes } from '../shared/dictionaries.js';
 import { toRecipeDetailResponse } from '../shared/response.js';
 import { resolveRecipeThumbnail } from './media.js';
+import { deleteMediaObject } from '../../uploads/service.js';
 
 const ALLOWED_DIFFICULTIES = new Set(RECIPE_DIFFICULTIES);
 const ALLOWED_VISIBILITIES = new Set(RECIPE_VISIBILITIES);
@@ -177,6 +178,7 @@ export async function updateRecipe(recipeId, payload, author) {
   }
 
   const update = buildRecipeUpdate(payload, dictionaryData, author._id);
+  const previousThumbnailKey = recipe.thumbnailKey;
   const previousMealTypeIds = recipe.mealTypeIds;
   const nextMealTypeIds = update.mealTypeIds ?? recipe.mealTypeIds;
   const addedMealTypeIds = getAddedIds(previousMealTypeIds, nextMealTypeIds);
@@ -224,6 +226,10 @@ export async function updateRecipe(recipeId, payload, author) {
     .populate('mealTypeIds', 'title')
     .populate('cuisineId', 'title')
     .lean();
+
+  if (previousThumbnailKey && previousThumbnailKey !== updatedRecipe.thumbnailKey) {
+    await deleteMediaObject(previousThumbnailKey);
+  }
 
   return {
     recipe: toRecipeDetailResponse(await resolveRecipeThumbnail(updatedRecipe)),

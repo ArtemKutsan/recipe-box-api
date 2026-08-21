@@ -1,4 +1,4 @@
-import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import config from '#config/index.js';
 
@@ -57,4 +57,15 @@ export async function createPresignedDownload(fileKey) {
     downloadUrl,
     expiresIn: PRESIGNED_URL_EXPIRES_IN,
   };
+}
+
+// Удаляем старый файл после того, как новая ссылка уже сохранена в базе.
+export async function deleteStoredObject(fileKey) {
+  const client = getS3Client();
+  await client.send(
+    new DeleteObjectCommand({
+      Bucket: config.storage.awsS3Bucket,
+      Key: fileKey,
+    }),
+  );
 }

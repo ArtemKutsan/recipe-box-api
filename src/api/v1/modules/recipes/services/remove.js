@@ -12,6 +12,7 @@ import { Recipe } from '#db/models/Recipe.js';
 import { MealType } from '#db/models/MealType.js';
 import { Cuisine } from '#db/models/Cuisine.js';
 import { buildNotFoundError, parseRecipePublicId } from '../shared/utils.js';
+import { deleteMediaObject } from '../../uploads/service.js';
 
 // Удаляем только рецепт текущего пользователя и уменьшаем счетчики справочников.
 export async function deleteRecipe(recipeId, author) {
@@ -45,6 +46,8 @@ export async function deleteRecipe(recipeId, author) {
   } finally {
     await session.endSession();
   }
+
+  await deleteMediaObject(recipe.thumbnailKey);
 
   return {
     message: 'Recipe deleted.',
