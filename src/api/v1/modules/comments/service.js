@@ -9,16 +9,7 @@ import {
   MAX_COMMENTS_PAGE_SIZE,
 } from './constants.js';
 import { toCommentResponse } from './response.js';
-
-function parsePositiveInteger(value, fallback, max) {
-  const parsed = Number.parseInt(String(value ?? ''), 10);
-
-  if (!Number.isInteger(parsed) || parsed < 1) {
-    return fallback;
-  }
-
-  return Math.min(parsed, max);
-}
+import { parsePositiveInteger } from '#utils/numbers.js';
 
 async function findPublicTarget(targetType, targetId) {
   if (targetType !== 'recipe') {

@@ -4,6 +4,8 @@ import {
   RECIPE_VISIBILITIES,
   RECIPE_VISIBILITY_ERROR,
 } from './constants.js';
+import { isStringArray } from '#utils/arrays.js';
+import { isNonEmptyString } from '#utils/strings.js';
 
 const RECIPE_UPDATE_FIELDS = [
   'title',
@@ -32,14 +34,6 @@ function throwValidationError(errors) {
   error.code = 'VALIDATION_ERROR';
   error.details = errors;
   throw error;
-}
-
-function isNonEmptyString(value) {
-  return typeof value === 'string' && value.trim().length > 0;
-}
-
-function isStringArray(value) {
-  return Array.isArray(value) && value.every((item) => typeof item === 'string');
 }
 
 function validateRecipeFields(body, errors, { partial = false } = {}) {

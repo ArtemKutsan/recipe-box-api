@@ -9,7 +9,8 @@
  */
 import { MealType } from '#db/models/MealType.js';
 import { Cuisine } from '#db/models/Cuisine.js';
-import { buildNotFoundError, normalizeSlug } from './utils.js';
+import { buildNotFoundError } from './utils.js';
+import { normalizeSlug } from '#utils/strings.js';
 
 // Находим один тип блюда по slug и возвращаем документ справочника.
 export async function resolveRecipeMealType(mealTypeValue) {

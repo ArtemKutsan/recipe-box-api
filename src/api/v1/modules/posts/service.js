@@ -10,6 +10,7 @@ import {
   MAX_POSTS_PAGE_SIZE,
 } from './constants.js';
 import { toPostResponse } from './response.js';
+import { parsePositiveInteger } from '#utils/numbers.js';
 
 function parsePostPublicId(value) {
   const publicId = Number(value);
@@ -19,16 +20,6 @@ function parsePostPublicId(value) {
   }
 
   return publicId;
-}
-
-function parsePositiveInteger(value, fallback, max = Number.MAX_SAFE_INTEGER) {
-  const parsed = Number.parseInt(String(value ?? ''), 10);
-
-  if (!Number.isInteger(parsed) || parsed < 1) {
-    return fallback;
-  }
-
-  return Math.min(parsed, max);
 }
 
 async function findPublicRecipe(recipeId) {

@@ -8,16 +8,7 @@ import {
 } from './constants.js';
 import { toFavoriteRecipeResponse, toFavoriteStateResponse } from './response.js';
 import { resolveRecipeThumbnail } from '../recipes/services/media.js';
-
-function parsePositiveInteger(value, fallback, max = Number.MAX_SAFE_INTEGER) {
-  const parsed = Number.parseInt(String(value ?? ''), 10);
-
-  if (!Number.isInteger(parsed) || parsed < 1) {
-    return fallback;
-  }
-
-  return Math.min(parsed, max);
-}
+import { parsePositiveInteger } from '#utils/numbers.js';
 
 async function findRecipeByPublicId(recipeId, { publicOnly = false } = {}) {
   const publicId = parseRecipePublicId(recipeId);

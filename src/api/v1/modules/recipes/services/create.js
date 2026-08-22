@@ -13,7 +13,7 @@ import { RECIPE_DIFFICULTIES, RECIPE_DIFFICULTY_ERROR, RECIPE_VISIBILITIES, RECI
 import { MealType } from '#db/models/MealType.js';
 import { Cuisine } from '#db/models/Cuisine.js';
 import { getNextSequence } from '#db/services/counter.js';
-import { normalizeStringArray } from '../shared/utils.js';
+import { normalizeStringArray } from '#utils/arrays.js';
 import { resolveRecipeDictionaries } from '../shared/dictionaries.js';
 import { toRecipeDetailResponseFromCreate } from '../shared/response.js';
 import { resolveRecipeThumbnail } from './media.js';

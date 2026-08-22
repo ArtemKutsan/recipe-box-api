@@ -1,4 +1,5 @@
 import { MEAL_PLAN_DAYS, MEAL_PLAN_PERIODS } from '#domain/meal-plans/constants.js';
+import { isPositiveInteger } from '#utils/numbers.js';
 
 const MEAL_PLAN_DAY_SET = new Set(MEAL_PLAN_DAYS);
 const MEAL_PLAN_PERIOD_SET = new Set(MEAL_PLAN_PERIODS);
@@ -10,10 +11,6 @@ function throwValidationError(errors) {
   error.code = 'VALIDATION_ERROR';
   error.details = errors;
   throw error;
-}
-
-function isPositiveInteger(value) {
-  return Number.isInteger(Number(value)) && Number(value) > 0;
 }
 
 // Проверяем body для изменения одного слота meal plan.

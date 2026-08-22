@@ -12,11 +12,8 @@ import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants.js'
 import { Recipe } from '#db/models/Recipe.js';
 import { toRecipeListResponse } from '../shared/response.js';
 import { resolveRecipeThumbnail } from './media.js';
-import {
-  buildRecipeListFilter,
-  buildSort,
-  parsePositiveInteger,
-} from '../shared/query.js';
+import { buildRecipeListFilter, buildSort } from '../shared/query.js';
+import { parsePositiveInteger } from '#utils/numbers.js';
 
 // Старые рецепты без `visibility` пока считаем публичными.
 function buildPublicVisibilityFilter() {

@@ -9,23 +9,9 @@
  */
 import { SORT_FIELDS } from '../constants.js';
 import { resolveRecipeCuisine, resolveRecipeMealType } from './dictionaries.js';
-
+import { parsePositiveInteger } from '#utils/numbers.js';
+import { escapeRegExp } from '#utils/strings.js';
 const ALLOWED_SORT_FIELDS = new Set(SORT_FIELDS);
-
-function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-// Приводим число из query к безопасному положительному значению.
-export function parsePositiveInteger(value, fallback, max = Number.MAX_SAFE_INTEGER) {
-  const parsed = Number.parseInt(String(value ?? ''), 10);
-
-  if (!Number.isInteger(parsed) || parsed < 1) {
-    return fallback;
-  }
-
-  return Math.min(parsed, max);
-}
 
 // Определяем направление сортировки.
 export function normalizeSortOrder(value) {
