@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import config from '#config/index.js';
 import { Recipe } from '#db/models/Recipe.js';
 import { User } from '#db/models/User.js';
 import {
@@ -8,6 +9,13 @@ import {
 } from '#integrations/storage/s3.js';
 
 export async function createUploadUrl(payload, user) {
+  if (!config.storage.uploadsEnabled) {
+    const error = new Error('Media uploads are temporarily disabled.');
+    error.status = 503;
+    error.code = 'MEDIA_UPLOADS_DISABLED';
+    throw error;
+  }
+
   const fileKey = `${payload.folder}/${user._id.toString()}/${randomUUID()}.${payload.extension}`;
   const result = await createPresignedUpload({
     fileKey,
