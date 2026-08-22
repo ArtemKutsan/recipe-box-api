@@ -66,7 +66,7 @@ async function populatePost(postId) {
   return buildPostResponse(post);
 }
 
-export async function getPosts(query = {}) {
+async function getPostsByFilter(filter, query = {}) {
   const page = parsePositiveInteger(query.page, DEFAULT_POSTS_PAGE);
   const pageSize = parsePositiveInteger(
     query.pageSize,
@@ -75,8 +75,8 @@ export async function getPosts(query = {}) {
   );
   const skip = (page - 1) * pageSize;
   const [total, posts] = await Promise.all([
-    Post.countDocuments(),
-    Post.find()
+    Post.countDocuments(filter),
+    Post.find(filter)
       .populate('authorId', 'publicId name avatarUrl avatarKey')
       .populate('recipeId', 'publicId title')
       .sort({ createdAt: -1, _id: -1 })
@@ -94,6 +94,14 @@ export async function getPosts(query = {}) {
     total,
     totalPages: total === 0 ? 0 : Math.ceil(total / pageSize),
   };
+}
+
+export function getPosts(query = {}) {
+  return getPostsByFilter({}, query);
+}
+
+export function getPostsByAuthor(authorId, query = {}) {
+  return getPostsByFilter({ authorId }, query);
 }
 
 export async function getPostByPublicId(value) {

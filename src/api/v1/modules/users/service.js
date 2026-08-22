@@ -1,4 +1,5 @@
 import { getRecipesByAuthor } from '../recipes/service.js';
+import { getPostsByAuthor } from '../posts/service.js';
 import { toPublicUserResponse } from './response.js';
 import { findUserByPublicId, updateUserAvatar } from './repositories/index.js';
 import { resolveUserAvatar } from './media.js';
@@ -74,4 +75,14 @@ export async function getPublicUserRecipes(publicId, query = {}) {
 export async function getCurrentUserRecipes(query = {}, user) {
   // Рецепты текущего пользователя включают и public, и private записи.
   return getRecipesByAuthor(user._id, query, { includePrivate: true });
+}
+
+export async function getPublicUserPosts(publicId, query = {}) {
+  const user = await getUserByPublicId(publicId);
+
+  return getPostsByAuthor(user._id, query);
+}
+
+export function getCurrentUserPosts(query = {}, user) {
+  return getPostsByAuthor(user._id, query);
 }
