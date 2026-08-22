@@ -2,6 +2,7 @@ import { Router } from 'express';
 import authRouter from './routes/auth.js';
 import cuisinesRouter from './routes/cuisines.js';
 import favoritesRouter from './routes/favorites.js';
+import feedRouter from './routes/feed.js';
 import healthRouter from './routes/health.js';
 import mealPlansRouter from './routes/meal-plans.js';
 import mealTypesRouter from './routes/meal-types.js';
@@ -21,6 +22,7 @@ router.use('/posts', postsRouter);
 router.use('/recipes', recipesRouter);
 router.use('/meal-plans', mealPlansRouter);
 router.use('/favorites', favoritesRouter);
+router.use('/feed', feedRouter);
 router.use('/uploads', uploadsRouter);
 router.use(healthRouter);
 

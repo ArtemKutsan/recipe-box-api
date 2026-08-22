@@ -71,6 +71,27 @@ const legacyDemoBodies = [
   'A practical recipe that is easy to add to a weekly meal plan.',
 ];
 
+function getDemoPostDate(timelineRecipes, index) {
+  const newerRecipeDate = timelineRecipes[index]?.createdAt?.getTime();
+  const olderRecipeDate = timelineRecipes[index + 1]?.createdAt?.getTime();
+
+  if (newerRecipeDate && olderRecipeDate && newerRecipeDate > olderRecipeDate) {
+    return new Date((newerRecipeDate + olderRecipeDate) / 2);
+  }
+
+  const referenceDate = timelineRecipes[0]?.createdAt?.getTime() ?? Date.now();
+  const offsetFromMiddle = Math.floor(demoPosts.length / 2) - index;
+
+  return new Date(referenceDate + offsetFromMiddle * 60 * 60 * 1000);
+}
+
+async function setPostDate(postId, date) {
+  await Post.collection.updateOne(
+    { _id: postId },
+    { $set: { createdAt: date, updatedAt: date } },
+  );
+}
+
 async function seedRecipePosts() {
   await connectMongo();
 
@@ -81,6 +102,13 @@ async function seedRecipePosts() {
     .sort({ publicId: 1 })
     .limit(demoPosts.length)
     .select('_id publicId')
+    .lean();
+  const timelineRecipes = await Recipe.find({
+    $or: [{ visibility: 'public' }, { visibility: { $exists: false } }],
+  })
+    .sort({ createdAt: -1, _id: -1 })
+    .limit(demoPosts.length + 1)
+    .select('createdAt')
     .lean();
 
   if (users.length === 0) {
@@ -96,6 +124,7 @@ async function seedRecipePosts() {
   for (const [index, item] of demoPosts.entries()) {
     const author = users[index % users.length];
     const recipe = recipes[item.recipeIndex] ?? null;
+    const createdAt = getDemoPostDate(timelineRecipes, index);
     const existingPost = await Post.findOne({ body: item.body }).select('_id').lean();
 
     if (existingPost) {
@@ -109,19 +138,21 @@ async function seedRecipePosts() {
           },
         },
       );
+      await setPostDate(existingPost._id, createdAt);
       updatedCount += 1;
       continue;
     }
 
     const publicId = await getNextSequence('posts');
 
-    await Post.create({
+    const createdPost = await Post.create({
       publicId,
       authorId: author._id,
       title: item.title,
       body: item.body,
       recipeId: recipe?._id ?? null,
     });
+    await setPostDate(createdPost._id, createdAt);
     createdCount += 1;
   }
 

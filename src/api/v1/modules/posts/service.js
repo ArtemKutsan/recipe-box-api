@@ -47,7 +47,7 @@ async function findPublicRecipe(recipeId) {
   return recipe;
 }
 
-async function buildPostResponse(post) {
+export async function buildPostResponse(post) {
   const author = await resolveUserAvatar(post.authorId);
 
   return toPostResponse({ ...post, authorId: author });
