@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import requireAuth from '../middleware/auth/require.js';
 import optionalAuth from '../middleware/auth/optional.js';
-import { create as createComment, list as listComments } from '../modules/comments/controller.js';
+import { recipeCommentHandlers } from '../modules/comments/controller.js';
 import { create, getById, list, remove, update } from '../modules/recipes/controller.js';
 
 const router = Router();
@@ -9,8 +9,8 @@ const router = Router();
 // Список рецептов доступен без авторизации.
 router.get('/', list);
 // Комментарии доступны только у публичных рецептов; создание требует cookie-сессию.
-router.get('/:recipeId/comments', listComments);
-router.post('/:recipeId/comments', requireAuth, createComment);
+router.get('/:recipeId/comments', recipeCommentHandlers.list);
+router.post('/:recipeId/comments', requireAuth, recipeCommentHandlers.create);
 // Детальная страница рецепта может принять cookie-сессию, чтобы автор увидел private-рецепт.
 router.get('/:id', optionalAuth, getById);
 // Создание рецепта доступно только после проверки cookie-сессии.

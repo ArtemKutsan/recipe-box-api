@@ -1,4 +1,5 @@
 import { Comment } from '#db/models/Comment.js';
+import { Post } from '#db/models/Post.js';
 import { Recipe } from '#db/models/Recipe.js';
 import mongoose from 'mongoose';
 import { resolveUserAvatar } from '../users/media.js';
@@ -12,23 +13,39 @@ import { toCommentResponse } from './response.js';
 import { parsePositiveInteger } from '#utils/numbers.js';
 
 async function findPublicTarget(targetType, targetId) {
-  if (targetType !== 'recipe') {
-    buildNotFoundError('Comment target not found.', 'COMMENT_TARGET_NOT_FOUND');
+  if (targetType === 'recipe') {
+    const publicId = parseRecipePublicId(targetId);
+    const recipe = await Recipe.findOne({
+      publicId,
+      $or: [{ visibility: 'public' }, { visibility: { $exists: false } }],
+    })
+      .select('_id')
+      .lean();
+
+    if (!recipe) {
+      buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
+    }
+
+    return { targetType, targetId: recipe._id };
   }
 
-  const publicId = parseRecipePublicId(targetId);
-  const recipe = await Recipe.findOne({
-    publicId,
-    $or: [{ visibility: 'public' }, { visibility: { $exists: false } }],
-  })
-    .select('_id')
-    .lean();
+  if (targetType === 'post') {
+    const publicId = Number(targetId);
 
-  if (!recipe) {
-    buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
+    if (!Number.isInteger(publicId) || publicId < 1) {
+      buildNotFoundError('Post not found.', 'POST_NOT_FOUND');
+    }
+
+    const post = await Post.findOne({ publicId }).select('_id').lean();
+
+    if (!post) {
+      buildNotFoundError('Post not found.', 'POST_NOT_FOUND');
+    }
+
+    return { targetType, targetId: post._id };
   }
 
-  return { targetType, targetId: recipe._id };
+  buildNotFoundError('Comment target not found.', 'COMMENT_TARGET_NOT_FOUND');
 }
 
 async function buildCommentResponse(comment) {
