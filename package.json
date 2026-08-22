@@ -19,6 +19,7 @@
     "start": "node src/server.js",
     "seed:recipe-dictionaries": "node src/db/scripts/seedRecipeDictionaries.js",
     "seed:recipe-comments": "node src/db/scripts/seedRecipeComments.js",
+    "seed:recipe-posts": "node src/db/scripts/seedRecipePosts.js",
     "backfill:recipe-public-ids": "node src/db/scripts/backfillRecipePublicIds.js"
   },
   "dependencies": {

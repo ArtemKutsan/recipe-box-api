@@ -121,6 +121,7 @@ export async function createPost(payload, author) {
           {
             publicId,
             authorId: author._id,
+            title: payload.title,
             body: payload.body,
             recipeId: recipe?._id ?? null,
           },
@@ -149,6 +150,10 @@ export async function updatePost(value, payload, author) {
   const publicId = parsePostPublicId(value);
   const post = await findOwnedPost(publicId, author);
   const update = {};
+
+  if (payload.title !== undefined) {
+    update.title = payload.title;
+  }
 
   if (payload.body !== undefined) {
     update.body = payload.body;

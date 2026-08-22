@@ -24,6 +24,7 @@ function toPostRecipeResponse(recipe) {
 export function toPostResponse(post) {
   return {
     id: post.publicId,
+    title: post.title,
     body: post.body,
     author: toPostAuthorResponse(post.authorId),
     recipe: toPostRecipeResponse(post.recipeId),

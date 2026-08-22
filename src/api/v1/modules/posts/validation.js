@@ -1,4 +1,4 @@
-import { MAX_POST_BODY_LENGTH } from './constants.js';
+import { MAX_POST_BODY_LENGTH, MAX_POST_TITLE_LENGTH } from './constants.js';
 
 function throwValidationError(details) {
   const error = new Error('Validation failed.');
@@ -11,6 +11,14 @@ function throwValidationError(details) {
 function validatePostPayload(payload, { partial = false } = {}) {
   const data = payload ?? {};
   const errors = [];
+
+  if (!partial || data.title !== undefined) {
+    if (typeof data.title !== 'string' || data.title.trim().length === 0) {
+      errors.push('title is required.');
+    } else if (data.title.trim().length > MAX_POST_TITLE_LENGTH) {
+      errors.push(`title must be no longer than ${MAX_POST_TITLE_LENGTH} characters.`);
+    }
+  }
 
   if (!partial || data.body !== undefined) {
     if (typeof data.body !== 'string' || data.body.trim().length === 0) {
@@ -29,6 +37,7 @@ function validatePostPayload(payload, { partial = false } = {}) {
   }
 
   return {
+    ...(data.title !== undefined ? { title: data.title.trim() } : {}),
     ...(data.body !== undefined ? { body: data.body.trim() } : {}),
     ...(data.recipeId !== undefined ? { recipeId: data.recipeId } : {}),
   };
@@ -40,7 +49,7 @@ export function validateCreatePost(payload) {
 
 export function validateUpdatePost(payload) {
   const data = payload ?? {};
-  const supportedFields = ['body', 'recipeId'];
+  const supportedFields = ['title', 'body', 'recipeId'];
   const unsupportedFields = Object.keys(data).filter((field) => !supportedFields.includes(field));
 
   if (unsupportedFields.length > 0) {

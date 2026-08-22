@@ -19,6 +19,12 @@ const postSchema = new Schema(
       required: true,
       index: true,
     },
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 160,
+    },
     body: {
       type: String,
       required: true,
