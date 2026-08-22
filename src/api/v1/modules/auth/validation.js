@@ -1,3 +1,5 @@
+import { isEmailLike } from '#utils/strings.js';
+
 // Общий helper для ошибок валидации auth-запросов.
 function throwValidationError(errors) {
   const error = new Error('Validation failed');
@@ -5,10 +7,6 @@ function throwValidationError(errors) {
   error.code = 'VALIDATION_ERROR';
   error.details = errors;
   throw error;
-}
-
-function isEmailLike(value) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
 // Проверяем данные для регистрации.

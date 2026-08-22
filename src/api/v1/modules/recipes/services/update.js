@@ -18,6 +18,7 @@ import { resolveRecipeCuisine, resolveRecipeMealTypes } from '../shared/dictiona
 import { toRecipeDetailResponse } from '../shared/response.js';
 import { resolveRecipeThumbnail } from './media.js';
 import { deleteMediaObject } from '../../uploads/service.js';
+import { setIfDefined } from '#utils/objects.js';
 
 const ALLOWED_DIFFICULTIES = new Set(RECIPE_DIFFICULTIES);
 const ALLOWED_VISIBILITIES = new Set(RECIPE_VISIBILITIES);
@@ -60,13 +61,6 @@ function getRemovedIds(previousIds, nextIds) {
   const next = new Set(nextIds.map(toIdString));
 
   return previousIds.filter((id) => !next.has(toIdString(id)));
-}
-
-// Добавляем поле в объект обновления только если клиент реально его передал.
-function setIfDefined(target, field, value) {
-  if (value !== undefined) {
-    target[field] = value;
-  }
 }
 
 // Собираем Mongo `$set` только из полей, которые можно менять через PATCH.
