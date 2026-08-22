@@ -1,0 +1,4 @@
+export const DEFAULT_COMMENTS_PAGE = 1;
+export const DEFAULT_COMMENTS_PAGE_SIZE = 10;
+export const MAX_COMMENTS_PAGE_SIZE = 50;
+export const MAX_COMMENT_LENGTH = 2000;
