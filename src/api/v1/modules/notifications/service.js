@@ -8,6 +8,7 @@ import {
   MAX_NOTIFICATIONS_PAGE_SIZE,
 } from './constants.js';
 import { toNotificationResponse } from './response.js';
+import { emitToUser } from '#integrations/socket-io/gateway.js';
 
 function buildNotificationNotFoundError() {
   const error = new Error('Notification not found.');
@@ -22,7 +23,7 @@ export async function createRecipeFavoritedNotification({ recipientId, actorId, 
     return null;
   }
 
-  return Notification.create({
+  const notification = await Notification.create({
     recipientId,
     actorId,
     type: 'recipe_favorited',
@@ -30,6 +31,16 @@ export async function createRecipeFavoritedNotification({ recipientId, actorId, 
     entityModel: NOTIFICATION_ENTITY_MODELS.recipe,
     entityId: recipeId,
   });
+
+  await notification.populate([
+    { path: 'actorId', select: 'publicId name avatarUrl' },
+    { path: 'entityId', select: 'publicId name title' },
+  ]);
+
+  const notificationResponse = toNotificationResponse(notification);
+  emitToUser(recipientId.toString(), 'notification:new', notificationResponse);
+
+  return notificationResponse;
 }
 
 // Возвращаем сохранённые уведомления текущего пользователя от новых к старым.
