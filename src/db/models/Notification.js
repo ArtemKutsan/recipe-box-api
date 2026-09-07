@@ -1,0 +1,57 @@
+import { model, Schema } from 'mongoose';
+import {
+  NOTIFICATION_ENTITY_TYPES,
+  NOTIFICATION_TYPES,
+} from '#domain/notifications/constants.js';
+
+const { ObjectId } = Schema.Types;
+
+// Notification хранит одно адресное уведомление для конкретного пользователя.
+const notificationSchema = new Schema(
+  {
+    // Пользователь, которому нужно показать уведомление.
+    recipientId: {
+      type: ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    // Пользователь, который выполнил действие.
+    actorId: {
+      type: ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    // Например, пользователь добавил рецепт в Favorites.
+    type: {
+      type: String,
+      enum: NOTIFICATION_TYPES,
+      required: true,
+    },
+    // Объект, к которому относится уведомление.
+    entityType: {
+      type: String,
+      enum: NOTIFICATION_ENTITY_TYPES,
+      required: true,
+    },
+    entityId: {
+      type: ObjectId,
+      required: true,
+    },
+    isRead: {
+      type: Boolean,
+      default: false,
+    },
+    readAt: {
+      type: Date,
+      default: null,
+    },
+  },
+  { timestamps: true },
+);
+
+// Список уведомлений пользователя показываем от новых к старым.
+notificationSchema.index({ recipientId: 1, createdAt: -1, _id: -1 });
+// Быстро находим непрочитанные уведомления для счётчика.
+notificationSchema.index({ recipientId: 1, isRead: 1, createdAt: -1 });
+
+export const Notification = model('Notification', notificationSchema, 'notifications');
