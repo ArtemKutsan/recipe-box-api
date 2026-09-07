@@ -9,6 +9,7 @@ import {
 import { toFavoriteRecipeResponse, toFavoriteStateResponse } from './response.js';
 import { resolveRecipeThumbnail } from '../recipes/services/media.js';
 import { parsePositiveInteger } from '#utils/numbers.js';
+import { createRecipeFavoritedNotification } from '../notifications/service.js';
 
 async function findRecipeByPublicId(recipeId, { publicOnly = false } = {}) {
   const publicId = parseRecipePublicId(recipeId);
@@ -19,7 +20,7 @@ async function findRecipeByPublicId(recipeId, { publicOnly = false } = {}) {
     filter.$or = [{ visibility: 'public' }, { visibility: { $exists: false } }];
   }
 
-  const recipe = await Recipe.findOne(filter).select('_id publicId').lean();
+  const recipe = await Recipe.findOne(filter).select('_id publicId authorId').lean();
 
   if (!recipe) {
     buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
@@ -32,11 +33,27 @@ async function findRecipeByPublicId(recipeId, { publicOnly = false } = {}) {
 export async function addFavorite(recipeId, user) {
   const recipe = await findRecipeByPublicId(recipeId, { publicOnly: true });
 
-  const favorite = await Favorite.findOneAndUpdate(
+  const favoriteResult = await Favorite.findOneAndUpdate(
     { userId: user._id, recipeId: recipe._id },
     { $setOnInsert: { userId: user._id, recipeId: recipe._id } },
-    { upsert: true, new: true, setDefaultsOnInsert: true },
+    {
+      upsert: true,
+      new: true,
+      setDefaultsOnInsert: true,
+      includeResultMetadata: true,
+    },
   ).lean();
+
+  const favorite = favoriteResult.value;
+
+  // Уведомление создаём только при настоящем добавлении новой связи.
+  if (!favoriteResult.lastErrorObject?.updatedExisting) {
+    await createRecipeFavoritedNotification({
+      recipientId: recipe.authorId,
+      actorId: user._id,
+      recipeId: recipe._id,
+    });
+  }
 
   return {
     favorite: toFavoriteStateResponse(recipe.publicId, true, favorite.createdAt),
