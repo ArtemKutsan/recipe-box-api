@@ -79,6 +79,42 @@ export async function createCommentRepliedNotification({
   return notificationResponse;
 }
 
+// Уведомляем автора рецепта или поста о новом корневом комментарии.
+export async function createCommentCreatedNotification({
+  recipientId,
+  actorId,
+  commentId,
+  contextType,
+  contextPublicId,
+}) {
+  if (recipientId.toString() === actorId.toString()) {
+    return null;
+  }
+
+  const notification = await Notification.create({
+    recipientId,
+    actorId,
+    type: 'comment_created',
+    entityType: 'comment',
+    entityModel: NOTIFICATION_ENTITY_MODELS.comment,
+    entityId: commentId,
+    context: {
+      type: contextType,
+      publicId: contextPublicId,
+    },
+  });
+
+  await notification.populate([
+    { path: 'actorId', select: 'publicId name avatarUrl' },
+    { path: 'entityId', select: 'publicId name title' },
+  ]);
+
+  const notificationResponse = toNotificationResponse(notification);
+  emitToUser(recipientId.toString(), 'notification:new', notificationResponse);
+
+  return notificationResponse;
+}
+
 // Возвращаем сохранённые уведомления текущего пользователя от новых к старым.
 export async function getCurrentUserNotifications(query = {}, user) {
   const page = parsePositiveInteger(query.page, DEFAULT_NOTIFICATIONS_PAGE);

@@ -11,7 +11,10 @@ import {
 } from './constants.js';
 import { toCommentResponse } from './response.js';
 import { parsePositiveInteger } from '#utils/numbers.js';
-import { createCommentRepliedNotification } from '../notifications/service.js';
+import {
+  createCommentCreatedNotification,
+  createCommentRepliedNotification,
+} from '../notifications/service.js';
 
 async function findPublicTarget(targetType, targetId) {
   if (targetType === 'recipe') {
@@ -20,14 +23,19 @@ async function findPublicTarget(targetType, targetId) {
       publicId,
       $or: [{ visibility: 'public' }, { visibility: { $exists: false } }],
     })
-      .select('_id')
+      .select('_id authorId')
       .lean();
 
     if (!recipe) {
       buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
     }
 
-    return { targetType, targetId: recipe._id, targetPublicId: publicId };
+    return {
+      targetType,
+      targetId: recipe._id,
+      targetPublicId: publicId,
+      targetAuthorId: recipe.authorId,
+    };
   }
 
   if (targetType === 'post') {
@@ -37,13 +45,18 @@ async function findPublicTarget(targetType, targetId) {
       buildNotFoundError('Post not found.', 'POST_NOT_FOUND');
     }
 
-    const post = await Post.findOne({ publicId }).select('_id').lean();
+    const post = await Post.findOne({ publicId }).select('_id authorId').lean();
 
     if (!post) {
       buildNotFoundError('Post not found.', 'POST_NOT_FOUND');
     }
 
-    return { targetType, targetId: post._id, targetPublicId: publicId };
+    return {
+      targetType,
+      targetId: post._id,
+      targetPublicId: publicId,
+      targetAuthorId: post.authorId,
+    };
   }
 
   buildNotFoundError('Comment target not found.', 'COMMENT_TARGET_NOT_FOUND');
@@ -166,6 +179,14 @@ export async function createComment(targetType, targetId, payload, user) {
   if (parent) {
     await createCommentRepliedNotification({
       recipientId: parent.userId,
+      actorId: user._id,
+      commentId: comment._id,
+      contextType: target.targetType,
+      contextPublicId: target.targetPublicId,
+    });
+  } else {
+    await createCommentCreatedNotification({
+      recipientId: target.targetAuthorId,
       actorId: user._id,
       commentId: comment._id,
       contextType: target.targetType,
