@@ -2,6 +2,7 @@ import { Server } from 'socket.io';
 import config from '#config/index.js';
 import { getSessionTokenFromRequest } from '#api/v1/modules/auth/session/cookie.js';
 import { findUserBySessionToken } from '#api/v1/modules/auth/session/service.js';
+import { addUserSocket, removeUserSocket } from './registry.js';
 
 const SOCKET_PATH = '/api/v1/socket.io';
 
@@ -38,8 +39,14 @@ export function createSocketServer(httpServer) {
   });
 
   io.on('connection', (socket) => {
-    // События уведомлений и registry подключений добавим следующим slice.
+    const userId = socket.data.user._id.toString();
+
+    addUserSocket(userId, socket);
     socket.emit('socket:ready');
+
+    socket.on('disconnect', () => {
+      removeUserSocket(userId, socket);
+    });
   });
 
   return io;
