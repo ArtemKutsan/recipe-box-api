@@ -1,6 +1,8 @@
+import { createServer } from 'node:http';
 import app from './app.js';
 import config from '#config/index.js';
 import { connectDb } from '#db/connect.js';
+import { createSocketServer } from '#integrations/socket-io/server.js';
 
 try {
   // Сначала пробуем поднять базу, если она включена в окружении.
@@ -17,7 +19,10 @@ try {
   process.exit(1);
 }
 
-// Поднимаем HTTP-сервер на порту из окружения или на дефолтном порту.
-app.listen(config.app.port, () => {
+// Поднимаем один HTTP-сервер для Express API и Socket.IO.
+const httpServer = createServer(app);
+createSocketServer(httpServer);
+
+httpServer.listen(config.app.port, () => {
   console.log(`recipe-box-api listening on ${config.app.port}`);
 });
