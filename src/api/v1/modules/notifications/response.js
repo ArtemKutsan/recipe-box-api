@@ -21,19 +21,14 @@ function toEntityResponse(entity) {
   };
 }
 
-export function toNotificationResponse(notification) {
+export function toNotificationResponse(notification, context = null) {
   return {
     id: notification._id.toString(),
     type: notification.type,
     entityType: notification.entityType,
     actor: toActorResponse(notification.actorId),
     entity: toEntityResponse(notification.entityId),
-    context: notification.context?.type
-      ? {
-          type: notification.context.type,
-          publicId: notification.context.publicId,
-        }
-      : null,
+    context,
     isRead: notification.isRead,
     readAt: notification.readAt,
     createdAt: notification.createdAt,

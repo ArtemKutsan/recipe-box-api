@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import { Notification } from '#db/models/Notification.js';
+import { Post } from '#db/models/Post.js';
+import { Recipe } from '#db/models/Recipe.js';
 import { parsePositiveInteger } from '#utils/numbers.js';
 import { NOTIFICATION_ENTITY_MODELS } from '#domain/notifications/constants.js';
 import {
@@ -15,6 +17,27 @@ function buildNotificationNotFoundError() {
   error.status = 404;
   error.code = 'NOTIFICATION_NOT_FOUND';
   return error;
+}
+
+async function resolveNotificationContext(notification) {
+  const context = notification.context;
+
+  if (!context?.type || !context.publicId) {
+    return null;
+  }
+
+  const Model = context.type === 'recipe' ? Recipe : Post;
+  const target = await Model.findOne({ publicId: context.publicId }).select('title name').lean();
+
+  return {
+    type: context.type,
+    publicId: context.publicId,
+    title: target?.title ?? target?.name ?? null,
+  };
+}
+
+async function buildNotificationResponse(notification) {
+  return toNotificationResponse(notification, await resolveNotificationContext(notification));
 }
 
 // Создаём уведомление только для другого пользователя, а не для автора действия.
@@ -37,7 +60,7 @@ export async function createRecipeFavoritedNotification({ recipientId, actorId, 
     { path: 'entityId', select: 'publicId name title' },
   ]);
 
-  const notificationResponse = toNotificationResponse(notification);
+  const notificationResponse = await buildNotificationResponse(notification);
   emitToUser(recipientId.toString(), 'notification:new', notificationResponse);
 
   return notificationResponse;
@@ -73,7 +96,7 @@ export async function createCommentRepliedNotification({
     { path: 'entityId', select: 'publicId name title' },
   ]);
 
-  const notificationResponse = toNotificationResponse(notification);
+  const notificationResponse = await buildNotificationResponse(notification);
   emitToUser(recipientId.toString(), 'notification:new', notificationResponse);
 
   return notificationResponse;
@@ -109,7 +132,7 @@ export async function createCommentCreatedNotification({
     { path: 'entityId', select: 'publicId name title' },
   ]);
 
-  const notificationResponse = toNotificationResponse(notification);
+  const notificationResponse = await buildNotificationResponse(notification);
   emitToUser(recipientId.toString(), 'notification:new', notificationResponse);
 
   return notificationResponse;
@@ -138,7 +161,7 @@ export async function getCurrentUserNotifications(query = {}, user) {
   ]);
 
   return {
-    items: notifications.map(toNotificationResponse),
+    items: await Promise.all(notifications.map(buildNotificationResponse)),
     total,
     unreadCount,
     page,
