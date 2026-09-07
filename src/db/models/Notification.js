@@ -1,6 +1,7 @@
 import { model, Schema } from 'mongoose';
 import {
   NOTIFICATION_ENTITY_TYPES,
+  NOTIFICATION_ENTITY_MODELS,
   NOTIFICATION_TYPES,
 } from '#domain/notifications/constants.js';
 
@@ -35,6 +36,13 @@ const notificationSchema = new Schema(
     },
     entityId: {
       type: ObjectId,
+      refPath: 'entityModel',
+      required: true,
+    },
+    // Mongoose использует это имя, чтобы понять, какую модель подставить в entityId.
+    entityModel: {
+      type: String,
+      enum: Object.values(NOTIFICATION_ENTITY_MODELS),
       required: true,
     },
     isRead: {
