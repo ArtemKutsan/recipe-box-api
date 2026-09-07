@@ -125,7 +125,7 @@ export async function getCurrentUserNotifications(query = {}, user) {
   );
   const filter = { recipientId: user._id };
   const skip = (page - 1) * pageSize;
-  const [notifications, total] = await Promise.all([
+  const [notifications, total, unreadCount] = await Promise.all([
     Notification.find(filter)
       .sort({ createdAt: -1, _id: -1 })
       .skip(skip)
@@ -134,11 +134,13 @@ export async function getCurrentUserNotifications(query = {}, user) {
       .populate('entityId', 'publicId name title')
       .lean(),
     Notification.countDocuments(filter),
+    Notification.countDocuments({ ...filter, isRead: false }),
   ]);
 
   return {
     items: notifications.map(toNotificationResponse),
     total,
+    unreadCount,
     page,
     pageSize,
     totalPages: Math.ceil(total / pageSize),
