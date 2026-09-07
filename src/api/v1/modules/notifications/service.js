@@ -168,3 +168,11 @@ export async function markNotificationAsRead(notificationId, user) {
     await notification.save();
   }
 }
+
+// Отмечаем все уведомления только текущего пользователя.
+export async function markAllNotificationsAsRead(user) {
+  await Notification.updateMany(
+    { recipientId: user._id, isRead: false },
+    { $set: { isRead: true, readAt: new Date() } },
+  );
+}
