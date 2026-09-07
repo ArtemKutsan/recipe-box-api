@@ -28,6 +28,12 @@ export function toNotificationResponse(notification) {
     entityType: notification.entityType,
     actor: toActorResponse(notification.actorId),
     entity: toEntityResponse(notification.entityId),
+    context: notification.context?.type
+      ? {
+          type: notification.context.type,
+          publicId: notification.context.publicId,
+        }
+      : null,
     isRead: notification.isRead,
     readAt: notification.readAt,
     createdAt: notification.createdAt,

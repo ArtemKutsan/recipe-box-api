@@ -27,7 +27,7 @@ async function findPublicTarget(targetType, targetId) {
       buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
     }
 
-    return { targetType, targetId: recipe._id };
+    return { targetType, targetId: recipe._id, targetPublicId: publicId };
   }
 
   if (targetType === 'post') {
@@ -43,7 +43,7 @@ async function findPublicTarget(targetType, targetId) {
       buildNotFoundError('Post not found.', 'POST_NOT_FOUND');
     }
 
-    return { targetType, targetId: post._id };
+    return { targetType, targetId: post._id, targetPublicId: publicId };
   }
 
   buildNotFoundError('Comment target not found.', 'COMMENT_TARGET_NOT_FOUND');
@@ -168,6 +168,8 @@ export async function createComment(targetType, targetId, payload, user) {
       recipientId: parent.userId,
       actorId: user._id,
       commentId: comment._id,
+      contextType: target.targetType,
+      contextPublicId: target.targetPublicId,
     });
   }
 

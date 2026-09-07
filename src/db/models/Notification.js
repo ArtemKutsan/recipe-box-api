@@ -45,6 +45,18 @@ const notificationSchema = new Schema(
       enum: Object.values(NOTIFICATION_ENTITY_MODELS),
       required: true,
     },
+    // Для ответа на комментарий сохраняем публичную страницу, где находится комментарий.
+    context: {
+      type: {
+        type: String,
+        enum: ['recipe', 'post'],
+        default: null,
+      },
+      publicId: {
+        type: Number,
+        default: null,
+      },
+    },
     isRead: {
       type: Boolean,
       default: false,

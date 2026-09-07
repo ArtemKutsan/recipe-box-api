@@ -44,7 +44,13 @@ export async function createRecipeFavoritedNotification({ recipientId, actorId, 
 }
 
 // Уведомляем автора комментария о прямом ответе на него.
-export async function createCommentRepliedNotification({ recipientId, actorId, commentId }) {
+export async function createCommentRepliedNotification({
+  recipientId,
+  actorId,
+  commentId,
+  contextType,
+  contextPublicId,
+}) {
   if (recipientId.toString() === actorId.toString()) {
     return null;
   }
@@ -56,6 +62,10 @@ export async function createCommentRepliedNotification({ recipientId, actorId, c
     entityType: 'comment',
     entityModel: NOTIFICATION_ENTITY_MODELS.comment,
     entityId: commentId,
+    context: {
+      type: contextType,
+      publicId: contextPublicId,
+    },
   });
 
   await notification.populate([
