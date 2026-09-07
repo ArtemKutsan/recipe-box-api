@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { Notification } from '#db/models/Notification.js';
 import { parsePositiveInteger } from '#utils/numbers.js';
 import { NOTIFICATION_ENTITY_MODELS } from '#domain/notifications/constants.js';
@@ -7,6 +8,13 @@ import {
   MAX_NOTIFICATIONS_PAGE_SIZE,
 } from './constants.js';
 import { toNotificationResponse } from './response.js';
+
+function buildNotificationNotFoundError() {
+  const error = new Error('Notification not found.');
+  error.status = 404;
+  error.code = 'NOTIFICATION_NOT_FOUND';
+  return error;
+}
 
 // Создаём уведомление только для другого пользователя, а не для автора действия.
 export async function createRecipeFavoritedNotification({ recipientId, actorId, recipeId }) {
@@ -52,4 +60,26 @@ export async function getCurrentUserNotifications(query = {}, user) {
     pageSize,
     totalPages: Math.ceil(total / pageSize),
   };
+}
+
+// Отмечаем уведомление прочитанным только для его получателя.
+export async function markNotificationAsRead(notificationId, user) {
+  if (!mongoose.isValidObjectId(notificationId)) {
+    throw buildNotificationNotFoundError();
+  }
+
+  const notification = await Notification.findOne({
+    _id: notificationId,
+    recipientId: user._id,
+  }).select('isRead readAt');
+
+  if (!notification) {
+    throw buildNotificationNotFoundError();
+  }
+
+  if (!notification.isRead) {
+    notification.isRead = true;
+    notification.readAt = new Date();
+    await notification.save();
+  }
 }
