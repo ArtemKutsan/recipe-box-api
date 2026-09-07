@@ -21,3 +21,6 @@ export function removeUserSocket(userId, socket) {
   }
 }
 
+export function getUserSockets(userId) {
+  return socketsByUserId.get(userId) ?? new Set();
+}
