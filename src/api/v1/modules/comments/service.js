@@ -11,6 +11,7 @@ import {
 } from './constants.js';
 import { toCommentResponse } from './response.js';
 import { parsePositiveInteger } from '#utils/numbers.js';
+import { createCommentRepliedNotification } from '../notifications/service.js';
 
 async function findPublicTarget(targetType, targetId) {
   if (targetType === 'recipe') {
@@ -71,7 +72,7 @@ async function findCommentParent(parentCommentId, target) {
     targetType: target.targetType,
     targetId: target.targetId,
   })
-    .select('_id depth')
+    .select('_id depth userId')
     .lean();
 
   if (!parent) {
@@ -161,6 +162,14 @@ export async function createComment(targetType, targetId, payload, user) {
     depth: parent ? parent.depth + 1 : 0,
     body: payload.body,
   });
+
+  if (parent) {
+    await createCommentRepliedNotification({
+      recipientId: parent.userId,
+      actorId: user._id,
+      commentId: comment._id,
+    });
+  }
 
   const populatedComment = await Comment.findById(comment._id)
     .populate('userId', 'publicId name avatarUrl avatarKey')

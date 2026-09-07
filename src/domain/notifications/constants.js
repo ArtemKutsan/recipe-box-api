@@ -1,5 +1,5 @@
 // Типы уведомлений, которые могут появиться в backend.
-export const NOTIFICATION_TYPES = ['recipe_favorited'];
+export const NOTIFICATION_TYPES = ['recipe_favorited', 'comment_replied'];
 
 // Тип сущности отделён от имени Mongoose-модели, чтобы их можно было менять независимо.
 export const NOTIFICATION_ENTITY_MODELS = {

@@ -43,6 +43,32 @@ export async function createRecipeFavoritedNotification({ recipientId, actorId, 
   return notificationResponse;
 }
 
+// Уведомляем автора комментария о прямом ответе на него.
+export async function createCommentRepliedNotification({ recipientId, actorId, commentId }) {
+  if (recipientId.toString() === actorId.toString()) {
+    return null;
+  }
+
+  const notification = await Notification.create({
+    recipientId,
+    actorId,
+    type: 'comment_replied',
+    entityType: 'comment',
+    entityModel: NOTIFICATION_ENTITY_MODELS.comment,
+    entityId: commentId,
+  });
+
+  await notification.populate([
+    { path: 'actorId', select: 'publicId name avatarUrl' },
+    { path: 'entityId', select: 'publicId name title' },
+  ]);
+
+  const notificationResponse = toNotificationResponse(notification);
+  emitToUser(recipientId.toString(), 'notification:new', notificationResponse);
+
+  return notificationResponse;
+}
+
 // Возвращаем сохранённые уведомления текущего пользователя от новых к старым.
 export async function getCurrentUserNotifications(query = {}, user) {
   const page = parsePositiveInteger(query.page, DEFAULT_NOTIFICATIONS_PAGE);
