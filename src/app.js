@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import verifyRequestOrigin from '#api/v1/middleware/csrf/origin.js';
+import verifyRequestOrigin from '#integrations/http/csrf/origin.js';
 import routerV1 from '#api/v1/router.js';
 import config from '#config/index.js';
 import notFound from '#middlewares/notFound.js';
