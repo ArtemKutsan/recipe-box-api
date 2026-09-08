@@ -2,7 +2,7 @@ import { Comment } from '#db/models/Comment.js';
 import { Post } from '#db/models/Post.js';
 import { Recipe } from '#db/models/Recipe.js';
 import mongoose from 'mongoose';
-import { resolveUserAvatar } from '../users/media.js';
+import { resolveUserAvatar } from '#modules/users/api/v1/media.js';
 import { buildNotFoundError, parseRecipePublicId } from '../recipes/shared/utils.js';
 import {
   DEFAULT_COMMENTS_PAGE,

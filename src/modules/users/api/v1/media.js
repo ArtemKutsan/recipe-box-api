@@ -1,4 +1,4 @@
-import { createDownloadUrl } from '../uploads/service.js';
+import { createDownloadUrl } from '#modules/uploads/service.js';
 
 // Для S3-аватара возвращаем временную ссылку, старую внешнюю ссылку не меняем.
 export async function resolveUserAvatar(user) {

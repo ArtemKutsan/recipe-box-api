@@ -7,7 +7,7 @@ import {
 } from '#integrations/http/session-cookie.js';
 import { toUserResponse } from './response.js';
 import { validateLogin, validateRegister } from './validation.js';
-import { resolveUserAvatar } from '#api/v1/modules/users/media.js';
+import { resolveUserAvatar } from '#modules/users/api/v1/media.js';
 
 export async function register(req, res, next) {
   try {

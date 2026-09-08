@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { getNextSequence } from '#db/services/counter.js';
 import { Post } from '#db/models/Post.js';
 import { Recipe } from '#db/models/Recipe.js';
-import { resolveUserAvatar } from '../users/media.js';
+import { resolveUserAvatar } from '#modules/users/api/v1/media.js';
 import { buildNotFoundError } from '../recipes/shared/utils.js';
 import {
   DEFAULT_POSTS_PAGE,

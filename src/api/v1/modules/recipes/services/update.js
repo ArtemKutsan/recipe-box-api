@@ -17,7 +17,7 @@ import { normalizeStringArray } from '#utils/arrays.js';
 import { resolveRecipeCuisine, resolveRecipeMealTypes } from '../shared/dictionaries.js';
 import { toRecipeDetailResponse } from '../shared/response.js';
 import { resolveRecipeThumbnail } from './media.js';
-import { deleteMediaObject } from '../../uploads/service.js';
+import { deleteMediaObject } from '#modules/uploads/service.js';
 import { setIfDefined } from '#utils/objects.js';
 
 const ALLOWED_DIFFICULTIES = new Set(RECIPE_DIFFICULTIES);

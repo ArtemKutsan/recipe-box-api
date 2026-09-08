@@ -1,10 +1,10 @@
-import { getRecipesByAuthor } from '../recipes/service.js';
-import { getPostsByAuthor } from '../posts/service.js';
+import { getRecipesByAuthor } from '#api/v1/modules/recipes/service.js';
+import { getPostsByAuthor } from '#api/v1/modules/posts/service.js';
 import { toPublicUserResponse } from './response.js';
 import { findUserByPublicId, updateUserAvatar } from '#modules/users/repositories/index.js';
 import { resolveUserAvatar } from './media.js';
-import { validateMediaFileKey } from '../uploads/validation.js';
-import { deleteMediaObject } from '../uploads/service.js';
+import { validateMediaFileKey } from '#modules/uploads/api/v1/validation.js';
+import { deleteMediaObject } from '#modules/uploads/service.js';
 
 function buildUserNotFoundError() {
   const error = new Error('User not found.');

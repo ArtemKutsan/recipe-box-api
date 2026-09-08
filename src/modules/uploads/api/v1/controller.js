@@ -1,4 +1,4 @@
-import { createUploadUrl, getMediaDownloadUrl } from './service.js';
+import { createUploadUrl, getMediaDownloadUrl } from '#modules/uploads/service.js';
 import { validateMediaFileKey, validatePresignedUpload } from './validation.js';
 
 export async function createPresignedUpload(req, res, next) {

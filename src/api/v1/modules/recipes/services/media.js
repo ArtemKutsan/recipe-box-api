@@ -4,8 +4,8 @@
  * Принимает: рецепт из MongoDB с уже проверенным доступом.
  * Возвращает: тот же рецепт с готовым `thumbnailUrl`.
  */
-import { createDownloadUrl } from '../../uploads/service.js';
-import { resolveUserAvatar } from '../../users/media.js';
+import { createDownloadUrl } from '#modules/uploads/service.js';
+import { resolveUserAvatar } from '#modules/users/api/v1/media.js';
 
 // Для старой внешней ссылки ничего дополнительно не делаем.
 export async function resolveRecipeThumbnail(recipe) {

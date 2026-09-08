@@ -4,7 +4,7 @@ import requireAuth from '../middleware/auth/require.js';
 import {
   createPresignedDownload,
   createPresignedUpload,
-} from '../modules/uploads/controller.js';
+} from '#modules/uploads/api/v1/controller.js';
 
 const router = Router();
 

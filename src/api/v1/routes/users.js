@@ -7,7 +7,7 @@ import {
   getPublicProfilePosts,
   getPublicProfileRecipes,
   updateMyAvatar,
-} from '../modules/users/controller.js';
+} from '#modules/users/api/v1/controller.js';
 
 const router = Router();
 
