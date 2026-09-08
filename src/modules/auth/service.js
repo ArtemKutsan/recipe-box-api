@@ -1,10 +1,8 @@
 import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
 import { getNextSequence } from '#db/services/counter.js';
-import { toUserResponse } from './response.js';
 import { createSession } from '#modules/auth/session/service.js';
 import { createUser, findUserByEmail } from '#modules/users/repositories/index.js';
-import { resolveUserAvatar } from '../users/media.js';
 
 function buildEmailAlreadyExistsError() {
   const error = new Error('Email is already in use.');
@@ -59,7 +57,7 @@ export async function registerUser(payload, sessionMetadata = {}) {
     });
 
     return {
-      user: toUserResponse(await resolveUserAvatar(transactionResult.user)),
+      user: transactionResult.user,
       sessionToken: transactionResult.sessionToken,
     };
   } catch (error) {
@@ -92,7 +90,7 @@ export async function loginUser(payload, sessionMetadata = {}) {
   const { sessionToken } = await createSession(user._id.toString(), sessionMetadata);
 
   return {
-    user: toUserResponse(await resolveUserAvatar(user)),
+    user,
     sessionToken,
   };
 }

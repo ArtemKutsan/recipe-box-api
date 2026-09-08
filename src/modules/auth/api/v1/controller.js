@@ -1,20 +1,23 @@
-import { loginUser, registerUser } from './service.js';
+import { loginUser, registerUser } from '#modules/auth/service.js';
 import { deleteUserSession } from '#modules/auth/session/service.js';
 import {
   clearSessionCookie,
   getSessionTokenFromRequest,
   setSessionCookie,
 } from '#integrations/http/session-cookie.js';
+import { toUserResponse } from './response.js';
 import { validateLogin, validateRegister } from './validation.js';
+import { resolveUserAvatar } from '#api/v1/modules/users/media.js';
 
 export async function register(req, res, next) {
   try {
     // Сначала валидируем тело запроса, потом отдаём данные в сервис.
     validateRegister(req.body);
     // User-Agent сохраняем в сессии, чтобы знать, откуда выполнен вход.
-    const { sessionToken, ...response } = await registerUser(req.body, {
+    const { sessionToken, user } = await registerUser(req.body, {
       userAgent: req.get('user-agent'),
     });
+    const response = { user: toUserResponse(await resolveUserAvatar(user)) };
     // Token нужен только для cookie и не должен попасть в JSON-ответ.
     setSessionCookie(res, sessionToken);
 
@@ -29,9 +32,10 @@ export async function login(req, res, next) {
     // Логин идёт по той же схеме: проверка тела запроса и потом сервис.
     validateLogin(req.body);
     // User-Agent относится к текущему входу, а не к данным пользователя.
-    const { sessionToken, ...response } = await loginUser(req.body, {
+    const { sessionToken, user } = await loginUser(req.body, {
       userAgent: req.get('user-agent'),
     });
+    const response = { user: toUserResponse(await resolveUserAvatar(user)) };
     // Браузер сохранит token из Set-Cookie и будет отправлять его сам.
     setSessionCookie(res, sessionToken);
 
