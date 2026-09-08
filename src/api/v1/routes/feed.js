@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { list } from '../modules/feed/controller.js';
+import { list } from '#modules/feed/api/v1/controller.js';
 
 const router = Router();
 
