@@ -10,42 +10,51 @@ src/
 ├── app.js
 ├── api/
 │   └── v1/
-│       ├── middleware/
-│       │   └── auth/
-│       │       ├── optional.js
-│       │       ├── require.js
-│       │       └── session.js
-│       ├── modules/
-│       │   ├── auth/
-│       │   ├── cuisines/
-│       │   ├── favorites/
-│       │   ├── meal-plans/
-│       │   ├── meal-types/
-│       │   ├── recipes/
-│       │   └── users/
 │       ├── routes/
 │       └── router.js
 ├── config/
 ├── db/
 │   ├── models/
 │   │   ├── AuthSession.js
+│   │   ├── Comment.js
 │   │   ├── Cuisine.js
 │   │   ├── Favorite.js
 │   │   ├── MealPlan.js
 │   │   ├── MealType.js
+│   │   ├── Notification.js
+│   │   ├── Post.js
 │   │   ├── Recipe.js
 │   │   └── User.js
 │   └── scripts/
 │       ├── backfillRecipePublicIds.js
-│       └── seedRecipeDictionaries.js
+│       ├── seedRecipeComments.js
+│       ├── seedRecipeDictionaries.js
+│       └── seedRecipePosts.js
+├── integrations/
+│   ├── http/
+│   │   └── session-cookie.js
+│   ├── socket-io/
+│   └── storage/
 ├── middlewares/
+│   ├── auth/
+│   │   ├── optional.js
+│   │   └── require.js
+│   ├── csrf/
 │   ├── errorHandler.js
 │   └── notFound.js
-├── domain/
+├── modules/
+│   ├── auth/
+│   ├── comments/
+│   ├── cuisines/
+│   ├── favorites/
+│   ├── feed/
 │   ├── meal-plans/
-│   │   └── constants.js
-│   └── recipes/
-│       └── constants.js
+│   ├── meal-types/
+│   ├── notifications/
+│   ├── posts/
+│   ├── recipes/
+│   ├── uploads/
+│   └── users/
 └── utils/
 ```
 
@@ -93,17 +102,32 @@ src/
 
 - обработка 404
 - обработка ошибок
+- `auth/` проверяет session cookie и кладёт сырого пользователя в `req.authUser`
+- `csrf/` проверяет Origin для изменяющих запросов
 
 ### `src/api/v1/`
 
-Версионированный HTTP-слой приложения:
+Версионированная композиция HTTP API:
 
 - `router.js` собирает все маршруты первой версии API
-- `middleware/` определяет пользователя по cookie-сессии и защищает маршруты первой версии
-- `routes/` связывает URL и HTTP-методы с middleware и контроллерами
-- `modules/` содержит controller, service, response и validation конкретной версии API
-- `auth/`, `cuisines/`, `favorites/`, `meal-plans/`, `meal-types/`, `recipes/` и `users/` содержат HTTP-логику соответствующих доменов
-- `app.js` подключает этот router по адресу `/api/v1`
+- `routes/` связывает URL и HTTP-методы с middleware и feature-контроллерами
+
+### `src/modules/`
+
+Feature-first слой приложения. Каждый feature-модуль хранит свою бизнес-логику,
+работу с моделями и versioned HTTP-код в `api/v1/`.
+
+- общий код feature находится на уровне модуля, например `auth/service.js`
+- versioned controller, response, validation и API-specific service находятся в `api/v1/`
+- repositories находятся внутри соответствующего feature-модуля
+
+### `src/integrations/`
+
+Интеграции с внешними транспортами и хранилищами:
+
+- `http/session-cookie.js` читает и устанавливает session cookie
+- `socket-io/` содержит Socket.IO server, registry и gateway
+- `storage/` содержит интеграцию с S3
 
 ### `src/db/`
 
@@ -115,10 +139,6 @@ src/
 - `npm run seed:recipe-posts` добавляет десять тестовых постов с заголовками и безопасно обновляет их при повторном запуске.
 - `AuthSession.js`, `Cuisine.js`, `Favorite.js`, `MealPlan.js`, `MealType.js`, `Recipe.js` и `User.js` содержат Mongoose-схемы и модели доменов
 - `AuthSession.js` описывает одну запись о входе; такие записи хранятся в коллекции `authSessions` и уже подключены к Login/Register
-
-### `src/domain/`
-
-Правила предметной области, которые нужны нескольким слоям приложения. Meal Plan schema и API используют один набор дней, периодов и пустых слотов из `domain/meal-plans/constants.js`, а Recipe schema и API — общие значения сложности и видимости из `domain/recipes/constants.js`.
 
 ### `src/utils/`
 
