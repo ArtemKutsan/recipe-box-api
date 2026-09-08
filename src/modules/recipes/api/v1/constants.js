@@ -1,4 +1,4 @@
-export { RECIPE_DIFFICULTIES, RECIPE_VISIBILITIES } from '#domain/recipes/constants.js';
+export { RECIPE_DIFFICULTIES, RECIPE_VISIBILITIES } from '#modules/recipes/constants.js';
 
 // Сообщение об ошибке держим рядом с правилами, чтобы не дублировать строку.
 export const RECIPE_DIFFICULTY_ERROR = 'difficulty must be one of easy, medium, hard';

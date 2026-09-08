@@ -1,7 +1,7 @@
 import { Notification } from '#db/models/Notification.js';
 import { Post } from '#db/models/Post.js';
 import { Recipe } from '#db/models/Recipe.js';
-import { NOTIFICATION_ENTITY_MODELS } from '#domain/notifications/constants.js';
+import { NOTIFICATION_ENTITY_MODELS } from '#modules/notifications/constants.js';
 import { toNotificationResponse } from './response.js';
 import { emitToUser } from '#integrations/socket-io/gateway.js';
 

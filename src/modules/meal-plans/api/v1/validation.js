@@ -1,4 +1,4 @@
-import { MEAL_PLAN_DAYS, MEAL_PLAN_PERIODS } from '#domain/meal-plans/constants.js';
+import { MEAL_PLAN_DAYS, MEAL_PLAN_PERIODS } from '#modules/meal-plans/constants.js';
 import { isPositiveInteger } from '#utils/numbers.js';
 
 const MEAL_PLAN_DAY_SET = new Set(MEAL_PLAN_DAYS);

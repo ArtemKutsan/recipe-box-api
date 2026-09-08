@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import { RECIPE_DIFFICULTIES, RECIPE_VISIBILITIES } from '#domain/recipes/constants.js';
+import { RECIPE_DIFFICULTIES, RECIPE_VISIBILITIES } from '#modules/recipes/constants.js';
 
 const { ObjectId } = Schema.Types;
 

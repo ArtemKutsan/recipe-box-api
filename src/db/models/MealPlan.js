@@ -3,7 +3,7 @@ import {
   MEAL_PLAN_DAYS,
   MEAL_PLAN_PERIODS,
   createEmptyMealPlanSlots,
-} from '#domain/meal-plans/constants.js';
+} from '#modules/meal-plans/constants.js';
 
 const { ObjectId } = Schema.Types;
 

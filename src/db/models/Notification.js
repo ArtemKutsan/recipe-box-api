@@ -3,7 +3,7 @@ import {
   NOTIFICATION_ENTITY_TYPES,
   NOTIFICATION_ENTITY_MODELS,
   NOTIFICATION_TYPES,
-} from '#domain/notifications/constants.js';
+} from '#modules/notifications/constants.js';
 
 const { ObjectId } = Schema.Types;
 
