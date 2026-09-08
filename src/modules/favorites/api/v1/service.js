@@ -23,7 +23,7 @@ async function findRecipeByPublicId(recipeId, { publicOnly = false } = {}) {
   const recipe = await Recipe.findOne(filter).select('_id publicId authorId').lean();
 
   if (!recipe) {
-    buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
+    throw buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
   }
 
   return recipe;

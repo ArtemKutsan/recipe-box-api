@@ -157,7 +157,7 @@ export async function updateRecipe(recipeId, payload, author) {
   const recipe = await Recipe.findOne({ publicId, authorId: author._id });
 
   if (!recipe) {
-    buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
+    throw buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
   }
 
   const dictionaryData = {};

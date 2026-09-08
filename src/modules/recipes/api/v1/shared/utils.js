@@ -24,7 +24,7 @@ export function parseRecipePublicId(value) {
   const publicId = Number(value);
 
   if (!Number.isInteger(publicId) || publicId < 1) {
-    buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
+    throw buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
   }
 
   return publicId;
@@ -35,5 +35,5 @@ export function buildNotFoundError(message, code) {
   const error = new Error(message);
   error.status = 404;
   error.code = code;
-  throw error;
+  return error;
 }

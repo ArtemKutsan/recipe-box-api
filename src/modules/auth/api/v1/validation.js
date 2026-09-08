@@ -1,12 +1,12 @@
 import { isEmailLike } from '#utils/strings.js';
 
 // Общий helper для ошибок валидации auth-запросов.
-function throwValidationError(errors) {
+function buildValidationError(errors) {
   const error = new Error('Validation failed');
   error.status = 400;
   error.code = 'VALIDATION_ERROR';
   error.details = errors;
-  throw error;
+  return error;
 }
 
 // Проверяем данные для регистрации.
@@ -28,7 +28,7 @@ export function validateRegister(payload) {
   }
 
   if (errors.length > 0) {
-    throwValidationError(errors);
+    throw buildValidationError(errors);
   }
 
   return [];
@@ -49,7 +49,7 @@ export function validateLogin(payload) {
   }
 
   if (errors.length > 0) {
-    throwValidationError(errors);
+    throw buildValidationError(errors);
   }
 
   return [];

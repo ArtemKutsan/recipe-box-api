@@ -18,7 +18,7 @@ export async function resolveRecipeMealType(mealTypeValue) {
   const mealType = await MealType.findOne({ slug: mealTypeSlug, isActive: true });
 
   if (!mealType) {
-    buildNotFoundError('Meal type not found.', 'MEAL_TYPE_NOT_FOUND');
+    throw buildNotFoundError('Meal type not found.', 'MEAL_TYPE_NOT_FOUND');
   }
 
   return mealType;
@@ -33,7 +33,7 @@ export async function resolveRecipeMealTypes(mealType) {
   });
 
   if (mealTypes.length !== mealTypeSlugs.length) {
-    buildNotFoundError('One or more meal types were not found.', 'MEAL_TYPE_NOT_FOUND');
+    throw buildNotFoundError('One or more meal types were not found.', 'MEAL_TYPE_NOT_FOUND');
   }
 
   const mealTypeBySlug = new Map(mealTypes.map((item) => [item.slug, item]));
@@ -52,7 +52,7 @@ export async function resolveRecipeCuisine(cuisineValue) {
   const cuisine = await Cuisine.findOne({ slug: cuisineSlug, isActive: true });
 
   if (!cuisine) {
-    buildNotFoundError('Cuisine not found.', 'CUISINE_NOT_FOUND');
+    throw buildNotFoundError('Cuisine not found.', 'CUISINE_NOT_FOUND');
   }
 
   return cuisine;

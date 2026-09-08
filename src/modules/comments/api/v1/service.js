@@ -27,7 +27,7 @@ async function findPublicTarget(targetType, targetId) {
       .lean();
 
     if (!recipe) {
-      buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
+      throw buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
     }
 
     return {
@@ -42,13 +42,13 @@ async function findPublicTarget(targetType, targetId) {
     const publicId = Number(targetId);
 
     if (!Number.isInteger(publicId) || publicId < 1) {
-      buildNotFoundError('Post not found.', 'POST_NOT_FOUND');
+      throw buildNotFoundError('Post not found.', 'POST_NOT_FOUND');
     }
 
     const post = await Post.findOne({ publicId }).select('_id authorId').lean();
 
     if (!post) {
-      buildNotFoundError('Post not found.', 'POST_NOT_FOUND');
+      throw buildNotFoundError('Post not found.', 'POST_NOT_FOUND');
     }
 
     return {
@@ -59,7 +59,7 @@ async function findPublicTarget(targetType, targetId) {
     };
   }
 
-  buildNotFoundError('Comment target not found.', 'COMMENT_TARGET_NOT_FOUND');
+  throw buildNotFoundError('Comment target not found.', 'COMMENT_TARGET_NOT_FOUND');
 }
 
 async function buildCommentResponse(comment) {
@@ -89,7 +89,7 @@ async function findCommentParent(parentCommentId, target) {
     .lean();
 
   if (!parent) {
-    buildNotFoundError('Parent comment not found.', 'PARENT_COMMENT_NOT_FOUND');
+    throw buildNotFoundError('Parent comment not found.', 'PARENT_COMMENT_NOT_FOUND');
   }
 
   return parent;

@@ -16,7 +16,7 @@ function parsePostPublicId(value) {
   const publicId = Number(value);
 
   if (!Number.isInteger(publicId) || publicId < 1) {
-    buildNotFoundError('Post not found.', 'POST_NOT_FOUND');
+    throw buildNotFoundError('Post not found.', 'POST_NOT_FOUND');
   }
 
   return publicId;
@@ -30,7 +30,7 @@ async function findPublicRecipe(recipeId) {
   const publicId = Number(recipeId);
 
   if (!Number.isInteger(publicId) || publicId < 1) {
-    buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
+    throw buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
   }
 
   const recipe = await Recipe.findOne({
@@ -41,7 +41,7 @@ async function findPublicRecipe(recipeId) {
     .lean();
 
   if (!recipe) {
-    buildNotFoundError('Public recipe not found.', 'RECIPE_NOT_FOUND');
+    throw buildNotFoundError('Public recipe not found.', 'RECIPE_NOT_FOUND');
   }
 
   return recipe;
@@ -60,7 +60,7 @@ async function populatePost(postId) {
     .lean();
 
   if (!post) {
-    buildNotFoundError('Post not found.', 'POST_NOT_FOUND');
+    throw buildNotFoundError('Post not found.', 'POST_NOT_FOUND');
   }
 
   return buildPostResponse(post);
@@ -109,7 +109,7 @@ export async function getPostByPublicId(value) {
   const post = await Post.findOne({ publicId }).select('_id').lean();
 
   if (!post) {
-    buildNotFoundError('Post not found.', 'POST_NOT_FOUND');
+    throw buildNotFoundError('Post not found.', 'POST_NOT_FOUND');
   }
 
   return { post: await populatePost(post._id) };
@@ -148,7 +148,7 @@ async function findOwnedPost(publicId, author) {
   const post = await Post.findOne({ publicId, authorId: author._id }).select('_id').lean();
 
   if (!post) {
-    buildNotFoundError('Post not found.', 'POST_NOT_FOUND');
+    throw buildNotFoundError('Post not found.', 'POST_NOT_FOUND');
   }
 
   return post;

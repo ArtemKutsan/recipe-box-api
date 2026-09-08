@@ -41,7 +41,7 @@ export async function getRecipeByPublicId(recipeId, currentUser = null) {
     .lean();
 
   if (!recipe) {
-    buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
+    throw buildNotFoundError('Recipe not found.', 'RECIPE_NOT_FOUND');
   }
 
   return {

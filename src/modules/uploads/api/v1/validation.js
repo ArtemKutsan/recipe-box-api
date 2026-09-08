@@ -13,12 +13,12 @@ const UPLOAD_PURPOSES = {
 
 const MEDIA_KEY_PATTERN = /^(recipes|avatars)\/[a-f0-9]{24}\/[a-zA-Z0-9-]+\.(jpg|png|webp)$/;
 
-function throwValidationError(details) {
+function buildValidationError(details) {
   const error = new Error('Validation failed.');
   error.status = 400;
   error.code = 'VALIDATION_ERROR';
   error.details = details;
-  throw error;
+  return error;
 }
 
 // Проверяем только данные, которые нужны для временной ссылки загрузки.
@@ -42,7 +42,7 @@ export function validatePresignedUpload(payload) {
   }
 
   if (details.length > 0) {
-    throwValidationError(details);
+    throw buildValidationError(details);
   }
 
   return {

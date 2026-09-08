@@ -5,12 +5,12 @@ const MEAL_PLAN_DAY_SET = new Set(MEAL_PLAN_DAYS);
 const MEAL_PLAN_PERIOD_SET = new Set(MEAL_PLAN_PERIODS);
 
 // Общий helper для ошибок валидации meal plan.
-function throwValidationError(errors) {
+function buildValidationError(errors) {
   const error = new Error('Validation failed');
   error.status = 400;
   error.code = 'VALIDATION_ERROR';
   error.details = errors;
-  throw error;
+  return error;
 }
 
 // Проверяем body для изменения одного слота meal plan.
@@ -33,7 +33,7 @@ export function validateUpdateMealPlanSlot(payload) {
   }
 
   if (errors.length > 0) {
-    throwValidationError(errors);
+    throw buildValidationError(errors);
   }
 
   return [];

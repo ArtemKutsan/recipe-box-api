@@ -28,12 +28,12 @@ const RECIPE_UPDATE_FIELDS = [
 ];
 
 // Общий helper для ошибок валидации рецепта.
-function throwValidationError(errors) {
+function buildValidationError(errors) {
   const error = new Error('Validation failed');
   error.status = 400;
   error.code = 'VALIDATION_ERROR';
   error.details = errors;
-  throw error;
+  return error;
 }
 
 function validateRecipeFields(body, errors, { partial = false } = {}) {
@@ -132,7 +132,7 @@ export function validateCreateRecipe(payload) {
   validateRecipeFields(body, errors);
 
   if (errors.length > 0) {
-    throwValidationError(errors);
+    throw buildValidationError(errors);
   }
 
   return [];
@@ -157,7 +157,7 @@ export function validateUpdateRecipe(payload) {
   validateRecipeFields(body, errors, { partial: true });
 
   if (errors.length > 0) {
-    throwValidationError(errors);
+    throw buildValidationError(errors);
   }
 
   return [];

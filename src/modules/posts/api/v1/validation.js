@@ -1,11 +1,11 @@
 import { MAX_POST_BODY_LENGTH, MAX_POST_TITLE_LENGTH } from './constants.js';
 
-function throwValidationError(details) {
+function buildValidationError(details) {
   const error = new Error('Validation failed.');
   error.status = 400;
   error.code = 'VALIDATION_ERROR';
   error.details = details;
-  throw error;
+  return error;
 }
 
 function validatePostPayload(payload, { partial = false } = {}) {
@@ -33,7 +33,7 @@ function validatePostPayload(payload, { partial = false } = {}) {
   }
 
   if (errors.length > 0) {
-    throwValidationError(errors);
+    throw buildValidationError(errors);
   }
 
   return {
@@ -53,11 +53,11 @@ export function validateUpdatePost(payload) {
   const unsupportedFields = Object.keys(data).filter((field) => !supportedFields.includes(field));
 
   if (unsupportedFields.length > 0) {
-    throwValidationError([`unsupported fields: ${unsupportedFields.join(', ')}`]);
+    throw buildValidationError([`unsupported fields: ${unsupportedFields.join(', ')}`]);
   }
 
   if (Object.keys(data).length === 0) {
-    throwValidationError(['request body must include at least one field.']);
+    throw buildValidationError(['request body must include at least one field.']);
   }
 
   return validatePostPayload(data, { partial: true });
