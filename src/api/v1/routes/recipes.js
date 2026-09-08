@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import requireAuth from '../middleware/auth/require.js';
-import optionalAuth from '../middleware/auth/optional.js';
+import requireAuth from '#middlewares/auth/require.js';
+import optionalAuth from '#middlewares/auth/optional.js';
 import { recipeCommentHandlers } from '#modules/comments/api/v1/controller.js';
 import { create, getById, list, remove, update } from '#modules/recipes/api/v1/controller.js';
 

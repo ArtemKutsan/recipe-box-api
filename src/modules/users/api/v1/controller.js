@@ -20,7 +20,7 @@ export async function getPublicProfile(req, res, next) {
 
 export async function getMyRecipes(req, res, next) {
   try {
-    // Берём пользователя из requireAuth и отдаём только его рецепты.
+    // Берём пользователя из session middleware и отдаём только его рецепты.
     const result = await getCurrentUserRecipes(req.query, req.authUser);
 
     return res.status(200).json(result);

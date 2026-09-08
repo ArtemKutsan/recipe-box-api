@@ -47,9 +47,10 @@ export async function login(req, res, next) {
 
 export async function me(req, res, next) {
   try {
-    // Текущий пользователь уже лежит в req.user после проверки middleware.
-    // Middleware уже проверяет cookie-сессию.
-    return res.status(200).json({ user: req.user });
+    // Middleware проверяет cookie-сессию, а v1-контроллер формирует свой DTO.
+    return res.status(200).json({
+      user: toUserResponse(await resolveUserAvatar(req.authUser)),
+    });
   } catch (error) {
     next(error);
   }

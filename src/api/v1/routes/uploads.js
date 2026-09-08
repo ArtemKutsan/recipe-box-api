@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import optionalAuth from '../middleware/auth/optional.js';
-import requireAuth from '../middleware/auth/require.js';
+import optionalAuth from '#middlewares/auth/optional.js';
+import requireAuth from '#middlewares/auth/require.js';
 import {
   createPresignedDownload,
   createPresignedUpload,

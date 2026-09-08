@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import requireAuth from '../middleware/auth/require.js';
+import requireAuth from '#middlewares/auth/require.js';
 import { postCommentHandlers } from '#modules/comments/api/v1/controller.js';
 import { create, getById, list, remove, update } from '#modules/posts/api/v1/controller.js';
 
