@@ -1,10 +1,10 @@
 import { Server } from 'socket.io';
 import config from '#config/index.js';
-import { getSessionTokenFromRequest } from '#api/v1/modules/auth/session/cookie.js';
+import { getSessionTokenFromRequest } from '#integrations/http/session-cookie.js';
 import { findUserBySessionToken } from '#api/v1/modules/auth/session/service.js';
 import { addUserSocket, removeUserSocket } from './registry.js';
 
-const SOCKET_PATH = '/api/v1/socket.io';
+const SOCKET_PATH = '/socket.io';
 
 function buildUnauthorizedError() {
   const error = new Error('Authentication is required.');
@@ -21,7 +21,7 @@ export function createSocketServer(httpServer) {
       : undefined,
   });
 
-  // Cookie с Path=/api/v1 доступна этому handshake-пути.
+  // Cookie с Path=/ доступна этому handshake-пути.
   io.use(async (socket, next) => {
     try {
       const sessionToken = getSessionTokenFromRequest(socket.request);

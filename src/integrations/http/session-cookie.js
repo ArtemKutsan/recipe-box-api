@@ -1,5 +1,7 @@
 import config from '#config/index.js';
-import { getSessionLifetimeMs } from './service.js';
+import { getSessionLifetimeMs } from '#api/v1/modules/auth/session/service.js';
+
+const SESSION_COOKIE_PATH = '/';
 
 // Достаём значение конкретной cookie из обычного заголовка Cookie.
 function getCookieValue(cookieHeader, cookieName) {
@@ -31,7 +33,7 @@ export function setSessionCookie(res, sessionToken) {
     secure: config.auth.sessionCookieSecure, // В production cookie работает только через HTTPS.
     sameSite: config.auth.sessionCookieSameSite, // Ограничиваем отправку cookie между сайтами.
     maxAge: getSessionLifetimeMs(), // Cookie живёт столько же, сколько серверная сессия.
-    path: '/api/v1', // Cookie отправляется только API-маршрутам.
+    path: SESSION_COOKIE_PATH, // Cookie отправляется API и Socket.IO.
   });
 }
 
@@ -41,6 +43,6 @@ export function clearSessionCookie(res) {
     httpOnly: true,
     secure: config.auth.sessionCookieSecure,
     sameSite: config.auth.sessionCookieSameSite,
-    path: '/api/v1',
+    path: SESSION_COOKIE_PATH,
   });
 }

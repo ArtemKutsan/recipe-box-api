@@ -4,7 +4,7 @@ import {
   clearSessionCookie,
   getSessionTokenFromRequest,
   setSessionCookie,
-} from './session/cookie.js';
+} from '#integrations/http/session-cookie.js';
 import { validateLogin, validateRegister } from './validation.js';
 
 export async function register(req, res, next) {
