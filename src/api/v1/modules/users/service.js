@@ -1,7 +1,7 @@
 import { getRecipesByAuthor } from '../recipes/service.js';
 import { getPostsByAuthor } from '../posts/service.js';
 import { toPublicUserResponse } from './response.js';
-import { findUserByPublicId, updateUserAvatar } from './repositories/index.js';
+import { findUserByPublicId, updateUserAvatar } from '#modules/users/repositories/index.js';
 import { resolveUserAvatar } from './media.js';
 import { validateMediaFileKey } from '../uploads/validation.js';
 import { deleteMediaObject } from '../uploads/service.js';

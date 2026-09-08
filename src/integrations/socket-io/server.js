@@ -1,7 +1,7 @@
 import { Server } from 'socket.io';
 import config from '#config/index.js';
 import { getSessionTokenFromRequest } from '#integrations/http/session-cookie.js';
-import { findUserBySessionToken } from '#api/v1/modules/auth/session/service.js';
+import { findUserBySessionToken } from '#modules/auth/session/service.js';
 import { addUserSocket, removeUserSocket } from './registry.js';
 
 const SOCKET_PATH = '/socket.io';

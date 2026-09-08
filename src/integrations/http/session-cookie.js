@@ -1,5 +1,5 @@
 import config from '#config/index.js';
-import { getSessionLifetimeMs } from '#api/v1/modules/auth/session/service.js';
+import { getSessionLifetimeMs } from '#modules/auth/session/service.js';
 
 const SESSION_COOKIE_PATH = '/';
 

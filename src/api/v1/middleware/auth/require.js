@@ -1,6 +1,6 @@
 import { toUserResponse } from '../../modules/auth/response.js';
 import { getSessionTokenFromRequest } from '#integrations/http/session-cookie.js';
-import { findUserBySessionToken } from '../../modules/auth/session/service.js';
+import { findUserBySessionToken } from '#modules/auth/session/service.js';
 import { resolveUserAvatar } from '../../modules/users/media.js';
 
 function buildUnauthorizedError() {

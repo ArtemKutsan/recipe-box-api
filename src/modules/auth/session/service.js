@@ -5,7 +5,7 @@ import {
   deleteSessionByTokenHash,
   findActiveSessionByTokenHash,
 } from './repositories/index.js';
-import { findUserById } from '../../users/repositories/index.js';
+import { findUserById } from '#modules/users/repositories/index.js';
 
 // Нужен, чтобы задавать срок сессии в env как 30d и получать дату её окончания.
 function parseSessionLifetime(value) {

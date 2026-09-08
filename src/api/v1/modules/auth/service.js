@@ -2,8 +2,8 @@ import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
 import { getNextSequence } from '#db/services/counter.js';
 import { toUserResponse } from './response.js';
-import { createSession } from './session/service.js';
-import { createUser, findUserByEmail } from '../users/repositories/index.js';
+import { createSession } from '#modules/auth/session/service.js';
+import { createUser, findUserByEmail } from '#modules/users/repositories/index.js';
 import { resolveUserAvatar } from '../users/media.js';
 
 function buildEmailAlreadyExistsError() {

@@ -11,6 +11,7 @@
     "#db/*": "./src/db/*",
     "#domain/*": "./src/domain/*",
     "#integrations/*": "./src/integrations/*",
+    "#modules/*": "./src/modules/*",
     "#utils/*": "./src/utils/*"
   },
   "main": "src/server.js",

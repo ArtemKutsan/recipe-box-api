@@ -1,6 +1,6 @@
 import { toUserResponse } from '../../modules/auth/response.js';
 import { getSessionTokenFromRequest } from '#integrations/http/session-cookie.js';
-import { findUserBySessionToken } from '../../modules/auth/session/service.js';
+import { findUserBySessionToken } from '#modules/auth/session/service.js';
 import { resolveUserAvatar } from '../../modules/users/media.js';
 
 // Пытаемся найти session cookie, но не ломаем публичный запрос без авторизации.

@@ -1,5 +1,5 @@
 import { loginUser, registerUser } from './service.js';
-import { deleteUserSession } from './session/service.js';
+import { deleteUserSession } from '#modules/auth/session/service.js';
 import {
   clearSessionCookie,
   getSessionTokenFromRequest,
