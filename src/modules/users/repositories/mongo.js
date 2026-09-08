@@ -12,7 +12,10 @@ export function findUserByPublicId(publicId, options = {}) {
 
 // Ищем пользователя по внутреннему MongoDB _id.
 export function findUserById(id, options = {}) {
-  return User.findById(id, options.projection ?? null, { session: options.session });
+  // Пользователь из session middleware не должен содержать passwordHash.
+  const projection = options.projection ?? { passwordHash: 0 };
+
+  return User.findById(id, projection, { session: options.session });
 }
 
 // Создаём пользователя, при необходимости внутри переданной транзакции.
