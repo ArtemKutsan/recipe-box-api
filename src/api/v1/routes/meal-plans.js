@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import requireAuth from '../middleware/auth/require.js';
-import { getCurrent, updateCurrentSlot } from '../modules/meal-plans/controller.js';
+import { getCurrent, updateCurrentSlot } from '#modules/meal-plans/api/v1/controller.js';
 
 const router = Router();
 
