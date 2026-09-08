@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import requireAuth from '../middleware/auth/require.js';
-import { add, list, listRecipes, remove } from '../modules/favorites/controller.js';
+import { add, list, listRecipes, remove } from '#modules/favorites/api/v1/controller.js';
 
 const router = Router();
 
