@@ -32,6 +32,7 @@ export function setSessionCookie(res, sessionToken) {
     httpOnly: true, // JavaScript на frontend не сможет прочитать token.
     secure: config.auth.sessionCookieSecure, // В production cookie работает только через HTTPS.
     sameSite: config.auth.sessionCookieSameSite, // Ограничиваем отправку cookie между сайтами.
+    partitioned: true, // Изолируем foreign cookie для текущего frontend-контекста.
     maxAge: getSessionLifetimeMs(), // Cookie живёт столько же, сколько серверная сессия.
     path: SESSION_COOKIE_PATH, // Cookie отправляется API и Socket.IO.
   });
@@ -43,6 +44,7 @@ export function clearSessionCookie(res) {
     httpOnly: true,
     secure: config.auth.sessionCookieSecure,
     sameSite: config.auth.sessionCookieSameSite,
+    partitioned: true,
     path: SESSION_COOKIE_PATH,
   });
 }
