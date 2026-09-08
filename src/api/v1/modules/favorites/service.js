@@ -9,7 +9,7 @@ import {
 import { toFavoriteRecipeResponse, toFavoriteStateResponse } from './response.js';
 import { resolveRecipeThumbnail } from '#modules/recipes/api/v1/services/media.js';
 import { parsePositiveInteger } from '#utils/numbers.js';
-import { createRecipeFavoritedNotification } from '../notifications/service.js';
+import { createRecipeFavoritedNotification } from '#modules/notifications/service.js';
 
 async function findRecipeByPublicId(recipeId, { publicOnly = false } = {}) {
   const publicId = parseRecipePublicId(recipeId);

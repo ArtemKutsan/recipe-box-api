@@ -14,7 +14,7 @@ import { parsePositiveInteger } from '#utils/numbers.js';
 import {
   createCommentCreatedNotification,
   createCommentRepliedNotification,
-} from '#api/v1/modules/notifications/service.js';
+} from '#modules/notifications/service.js';
 
 async function findPublicTarget(targetType, targetId) {
   if (targetType === 'recipe') {

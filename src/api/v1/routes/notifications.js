@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import requireAuth from '../middleware/auth/require.js';
-import { list, markAllRead, markRead } from '../modules/notifications/controller.js';
+import { list, markAllRead, markRead } from '#modules/notifications/api/v1/controller.js';
 
 const router = Router();
 
