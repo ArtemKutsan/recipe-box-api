@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getMealTypesList } from '../modules/meal-types/controller.js';
+import { getMealTypesList } from '#modules/meal-types/api/v1/controller.js';
 
 const router = Router();
 
