@@ -1,6 +1,6 @@
 import { MealPlan } from '#db/models/MealPlan.js';
 import { Recipe } from '#db/models/Recipe.js';
-import { buildNotFoundError } from '../recipes/shared/utils.js';
+import { buildNotFoundError } from '#modules/recipes/api/v1/shared/utils.js';
 import { createEmptyMealPlanSlots } from '#domain/meal-plans/constants.js';
 import { toMealPlanResponse } from './response.js';
 

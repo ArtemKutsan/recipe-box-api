@@ -3,7 +3,7 @@ import { Post } from '#db/models/Post.js';
 import { Recipe } from '#db/models/Recipe.js';
 import mongoose from 'mongoose';
 import { resolveUserAvatar } from '#modules/users/api/v1/media.js';
-import { buildNotFoundError, parseRecipePublicId } from '../recipes/shared/utils.js';
+import { buildNotFoundError, parseRecipePublicId } from '#modules/recipes/api/v1/shared/utils.js';
 import {
   DEFAULT_COMMENTS_PAGE,
   DEFAULT_COMMENTS_PAGE_SIZE,

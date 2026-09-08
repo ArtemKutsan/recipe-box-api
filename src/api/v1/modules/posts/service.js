@@ -3,7 +3,7 @@ import { getNextSequence } from '#db/services/counter.js';
 import { Post } from '#db/models/Post.js';
 import { Recipe } from '#db/models/Recipe.js';
 import { resolveUserAvatar } from '#modules/users/api/v1/media.js';
-import { buildNotFoundError } from '../recipes/shared/utils.js';
+import { buildNotFoundError } from '#modules/recipes/api/v1/shared/utils.js';
 import {
   DEFAULT_POSTS_PAGE,
   DEFAULT_POSTS_PAGE_SIZE,

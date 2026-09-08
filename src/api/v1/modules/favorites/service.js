@@ -1,13 +1,13 @@
 import { Favorite } from '#db/models/Favorite.js';
 import { Recipe } from '#db/models/Recipe.js';
-import { buildNotFoundError, parseRecipePublicId } from '../recipes/shared/utils.js';
+import { buildNotFoundError, parseRecipePublicId } from '#modules/recipes/api/v1/shared/utils.js';
 import {
   DEFAULT_FAVORITES_PAGE,
   DEFAULT_FAVORITES_PAGE_SIZE,
   MAX_FAVORITES_PAGE_SIZE,
 } from './constants.js';
 import { toFavoriteRecipeResponse, toFavoriteStateResponse } from './response.js';
-import { resolveRecipeThumbnail } from '../recipes/services/media.js';
+import { resolveRecipeThumbnail } from '#modules/recipes/api/v1/services/media.js';
 import { parsePositiveInteger } from '#utils/numbers.js';
 import { createRecipeFavoritedNotification } from '../notifications/service.js';
 

@@ -1,7 +1,7 @@
 import { Post } from '#db/models/Post.js';
 import { Recipe } from '#db/models/Recipe.js';
-import { resolveRecipeThumbnail } from '../recipes/services/media.js';
-import { toRecipeListResponse } from '../recipes/shared/response.js';
+import { resolveRecipeThumbnail } from '#modules/recipes/api/v1/services/media.js';
+import { toRecipeListResponse } from '#modules/recipes/api/v1/shared/response.js';
 import { buildPostResponse } from '../posts/service.js';
 import { parsePositiveInteger } from '#utils/numbers.js';
 import {

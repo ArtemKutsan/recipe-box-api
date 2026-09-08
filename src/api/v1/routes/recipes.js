@@ -2,7 +2,7 @@ import { Router } from 'express';
 import requireAuth from '../middleware/auth/require.js';
 import optionalAuth from '../middleware/auth/optional.js';
 import { recipeCommentHandlers } from '../modules/comments/controller.js';
-import { create, getById, list, remove, update } from '../modules/recipes/controller.js';
+import { create, getById, list, remove, update } from '#modules/recipes/api/v1/controller.js';
 
 const router = Router();
 

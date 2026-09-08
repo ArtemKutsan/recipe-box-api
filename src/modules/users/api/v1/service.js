@@ -1,4 +1,4 @@
-import { getRecipesByAuthor } from '#api/v1/modules/recipes/service.js';
+import { getRecipesByAuthor } from '#modules/recipes/api/v1/service.js';
 import { getPostsByAuthor } from '#api/v1/modules/posts/service.js';
 import { toPublicUserResponse } from './response.js';
 import { findUserByPublicId, updateUserAvatar } from '#modules/users/repositories/index.js';
