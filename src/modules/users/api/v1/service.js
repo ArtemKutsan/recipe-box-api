@@ -2,7 +2,7 @@ import { getRecipesByAuthor } from '#modules/recipes/api/v1/service.js';
 import { getPostsByAuthor } from '#modules/posts/api/v1/service.js';
 import { toPublicUserResponse } from './response.js';
 import { findUserByPublicId, updateUserAvatar } from '#modules/users/repositories/index.js';
-import { resolveUserAvatar } from './media.js';
+import { resolveUserAvatar } from './services/media.js';
 import { validateMediaFileKey } from '#modules/uploads/api/v1/validation.js';
 import { deleteMediaObject } from '#modules/uploads/service.js';
 

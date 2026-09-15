@@ -2,7 +2,7 @@ import { Comment } from '#db/models/Comment.js';
 import { Post } from '#db/models/Post.js';
 import { Recipe } from '#db/models/Recipe.js';
 import mongoose from 'mongoose';
-import { resolveUserAvatar } from '#modules/users/api/v1/media.js';
+import { resolveUserAvatar } from '#modules/users/api/v1/services/media.js';
 import { buildNotFoundError, parseRecipePublicId } from '#modules/recipes/api/v1/shared/utils.js';
 import {
   DEFAULT_COMMENTS_PAGE,
@@ -137,7 +137,11 @@ export async function getComments(targetType, targetId, query = {}) {
   );
   const skip = (page - 1) * pageSize;
   const [roots, rootTotal, total] = await Promise.all([
-    Comment.find({ targetType: target.targetType, targetId: target.targetId, parentCommentId: null })
+    Comment.find({
+      targetType: target.targetType,
+      targetId: target.targetId,
+      parentCommentId: null,
+    })
       // Новые основные комментарии показываем первыми.
       .sort({ createdAt: -1, _id: -1 })
       .skip(skip)
