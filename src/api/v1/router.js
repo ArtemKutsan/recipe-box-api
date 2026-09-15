@@ -11,12 +11,14 @@ import postsRouter from './routes/posts.js';
 import recipesRouter from './routes/recipes.js';
 import uploadsRouter from './routes/uploads.js';
 import usersRouter from './routes/users.js';
+import searchRouter from './routes/search.js';
 
 const router = Router();
 
 // Группируем маршруты первой версии API по их публичным адресам.
 router.use('/auth', authRouter);
 router.use('/users', usersRouter);
+router.use('/search', searchRouter);
 router.use('/meal-types', mealTypesRouter);
 router.use('/cuisines', cuisinesRouter);
 router.use('/posts', postsRouter);
