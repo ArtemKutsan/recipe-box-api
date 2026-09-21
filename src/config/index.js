@@ -23,7 +23,10 @@ const config = {
     provider: process.env.MEDIA_STORAGE_PROVIDER || 's3',
     uploadsEnabled: process.env.MEDIA_UPLOADS_ENABLED === 'true',
     awsRegion: process.env.AWS_REGION || '',
+    awsS3Endpoint: process.env.AWS_S3_ENDPOINT || '',
     awsS3Bucket: process.env.AWS_S3_BUCKET || '',
+    awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+    awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
   },
 };
 

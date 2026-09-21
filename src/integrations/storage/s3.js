@@ -15,12 +15,22 @@ function getS3Client() {
   if (
     config.storage.provider !== 's3' ||
     !config.storage.awsRegion ||
-    !config.storage.awsS3Bucket
+    !config.storage.awsS3Endpoint ||
+    !config.storage.awsS3Bucket ||
+    !config.storage.awsAccessKeyId ||
+    !config.storage.awsSecretAccessKey
   ) {
     throw buildStorageConfigError();
   }
 
-  return new S3Client({ region: config.storage.awsRegion });
+  return new S3Client({
+    region: config.storage.awsRegion,
+    endpoint: config.storage.awsS3Endpoint,
+    credentials: {
+      accessKeyId: config.storage.awsAccessKeyId,
+      secretAccessKey: config.storage.awsSecretAccessKey,
+    },
+  });
 }
 
 // Создаём временную ссылку: сам файл потом отправляет frontend прямо в S3.
