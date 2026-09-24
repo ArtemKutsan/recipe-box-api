@@ -25,7 +25,7 @@ function collectRecipePublicIds(slots = {}) {
     .map(Number);
 }
 
-async function getMealPlanRecipes(mealPlan) {
+async function getMealPlanRecipes(mealPlan, user) {
   const recipePublicIds = [...new Set(collectRecipePublicIds(mealPlan?.slots))];
 
   if (recipePublicIds.length === 0) {
@@ -34,17 +34,26 @@ async function getMealPlanRecipes(mealPlan) {
 
   const recipes = await Recipe.find({
     publicId: { $in: recipePublicIds },
+    $or: [{ visibility: 'public' }, { visibility: { $exists: false } }, { authorId: user._id }],
   })
     .select('publicId title thumbnailUrl thumbnailKey caloriesPerServing')
     .lean();
 
-  return Promise.all(recipes.map(resolveRecipeMedia));
+  const resolvedRecipes = await Promise.all(recipes.map(resolveRecipeMedia));
+  const availableRecipeIds = new Set(resolvedRecipes.map((recipe) => String(recipe.publicId)));
+
+  return [
+    ...resolvedRecipes,
+    ...recipePublicIds
+      .filter((recipeId) => !availableRecipeIds.has(String(recipeId)))
+      .map((publicId) => ({ publicId, unavailable: true })),
+  ];
 }
 
 // Возвращаем текущий weekly meal plan пользователя или пустой шаблон.
 export async function getCurrentMealPlan(user) {
   const mealPlan = await MealPlan.findOne({ userId: user._id }).lean();
-  const recipes = await getMealPlanRecipes(mealPlan);
+  const recipes = await getMealPlanRecipes(mealPlan, user);
 
   return toMealPlanResponse(mealPlan, recipes);
 }
@@ -64,7 +73,7 @@ export async function updateCurrentMealPlanSlot(payload, user) {
   mealPlan.slots[payload.day][payload.mealPeriod] = recipeId;
   await mealPlan.save();
 
-  const recipes = await getMealPlanRecipes(mealPlan.toObject());
+  const recipes = await getMealPlanRecipes(mealPlan.toObject(), user);
 
   return toMealPlanResponse(mealPlan.toObject(), recipes);
 }

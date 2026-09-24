@@ -18,6 +18,13 @@ function mergeMealPlanSlots(slots = {}) {
 }
 
 function toMealPlanRecipeResponse(recipe) {
+  if (recipe.unavailable) {
+    return {
+      id: recipe.publicId,
+      unavailable: true,
+    };
+  }
+
   return {
     id: recipe.publicId,
     title: recipe.title,
