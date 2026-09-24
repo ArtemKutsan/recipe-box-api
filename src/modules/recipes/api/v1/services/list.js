@@ -11,7 +11,7 @@ import { Cuisine } from '#db/models/Cuisine.js';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../constants.js';
 import { Recipe } from '#db/models/Recipe.js';
 import { toRecipeListResponse } from '../shared/response.js';
-import { resolveRecipeThumbnail } from './media.js';
+import { resolveRecipeMedia } from './media.js';
 import { buildRecipeListFilter, buildSort } from '../shared/query.js';
 import { parsePositiveInteger } from '#utils/numbers.js';
 
@@ -103,7 +103,7 @@ async function getRecipesByFilter(filter, query = {}) {
 
   const totalPages = total === 0 ? 0 : Math.ceil(total / pageSize);
 
-  const recipesWithMedia = await Promise.all(recipes.map(resolveRecipeThumbnail));
+  const recipesWithMedia = await Promise.all(recipes.map(resolveRecipeMedia));
 
   return {
     items: recipesWithMedia.map(toRecipeListResponse),

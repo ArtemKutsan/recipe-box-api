@@ -1,6 +1,6 @@
 import { Post } from '#db/models/Post.js';
 import { Recipe } from '#db/models/Recipe.js';
-import { resolveRecipeThumbnail } from '#modules/recipes/api/v1/services/media.js';
+import { resolveRecipeMedia } from '#modules/recipes/api/v1/services/media.js';
 import { toRecipeListResponse } from '#modules/recipes/api/v1/shared/response.js';
 import { buildPostResponse } from '#modules/posts/api/v1/service.js';
 import { parsePositiveInteger } from '#utils/numbers.js';
@@ -27,7 +27,7 @@ function compareFeedItems(first, second) {
 }
 
 async function buildRecipeFeedItem(recipe) {
-  const resolvedRecipe = await resolveRecipeThumbnail(recipe);
+  const resolvedRecipe = await resolveRecipeMedia(recipe);
 
   return {
     type: 'recipe',

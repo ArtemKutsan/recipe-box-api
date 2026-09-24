@@ -9,19 +9,29 @@ import { resolveUserAvatar } from '#modules/users/api/v1/services/media.js';
 
 // Для старой внешней ссылки ничего дополнительно не делаем.
 export async function resolveRecipeThumbnail(recipe) {
-  const resolvedRecipe = recipe.thumbnailKey
-    ? {
-        ...recipe,
-        thumbnailUrl: (await createDownloadUrl(recipe.thumbnailKey)).downloadUrl,
-      }
-    : recipe;
+  const resolvedRecipe =
+    typeof recipe.toObject === 'function' ? recipe.toObject() : recipe;
 
-  if (!resolvedRecipe.authorId?.avatarKey) {
-    return resolvedRecipe;
+  return resolvedRecipe.thumbnailKey
+    ? {
+        ...resolvedRecipe,
+        thumbnailUrl: (await createDownloadUrl(resolvedRecipe.thumbnailKey)).downloadUrl,
+      }
+    : resolvedRecipe;
+}
+
+export async function resolveRecipeAuthorAvatar(recipe) {
+  if (!recipe.authorId?.avatarKey) {
+    return recipe;
   }
 
   return {
-    ...resolvedRecipe,
-    authorId: await resolveUserAvatar(resolvedRecipe.authorId),
+    ...recipe,
+    authorId: await resolveUserAvatar(recipe.authorId),
   };
+}
+
+export async function resolveRecipeMedia(recipe) {
+  const recipeWithThumbnail = await resolveRecipeThumbnail(recipe);
+  return resolveRecipeAuthorAvatar(recipeWithThumbnail);
 }

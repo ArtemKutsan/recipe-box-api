@@ -2,7 +2,7 @@ import { Post } from '#db/models/Post.js';
 import { Recipe } from '#db/models/Recipe.js';
 import { User } from '#db/models/User.js';
 import { resolvePostMedia } from '#modules/posts/api/v1/services/media.js';
-import { resolveRecipeThumbnail } from '#modules/recipes/api/v1/services/media.js';
+import { resolveRecipeMedia } from '#modules/recipes/api/v1/services/media.js';
 import { resolveUserAvatar } from '#modules/users/api/v1/services/media.js';
 import { toPostSearchResponse, toRecipeSearchResponse, toUserSearchResponse } from './response.js';
 
@@ -45,7 +45,7 @@ export async function search(value = '') {
       .lean(),
   ]);
 
-  const recipesWithMedia = await Promise.all(recipes.map(resolveRecipeThumbnail));
+  const recipesWithMedia = await Promise.all(recipes.map(resolveRecipeMedia));
   const postsWithMedia = await Promise.all(posts.map(resolvePostMedia));
   const usersWithMedia = await Promise.all(users.map(resolveUserAvatar));
 

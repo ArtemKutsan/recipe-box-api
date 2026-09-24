@@ -16,7 +16,7 @@ import { buildNotFoundError, parseRecipePublicId } from '../shared/utils.js';
 import { normalizeStringArray } from '#utils/arrays.js';
 import { resolveRecipeCuisine, resolveRecipeMealTypes } from '../shared/dictionaries.js';
 import { toRecipeDetailResponse } from '../shared/response.js';
-import { resolveRecipeThumbnail } from './media.js';
+import { resolveRecipeMedia } from './media.js';
 import { deleteMediaObject } from '#modules/uploads/service.js';
 import { setIfDefined } from '#utils/objects.js';
 
@@ -227,6 +227,6 @@ export async function updateRecipe(recipeId, payload, author) {
   }
 
   return {
-    recipe: toRecipeDetailResponse(await resolveRecipeThumbnail(updatedRecipe)),
+    recipe: toRecipeDetailResponse(await resolveRecipeMedia(updatedRecipe)),
   };
 }

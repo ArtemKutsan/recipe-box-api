@@ -1,7 +1,7 @@
 import { MealPlan } from '#db/models/MealPlan.js';
 import { Recipe } from '#db/models/Recipe.js';
 import { buildNotFoundError } from '#modules/recipes/api/v1/shared/utils.js';
-import { resolveRecipeThumbnail } from '#modules/recipes/api/v1/services/media.js';
+import { resolveRecipeMedia } from '#modules/recipes/api/v1/services/media.js';
 import { createEmptyMealPlanSlots } from '#modules/meal-plans/constants.js';
 import { toMealPlanResponse } from './response.js';
 
@@ -38,7 +38,7 @@ async function getMealPlanRecipes(mealPlan) {
     .select('publicId title thumbnailUrl thumbnailKey caloriesPerServing')
     .lean();
 
-  return Promise.all(recipes.map(resolveRecipeThumbnail));
+  return Promise.all(recipes.map(resolveRecipeMedia));
 }
 
 // Возвращаем текущий weekly meal plan пользователя или пустой шаблон.

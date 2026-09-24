@@ -7,7 +7,7 @@ import {
   MAX_FAVORITES_PAGE_SIZE,
 } from './constants.js';
 import { toFavoriteRecipeResponse, toFavoriteStateResponse } from './response.js';
-import { resolveRecipeThumbnail } from '#modules/recipes/api/v1/services/media.js';
+import { resolveRecipeMedia } from '#modules/recipes/api/v1/services/media.js';
 import { parsePositiveInteger } from '#utils/numbers.js';
 import { createRecipeFavoritedNotification } from '#modules/notifications/service.js';
 
@@ -162,7 +162,7 @@ export async function getCurrentUserFavoriteRecipes(query = {}, user) {
       const recipe = recipesById.get(recipeId.toString());
 
       return recipe
-        ? toFavoriteRecipeResponse(await resolveRecipeThumbnail(recipe), savedAt)
+        ? toFavoriteRecipeResponse(await resolveRecipeMedia(recipe), savedAt)
         : null;
     }),
   ))
