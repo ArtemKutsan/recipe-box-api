@@ -7,6 +7,5 @@ export function toPublicUserResponse(user) {
     bio: user.bio,
     age: user.age ?? null,
     gender: user.gender ?? null,
-    phone: user.phone ?? null,
   };
 }
