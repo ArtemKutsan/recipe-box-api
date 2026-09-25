@@ -76,7 +76,7 @@ async function getCuisineList(filter) {
         recipesCount: 1,
       },
     },
-    { $sort: { order: 1, title: 1 } },
+    { $sort: { title: 1 } },
   ]);
 
   return cuisines;
